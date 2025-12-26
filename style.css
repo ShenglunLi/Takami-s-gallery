@@ -1,0 +1,251 @@
+/* --- 匯入 Noto Sans TC --- */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+/* --- 設計系統變數 (Design System Tokens) --- */
+:root {
+
+    /* 色彩系統 - 基本 (暖色淺色系) */
+    --primary-color: #5d4037;      /* 主色：深咖啡色，取代深藍以符合暖調 */
+    --primary-hover: #8d6e63;      /* 懸浮色：淺咖啡色 */
+    --bg-color: #fdfaf5;           /* 全域背景：米白色 (Creamy White) */
+    --bg-color-ts: rgba(55, 55, 55, 0.6);
+    
+    /* 文字系統 - 針對淺色背景優化 */
+    --text-main: #2c2c2c;          /* 標題與重要文字：深碳灰，提高對比度 */
+    --text-body: #555555;          /* 內文文字：深灰 */
+    --text-light: #fdfaf5;
+    --text-light-subtitle:#d7d5d1;  
+    --text-muted: #9b9b9b;         /* 輔助與次要文字：中灰 */
+    
+    /* 遮罩與特殊背景 */
+    --overlay-dark: rgba(0, 0, 0, 0.3);        /* 卡片預設遮罩 (略微調淺) */
+    --overlay-hover: rgba(0, 0, 0, 0.15);      /* 卡片懸浮遮罩 */
+    --card-default-bg: #f5f0e6;                /* 卡片底色：淺米色 */
+    --hero-fallback-bg: #ebe5d8;               /* Hero 底色 */
+    --sns-btn-bg: rgba(0, 0, 0, 0.05);         /* SNS按鈕背景：極淺灰背景 */
+    --sns-btn-icon: #5d4037;                   /* SNS圖示顏色：改用深咖啡色 */
+
+
+    /* 圖示顏色 */
+    --icon-color: #484746;
+    --icon-light: #fdfaf5;
+    --icon-hover: #ab3e03;
+
+    /* 陰影 */
+    --text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+
+    /* New 頁面專用變數 */
+    --accent-color: #e65100;       /* 焦橘色 (保留作為重點強調) */
+    --card-bg: #ffffff;            /* 作品卡片底色：純白，在米白背景下產生層次感 */
+
+
+    
+
+    /* 字體排版 (Mobile-first) */
+    --font-main: 'Noto Sans TC', -apple-system, sans-serif;
+    
+    /* 文字大小定義 */
+    --fs-h1: 2rem;       
+    --fs-h2: 1.5rem;     
+    --fs-h3: 1.25rem;    
+    --fs-p: 1rem;        
+    --fs-label: 1.2rem;  
+
+    /* 圓角與間距 */
+    --radius-md: 12px;
+    --radius-full: 9999px;
+    --container-gap: 16px;
+
+    /* 動態效果 */
+    --transition-base: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --hover-lift: translateY(-8px);
+}
+
+/* --- 基礎重設 (Reset) --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    font-family: var(--font-main);
+    color: var(--text-body);
+    background-color: var(--bg-color);
+    line-height: 1.6;
+}
+
+ul, li { list-style: none; }
+a { 
+    text-decoration: none; 
+    color: inherit; 
+    transition: var(--transition-base);
+}
+
+h1 { font-size: var(--fs-h1); font-weight: 700; color: var(--text-main); }
+h2 { font-size: var(--fs-h2); font-weight: 700; color: var(--text-main); }
+h3 { font-size: var(--fs-h3); font-weight: 500; color: var(--text-main); }
+p  { font-size: var(--fs-p); color: var(--text-body); }
+
+/* --- 佈局結構 --- */
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* 1. Hero 區塊 */
+.hero {
+    position: relative;
+    height: 20vh;
+}
+
+.hero-bg {
+    width: 100%;
+    height: 100%;
+    background-image: url('img/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: var(--hero-fallback-bg);
+}
+
+/* 2. Logo 中心對齊 Hero 下邊界 */
+.logo-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+    z-index: 10;
+}
+
+.main-logo {
+    width: 88px;
+    height: 88px;
+    border-radius: var(--radius-full);
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    object-fit: cover;
+    transition: var(--transition-base);
+}
+
+.main-logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+
+/* 3. 三欄卡片 */
+.card-container {
+    flex: 1;
+    display: flex;
+    padding: 60px 20px 0px 20px;
+    gap: var(--container-gap);
+}
+
+.card {
+    flex: 1;
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--card-default-bg);
+}
+
+.card span {
+    font-size: 2rem;
+    position: relative;
+    z-index: 2;
+    color: white;
+    font-size: var(--fs-label);
+    font-weight: 700;
+    text-shadow: var(--text-shadow)
+}
+
+/* 卡片背景與遮罩 */
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--card-img);
+    background-size: cover;
+    background-position: center;
+    transition: var(--transition-base);
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--overlay-dark);
+    transition: var(--transition-base);
+}
+
+.card-new { --card-img: url('img/index/new.jpg'); }
+.card-gallery { --card-img: url('img/index/gallery.jpg'); }
+.card-life { --card-img: url('img/index/life.jpg'); }
+
+.card:hover { transform: var(--hover-lift); }
+.card:hover::before { transform: scale(1.1); }
+.card:hover::after { background: var(--overlay-hover); }
+
+/* --- 4. Footer 區塊修正 --- */
+.footer {
+    padding: 20px 0;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.footer p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+    text-align: center;
+}
+
+/* --- Footer SNS 區塊修正 --- */
+/* 共用 SNS 按鈕基礎樣式 */
+.sns-links {
+    display: flex;
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+}
+
+.sns-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    transition: all 0.3s ease;
+}
+/* PNG 圖示統一處理邏輯 */
+.png-icon {
+    background-image: var(--icon); /* 使用行內定義的預設圖 */
+    background-size: 20px;         /* 統一控制圖示大小 */
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.png-icon:hover {
+    background-image: var(--hover); /* 懸停時自動切換為行內定義的 Hover 圖 */
+    background-color: transparent;  /* 根據需求決定是否保留背景色 */
+    transform: translateY(-3px);
+}
+
+
+/* 電腦版微調 */
+@media (min-width: 768px) {
+    .footer { padding: 30px 0; }
+    .footer p { font-size: 0.95rem; }
+    .sns-btn { width: 40px; height: 40px; }
+}

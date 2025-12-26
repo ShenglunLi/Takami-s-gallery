@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAKAMI's Portfolio - New</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 基礎設定：確保頁面可以捲動 */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color); /* 沿用您的背景色 */
+            color: var(--text-body);
+            /* 關鍵：不要設定 height: 100% 和 overflow: hidden */
+            min-height: 200vh; 
+        }
+
+        /* 漢堡選單圖示 */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            padding: 8px 16px;
+            background: var(--bg-color-ts);
+            border-radius: 8px;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-icon{
+            color: var(--icon-light);
+        }
+
+        /* 隱藏狀態 */
+        .menu-toggle.hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            transform: translateY(-20px);
+        }
+
+        .full-menu {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding-left: 30px;
+            padding-top: 80px;
+            background: var(--bg-color); /* 使用設計系統變數 */
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: start;
+            transition: var(--transition-base);
+            opacity: 0;
+        }
+
+    .full-menu.active {
+        top: 0;
+        opacity: 1;
+    }
+
+    /* 選單內的關閉按鈕，確保能點擊關閉 */
+    .close-menu {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        color: var(--text-main);
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+
+    .full-menu a {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin: 15px 0;
+        transition: var(--transition-base);
+    }
+
+    .full-menu a:hover {
+        color: var(--accent-color); /* 懸停時使用焦橘色 */
+        padding-left: 10px; /* 輕微位移增加互動感 */
+    }
+
+
+    /* --- New 頁面 Hero 區塊修正 --- */
+    .new-hero {
+        position: relative;
+        height: 40vh;           /* 高度佔據視窗的一半 */
+        width: 100%;
+        padding: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;       /* 確保背景不會溢出 */
+        color: white;           /* 統一文字基礎顏色 */
+    }
+
+    .new-hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: url('img/new-hero.jpg');
+        background-size: cover;    /* 確保背景圖填滿整個區塊 */
+        background-position: center;
+        z-index: 1;               /* 背景位於底層 */
+    }
+
+    /* 加入半透明遮罩，確保文字在任何底圖上都清晰可見 */
+    .new-hero-bg::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.8); 
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;               /* 文字內容位於背景與遮罩之上 */
+        text-align: center;
+        padding: 0 20px;
+    }
+
+    .hero-content p:first-child {
+        color: var(--accent-color); /* 使用焦橘色 */
+        letter-spacing: 3px;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+
+    .hero-content h1 {
+        font-size: 3rem;           /* 放大標題感 */
+        color: var(--text-light);    /* 使用淺灰色 */
+        margin-bottom: 8px;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.5); /* 增加文字陰影提升可讀性 */
+    }
+
+    .hero-content p:last-child {
+        font-size: 1.1rem;
+        color: var(--text-body);    /* 使用中灰色 */
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+
+    .new-container {
+        flex: 1;
+        display: flex;          /* 使用 Flex 佈局 */
+        flex-direction: column; /* 讓內容垂直排列 */
+        align-items: center;    /* 關鍵：將子元素（包含按鈕）水平置中 */
+
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 60px 20px;
+    }
+
+    /* 標題區域 */
+    .section-header {
+        margin-bottom: 60px;
+        border-left: 4px solid var(--accent-color);
+        padding-left: 20px;
+    }
+
+    .section-header p:first-child {
+        color: var(--accent-color);
+        letter-spacing: 2px;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .section-header h1 {
+        color: var(--accent-color);
+        margin: 10px 0;
+    }
+
+    /* 作品網格 */
+    .work-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: var(--container-gap);
+        margin-bottom: 80px;
+    }
+
+    .work-item {
+        background: var(--card-bg);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        transition: var(--transition-base);
+    }
+
+    .work-item:hover {
+        transform: var(--hover-lift);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .work-img {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+        filter: grayscale(20%);
+        transition: var(--transition-base);
+    }
+
+    .work-item:hover .work-img {
+        filter: grayscale(0%);
+    }
+
+    .work-info {
+        padding: 20px;
+    }
+
+    .work-info h3 {
+        color: var(--accent-color);
+        margin-bottom: 5px;
+    }
+
+    /* 介紹區域 (Featured) */
+    .featured-row {
+        display: flex;
+        flex-direction: column;
+        gap: 100px;
+        margin-top: 40px;
+        margin-bottom: 40px;
+    }
+
+    .featured-item {
+        display: flex;
+        align-items: center;
+        gap: 50px;
+    }
+
+    .featured-item:nth-child(even) {
+        flex-direction: row-reverse;
+    }
+
+    .featured-img-wrap {
+        flex: 1;
+    }
+
+    .featured-img-wrap img {
+        width: 100%;
+        border-radius: var(--radius-md);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .featured-content {
+        flex: 1;
+    }
+
+    .featured-content h2 {
+        color: var(--accent-color);
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+    }
+
+    .featured-content p {
+        color: var(--text-main);
+        margin-bottom: 30px;
+    }
+
+    /* 按鈕樣式 */
+    .btn-more {
+        width: 200px;           /* 1. 設定固定寬度 (依需求調整數值) */
+        display: inline-flex;   /* 2. 使用 inline-flex 讓按鈕寬度受控 */
+        display: flex;
+        justify-content: center;
+        padding: 12px 30px;
+        border: 1px solid var(--accent-color);
+        color: var(--accent-color);
+        border-radius: var(--radius-full);
+        font-weight: 500;
+        transition: var(--transition-base);
+    }
+
+    .btn-more:hover {
+        background: var(--accent-color);
+        color: white;
+    }
+
+    /* 電腦版尺寸調整 */
+    @media (min-width: 768px) {
+        :root {
+            --container-gap: 32px;
+        }
+    }
+
+    /* 手機版排版切換 */
+    @media (max-width: 768px) {
+        .featured-item, .featured-item:nth-child(even) {
+            flex-direction: column;
+            gap: 30px;
+        }
+        .featured-content h2 {
+            font-size: 1.8rem;
+        }
+    }
+    </style>
+</head>
+<body>
+
+    <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars menu-icon"></i>
+    </div>
+
+    <nav class="full-menu" id="fullMenu">
+        <div class="close-menu" onclick="toggleMenu()">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="new.html">New</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="life.html">Life</a>
+    </nav>
+
+    <header class="new-hero">
+        <div class="new-hero-bg"></div>
+        
+        <div class="hero-content">
+            <p>LATEST ARRIVALS</p>
+            <h1>最新作品</h1>
+            <p>Explore the newest stories captured through our lens.</p>
+        </div>
+    </header>
+
+    <main class="new-container">
+
+        <section class="featured-row">
+            <div class="featured-item">
+                <div class="featured-img-wrap">
+                    <img src="img/featured-1.jpg" alt="Featured">
+                </div>
+                <div class="featured-content">
+                    <h2>Gabriela Silva</h2>
+                    <p>這是一個關於光影與內心世界的對話。我們試圖在最暗的角落尋找靈魂的閃光，透過攝影紀錄下每一瞬間的真實情感與脆弱。</p>
+                    
+                </div>
+            </div>
+
+            <div class="featured-item">
+                <div class="featured-img-wrap">
+                    <img src="img/featured-1.jpg" alt="Featured">
+                </div>
+                <div class="featured-content">
+                    <h2>Amara Lopez</h2>
+                    <p>攝影不只是快門的跳動，更是生命力的延續。每一張照片的背後，都藏著一段不為人知的故事，等待著被發掘與細細體會。</p>
+
+                </div>
+            </div>
+        </section>
+        <a href="#" class="btn-more">READ MORE</a>
+        <footer class="footer">
+            <p>版權標語 © 2024 All Rights Reserved</p>
+            <p>sample@xmail.com</p>
+            <div class="sns-links">
+                <a href="#" class="sns-btn"><i class="fa-solid font-plurk">P</i></a>
+                <a href="#" class="sns-btn"><i class="fa-brands fa-x-twitter"></i></a>
+                <a href="#" class="sns-btn"><i class="fa-brands fa-bluesky"></i></a>
+                <a href="#" class="sns-btn"><i class="fa-solid fa-image"></i></a>
+            </div>
+        </footer>
+    </main>
+
+<script>
+    // 1. 將變數宣告放在最上方
+    const menuBtn = document.getElementById('menuBtn');
+    const fullMenu = document.getElementById('fullMenu');
+    let lastScrollY = window.scrollY;
+
+    // 2. 定義切換函式
+    function toggleMenu() {
+        if (!fullMenu || !menuBtn) return; // 防禦性檢查
+
+        const isActive = fullMenu.classList.toggle('active');
+        
+        if (isActive) {
+            // 開啟選單時：隱藏外部按鈕
+            menuBtn.classList.add('hidden');
+        } else {
+            // 關閉選單時：重新顯示按鈕
+            menuBtn.classList.remove('hidden');
+        }
+    }
+
+    // 3. 核心捲動偵測邏輯
+    window.addEventListener('scroll', () => {
+        // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
+        // 避免在操作選單時按鈕狀態被捲動事件干擾
+        if (fullMenu.classList.contains('active')) return;
+
+        const currentScrollY = window.scrollY;
+        const delta = currentScrollY - lastScrollY;
+
+        // 輸出數值到控制台
+        // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
+
+        if (delta > 0 && currentScrollY > 50) {
+            // 向下捲動 -> 隱藏
+            menuBtn.classList.add('hidden');
+        } else if (delta < 0) {
+            // 向上捲動 -> 顯示
+            menuBtn.classList.remove('hidden');
+        }
+
+        lastScrollY = currentScrollY;
+    });
+</script>
+
+</body>
+</html>

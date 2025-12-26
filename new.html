@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAKAMI's Portfolio - New</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- 基礎設定 --- */
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-body);
+            min-height: 200vh; 
+        }
+
+        .new-container {
+            flex: 1;
+            display: flex;          /* 使用 Flex 佈局 */
+            flex-direction: column; /* 讓內容垂直排列 */
+            align-items: center;    /* 關鍵：將子元素（包含按鈕）水平置中 */
+
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+
+        /* --- 導覽選單樣式 --- */
+        .menu-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            padding: 8px 16px;
+            background: var(--bg-color-ts);
+            border-radius: 8px;
+            font-size: 1.5rem;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .menu-icon{color: var(--icon-light);}
+
+        .menu-toggle.hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            transform: translateY(-20px);
+        }
+
+        .full-menu {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding-left: 30px;
+            padding-top: 80px;
+            background: var(--bg-color);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition-base);
+            opacity: 0;
+        }
+
+        .full-menu.active {
+            top: 0;
+            opacity: 1;
+        }
+
+        .close-menu {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            color: var(--text-main);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .full-menu a {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 15px 0;
+            text-decoration: none;
+            transition: var(--transition-base);
+        }
+
+        .full-menu a:hover {
+            color: var(--accent-color);
+            padding-left: 10px;
+        }
+
+        /* --- Hero 區塊 --- */
+        .new-hero {
+            position: relative;
+            height: 40vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .new-hero-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url('img/new-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        .new-hero-bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6); 
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            color: #ffffff;
+            margin: 10px 0;
+            text-shadow: var(--text-shadow);
+        }
+
+        .hero-content p{
+            color: var(--text-muted);
+        }
+
+        .hero-content p:first-child {
+            color: var(--accent-color); /* 使用焦橘色 */
+            letter-spacing: 3px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        /* --- 動態內容容器 (work Section) --- */
+        .work-row {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 80px; /* 控制各筆作品之間的距離 */
+        }
+
+        .work-item {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            width: 100%;
+        }
+
+        /* 關鍵：維持原始結構，偶數筆圖片在右側 */
+        .work-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        /* 圖片包裝層 */
+        .work-img-wrap {
+            flex: 1.2; /* 圖片佔比略大 */
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .work-img-wrap img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+            object-fit: cover;
+        }
+
+        .work-item:hover .work-img-wrap img {
+            transform: scale(1.03);
+        }
+
+        /* 文字內容層 */
+        .work-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            /* 如果希望文字也置中，可開啟下方兩行，目前維持原始靠左/靠右感 */
+            /* align-items: center; */
+            /* text-align: center; */
+        }
+
+        .date-label {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .work-content h2 {
+            color: var(--text-main);
+            font-size: 2.2rem;
+            margin: 0 0 15px 0;
+        }
+
+        .work-content p {
+            color: var(--text-body);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+
+        /* 按鈕樣式 */
+        .btn-more {
+            width: 200px;           /* 1. 設定固定寬度 (依需求調整數值) */
+            display: inline-flex;   /* 2. 使用 inline-flex 讓按鈕寬度受控 */
+            display: flex;
+            justify-content: center;
+            padding: 12px 30px;
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            transition: var(--transition-base);
+        }
+
+        .btn-more:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* 加載中與錯誤提示 */
+        .loading-text {
+            text-align: center;
+            padding: 100px 0;
+            color: var(--text-muted);
+        }
+
+        /* 電腦版尺寸調整 */
+        @media (min-width: 768px) {
+            :root {
+                --container-gap: 32px;
+            }
+        }
+
+        /* --- 手機版 RWD 排版 --- */
+        @media (max-width: 768px) {
+            .work-item, .work-item:nth-child(even) {
+                flex-direction: column;
+                gap: 30px;
+            }
+            /* .work-content {
+                align-items: center;
+                text-align: center;
+            } */
+            .work-content h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars menu-icon"></i>
+    </div>
+
+    <nav class="full-menu" id="fullMenu">
+        <div class="close-menu" onclick="toggleMenu()">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="new.html">New</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="life.html">Life</a>
+    </nav>
+
+    <header class="new-hero">
+        <div class="new-hero-bg"></div>
+        
+        <div class="hero-content">
+            <p>LATEST ARRIVALS</p>
+            <h1>最新作品</h1>
+            <p>Explore the newest stories captured through our lens.</p>
+        </div>
+    </header>
+
+    <main class="new-container">
+
+        <section class="work-row" id="workContainer">
+            <div class="loading-text">內容加載中...</div>
+        </section>
+        
+
+        <a href="#" class="btn-more">READ MORE</a>
+        <footer class="footer">
+            <p>版權標語 © 2024 All Rights Reserved</p>
+            <p>sample@xmail.com</p>
+            <ul class="sns-links">
+                <li><a href="#" class="sns-btn png-icon" style="--icon: url('img/icon/icon-plurk.png'); --hover: url('img/icon/icon-plurk-hover.png');"></a></li>
+                <li><a href="#" class="sns-btn png-icon" style="--icon: url('img/icon/icon-x.png'); --hover: url('img/icon/icon-x-hover.png');"></a></li>
+                <li><a href="#" class="sns-btn png-icon" style="--icon: url('img/icon/icon-bluesky.png'); --hover: url('img/icon/icon-bluesky-hover.png');"></a></li>
+                <li><a href="#" class="sns-btn png-icon" style="--icon: url('img/icon/icon-pixiv.png'); --hover: url('img/icon/icon-pixiv-hover.png');"></a></li>
+            </ul>
+        </footer>
+    </main>
+
+<script>
+    // 1. 將變數宣告放在最上方
+    const menuBtn = document.getElementById('menuBtn');
+    const fullMenu = document.getElementById('fullMenu');
+    let lastScrollY = window.scrollY;
+
+    // 2. 定義切換函式
+    function toggleMenu() {
+        if (!fullMenu || !menuBtn) return; // 防禦性檢查
+
+        const isActive = fullMenu.classList.toggle('active');
+        
+        if (isActive) {
+            // 開啟選單時：隱藏外部按鈕
+            menuBtn.classList.add('hidden');
+        } else {
+            // 關閉選單時：重新顯示按鈕
+            menuBtn.classList.remove('hidden');
+        }
+    }
+
+    // 3. 核心捲動偵測邏輯
+    window.addEventListener('scroll', () => {
+        // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
+        // 避免在操作選單時按鈕狀態被捲動事件干擾
+        if (fullMenu.classList.contains('active')) return;
+
+        const currentScrollY = window.scrollY;
+        const delta = currentScrollY - lastScrollY;
+
+        // 輸出數值到控制台
+        // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
+
+        if (delta > 0 && currentScrollY > 50) {
+            // 向下捲動 -> 隱藏
+            menuBtn.classList.add('hidden');
+        } else if (delta < 0) {
+            // 向上捲動 -> 顯示
+            menuBtn.classList.remove('hidden');
+        }
+
+        lastScrollY = currentScrollY;
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('workContainer');
+        // 因為 html 在根目錄，此路徑指向 root/data/content.json
+        const JSON_URL = 'data/content.json'; 
+
+        async function fetchAndRenderData() {
+            try {
+                const response = await fetch(JSON_URL);
+                if (!response.ok) throw new Error('無法讀取資料檔');
+                
+                const data = await response.json();
+
+                // 1. 排序邏輯 (依日期從新到舊)
+                data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // 2. 取得前 10 筆資料
+                const latestTen = data.slice(0, 10);
+
+                // 3. 生成 HTML
+                if (latestTen.length === 0) {
+                    container.innerHTML = '<p class="loading-text">目前尚無作品內容。</p>';
+                    return;
+                }
+
+                container.innerHTML = latestTen.map(item => {
+                    // 生成標籤 HTML 陣列
+                    const tagsHTML = item.tags && item.tags.length > 0 
+                        ? `<div class="tag-container">${item.tags.map(tag => `<span class="tag-item">#${tag}</span>`).join('')}</div>`
+                        : '';
+
+                    // 設定圖片完整路徑與預設圖路徑
+                    const imgPath = `img/gallery/${item.img}`;
+                    const fallbackPath = `img/gallery/default.jpg`;
+
+                    return `
+                        <div class="work-item">
+                            <div class="work-img-wrap">
+                                <img src="${imgPath}" 
+                                    alt="${item.title}" 
+                                    onerror="this.onerror=null; this.src='${fallbackPath}';">
+                            </div>
+                            <div class="work-content">
+                                <span class="date-label" style="font-size: 0.8rem; color: var(--accent-color); font-weight: bold;">${item.date}</span>
+                                <h2>${item.title}</h2>
+                                <p>${item.desc}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+            } catch (error) {
+                console.error('Error:', error);
+                container.innerHTML = `<p class="loading-text">讀取內容時發生錯誤：${error.message}</p>`;
+            }
+        }
+
+        fetchAndRenderData();
+    });
+</script>
+
+</body>
+</html>
