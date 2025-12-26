@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TAKAMI's Portfolio - New</title>
+    <meta name="robots" content="noindex, nofollow, noimageindex">
+    <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!" />
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
@@ -305,7 +309,8 @@
 
         <a href="#" class="btn-more">READ MORE</a>
         <footer class="footer">
-            <p>版權標語 © 2024 All Rights Reserved</p>
+            <p>&copy; 2024 Takami's Gallery. All Rights Reserved.</p>
+            <p>本站圖文受版權保護，禁止未經授權之轉載、AI 訓練與商業使用。</p>
             <p>sample@xmail.com</p>
             <ul class="sns-links">
                 <li><a href="#" class="sns-btn png-icon" style="--icon: url('img/icon/icon-plurk.png'); --hover: url('img/icon/icon-plurk-hover.png');"></a></li>
@@ -420,6 +425,18 @@
         fetchAndRenderData();
     });
 </script>
+<script>
+    // 禁止右鍵
+    document.addEventListener('contextmenu', e => e.preventDefault());
 
+    // 禁止複製與選取文字
+    document.addEventListener('selectstart', e => e.preventDefault());
+    document.addEventListener('copy', e => e.preventDefault());
+
+    // 禁止圖片拖拽
+    document.addEventListener('dragstart', e => {
+        if (e.target.tagName === 'IMG') e.preventDefault();
+    });
+</script>
 </body>
 </html>
