@@ -249,3 +249,123 @@ p  { font-size: var(--fs-p); color: var(--text-body); }
     .footer p { font-size: 0.95rem; }
     .sns-btn { width: 40px; height: 40px; }
 }
+
+/* --- 導覽選單樣式 --- */
+.menu-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    cursor: pointer;
+    padding: 8px 16px;
+    background: var(--bg-color-ts);
+    border-radius: 8px;
+    font-size: 1.5rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.menu-icon{color: var(--icon-light);}
+
+.menu-toggle.hidden {
+    opacity: 0 !important;
+    visibility: hidden !important;
+    transform: translateY(-20px);
+}
+
+.full-menu {
+    position: fixed;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding-left: 30px;
+    padding-top: 80px;
+    background: var(--bg-color);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    transition: var(--transition-base);
+    opacity: 0;
+}
+
+.full-menu.active {
+    top: 0;
+    opacity: 1;
+}
+
+.close-menu {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    color: var(--text-main);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.full-menu a {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-main);
+    margin: 15px 0;
+    text-decoration: none;
+    transition: var(--transition-base);
+}
+
+.full-menu a:hover {
+    color: var(--accent-color);
+    padding-left: 10px;
+}
+
+/* --- Hero 區塊 --- */
+.new-hero {
+    position: relative;
+    height: 40vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.new-hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('img/new-hero.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+.new-hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6); 
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    color: #ffffff;
+    margin: 10px 0;
+    text-shadow: var(--text-shadow);
+}
+
+.hero-content p{
+    color: var(--text-muted);
+}
+
+.hero-content p:first-child {
+    color: var(--accent-color); /* 使用焦橘色 */
+    letter-spacing: 3px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}

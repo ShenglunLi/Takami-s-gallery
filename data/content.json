@@ -1,9 +1,29 @@
 [
   {
-    "title": "標題一",
+    "type": "series",
+    "title": "測試系列",
+    "desc": "系列作品說明",
+    "date": "2025-12-27",
+    "cover": "A-01.jpg",
+    "img": [
+      "A-01.jpg",
+      "A-02.jpg",
+      "A-03.jpg",
+      "A-04.jpg",
+      "A-05.jpg",
+      "A-06.jpg"
+    ],
+    "category": "Comic",
+    "tags": []
+  },
+  {
+    "type": "single",
+    "title": "標題1",
     "desc": "在清晨的森林中捕捉到的光影流動。",
     "date": "2025-12-25",
+    "cover": "test.jpg",
     "img": "test.jpg",
+    "category": "Default",
     "tags": [
       "tag1",
       "tag2",
@@ -11,17 +31,81 @@
     ]
   },
   {
-    "title": "標題二",
+    "type": "single",
+    "title": "標題2",
     "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
     "date": "2025-11-30",
+    "cover": "test.jpg",
     "img": "test.jpg",
-    "tags": []
+    "category": "Default",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
   },
   {
-    "title": "標題三",
+    "type": "single",
+    "title": "標題3",
     "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
     "date": "2025-10-10",
+    "cover": "test.jpg",
     "img": "test.jpg",
-    "tags": []
+    "category": "Default",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
+  },
+  {
+    "type": "single",
+    "title": "標題4",
+    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "date": "2025-10-01",
+    "cover": "test.jpg",
+    "img": "test.jpg",
+    "category": "Type A",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
+  },
+  {
+    "type": "single",
+    "title": "標題5",
+    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
+    "date": "2025-10-01",
+    "cover": "test.jpg",
+    "img": "test.jpg",
+    "category": "Type A",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
+  },
+  {
+    "type": "single",
+    "title": "標題6",
+    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+    "date": "2025-10-01",
+    "cover": "test.jpg",
+    "img": "test.jpg",
+    "category": "Type A",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
+  },
+  {
+    "type": "single",
+    "title": "標題7",
+    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
+    "date": "2025-10-01",
+    "cover": "test.jpg",
+    "img": "test.jpg",
+    "category": "Type A",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
   }
 ]

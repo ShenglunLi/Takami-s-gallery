@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | TAKAMI's Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* --- Gallery 專屬樣式 --- */
+        .gallery-main { padding: 40px 0; min-height: 80vh; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+        /* 1. FilterBar 按鈕配置靠左對齊 */
+        .category-filter {
+            display: flex;
+            justify-content: flex-start;
+            gap: 12px;
+            margin-top: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        .filter-btn {
+            padding: 6px 24px;
+            border: 1px solid var(--primary-color);
+            background: transparent;
+            color: var(--primary-color);
+            border-radius: var(--radius-full);
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+        }
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary-color);
+            color: #fff;
+        }
+
+        /* 2. 類別分組樣式 */
+        .category-group {
+            margin-bottom: 60px;
+            position: relative;
+        }
+        .category-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--text-light-subtitle);
+            font-weight: 700;
+        }
+
+        /* 3. Instagram 風格網格佈局 */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 稍微調大最小寬度增加質感 */
+            gap: 8px;
+        }
+
+        .work-card {
+            position: relative;
+            background: #eee;
+            aspect-ratio: 1 / 1;
+            overflow: hidden;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        /* 初始隱藏超出的項目 */
+        .work-card.is-hidden {
+            display: none;
+        }
+
+        .work-card:hover { opacity: 0.9; }
+        .work-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* 4. 顯示更多按鈕樣式 */
+        .show-more-container {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-start;
+        }
+        .show-more-btn {
+            background: none;
+            border: none;
+            color: var(--primary-hover);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+        }
+        .show-more-btn:hover {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+        .show-more-btn i { font-size: 0.8rem; }
+
+        /* Overlay 彈窗 */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: none; 
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 0;
+        }
+        .overlay.active { display: flex; }
+        .overlay-close {
+            position: fixed; top: 20px; right: 25px;
+            color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 1010;
+        }
+        .overlay-content {
+            width: 90%; max-width: 900px; margin: auto;
+            background: #fff; border-radius: 12px; overflow: hidden;
+        }
+        .overlay-image-container { position: relative; background: #000; display: flex; justify-content: center; }
+        .overlay-image-container img { max-width: 100%; max-height: 75vh; object-fit: contain; }
+        .overlay-details { padding: 30px; }
+        .work-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
+
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.3); color: #fff; border: none;
+            padding: 15px; cursor: pointer; font-size: 1.2rem;
+        }
+        .nav-btn:hover { background: rgba(0,0,0,0.6); }
+        .prev-btn { left: 0; }
+        .next-btn { right: 0; }
+
+        @media (max-width: 600px) {
+            .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
+            .category-title { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars menu-icon"></i>
+    </div>
+
+    <nav class="full-menu" id="fullMenu">
+        <div class="close-menu" onclick="toggleMenu()">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="new.html">New</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="life.html">Life</a>
+    </nav>
+
+    <header class="new-hero" style="height: 30vh;">
+        <div class="new-hero-bg" style="background-image: url('img/index/gallery.jpg');"></div>
+        <div class="hero-content">
+            <p>Gallery</p>
+            <h1>作品全集</h1>
+        </div>
+    </header>
+
+    <main class="gallery-main">
+        <div class="category-filter" id="filterBar"></div>
+        <div id="galleryContainer"></div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2026 Takami's Gallery. All Rights Reserved.</p>
+    </footer>
+
+    <div id="workOverlay" class="overlay">
+        <span class="overlay-close" onclick="closeOverlay()">&times;</span>
+        <div class="overlay-content">
+            <div class="overlay-image-container">
+                <button class="nav-btn prev-btn" onclick="changeWork(-1)"><i class="fas fa-chevron-left"></i></button>
+                <img id="modalImg" src="" alt="">
+                <button class="nav-btn next-btn" onclick="changeWork(1)"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            <div class="overlay-details">
+                <h2 id="modalTitle">標題</h2>
+                <div class="work-meta" id="modalMeta"></div>
+                <p id="modalDesc"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allWorks = [];
+        let currentFilteredWorks = []; 
+        let currentIndex = 0;
+
+        async function initGallery() {
+            try {
+                const response = await fetch('data/content.json');
+                allWorks = await response.json();
+                allWorks = allWorks.map(w => ({ ...w, category: w.category || 'Other' }));
+                renderFilters();
+                renderCategorizedGallery('All');
+            } catch (err) {
+                console.error("Load Failed:", err);
+            }
+        }
+
+        function renderFilters() {
+            const categories = ['All', ...new Set(allWorks.map(w => w.category))];
+            const filterBar = document.getElementById('filterBar');
+            filterBar.innerHTML = categories.map(cat => `
+                <button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="handleFilterClick('${cat}', this)">
+                    ${cat}
+                </button>
+            `).join('');
+        }
+
+        function handleFilterClick(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            renderCategorizedGallery(category);
+        }
+
+        function renderCategorizedGallery(filterTag) {
+            const container = document.getElementById('galleryContainer');
+            container.innerHTML = '';
+            currentFilteredWorks = [];
+
+            const categoriesInView = filterTag === 'All' 
+                ? [...new Set(allWorks.map(w => w.category))]
+                : [filterTag];
+
+            categoriesInView.forEach(cat => {
+                const worksInCat = allWorks.filter(w => w.category === cat);
+                if (worksInCat.length === 0) return;
+
+                const groupDiv = document.createElement('div');
+                groupDiv.className = 'category-group';
+
+                const title = document.createElement('h2');
+                title.className = 'category-title';
+                title.innerText = cat;
+                groupDiv.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'gallery-grid';
+
+                worksInCat.forEach((work, idx) => {
+                    const globalIndex = currentFilteredWorks.length;
+                    currentFilteredWorks.push(work);
+                    const card = document.createElement('div');
+                    card.className = 'work-card';
+                    card.onclick = () => openOverlay(globalIndex);
+                    card.innerHTML = `<img src="img/gallery/${work.img}" alt="${work.title}" onerror="this.src='img/gallery/default.jpg'">`;
+                    grid.appendChild(card);
+                });
+
+                groupDiv.appendChild(grid);
+                container.appendChild(groupDiv);
+
+                applyLimit(grid, groupDiv);
+            });
+        }
+
+        function applyLimit(grid, groupDiv) {
+            // 透過 getComputedStyle 取得當前網格實際的列數
+            const gridStyle = window.getComputedStyle(grid);
+            const columns = gridStyle.getPropertyValue('grid-template-columns').split(' ').length;
+            
+            // 判斷是否為手機版 (小於 600px)
+            const isMobile = window.innerWidth <= 600;
+            
+            // 設定限制數量：電腦版 2 列，手機版 3 列
+            const maxRows = isMobile ? 3 : 2;
+            const limit = columns * maxRows;
+            
+            const cards = grid.querySelectorAll('.work-card');
+            
+            if (cards.length > limit) {
+                cards.forEach((card, i) => {
+                    if (i >= limit) card.classList.add('is-hidden');
+                });
+
+                const btnContainer = document.createElement('div');
+                btnContainer.className = 'show-more-container';
+                btnContainer.innerHTML = `
+                    <button class="show-more-btn" onclick="toggleExpand(this)">
+                        more... <i class="fas fa-chevron-down"></i>
+                    </button>
+                `;
+                groupDiv.appendChild(btnContainer);
+            }
+        }
+
+        function toggleExpand(btn) {
+            const group = btn.closest('.category-group');
+            const hiddenCards = group.querySelectorAll('.work-card.is-hidden');
+            hiddenCards.forEach(card => card.classList.remove('is-hidden'));
+            btn.parentElement.remove();
+        }
+
+        function openOverlay(index) {
+            currentIndex = index;
+            const item = currentFilteredWorks[currentIndex];
+            document.getElementById('modalImg').src = `img/gallery/${item.img}`;
+            document.getElementById('modalTitle').innerText = item.title;
+            document.getElementById('modalDesc').innerText = item.desc || "";
+            document.getElementById('modalMeta').innerText = `${item.date} | ${item.category}`;
+            document.getElementById('workOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        function closeOverlay() {
+            document.getElementById('workOverlay').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function changeWork(step) {
+            currentIndex += step;
+            if (currentIndex < 0) currentIndex = currentFilteredWorks.length - 1;
+            if (currentIndex >= currentFilteredWorks.length) currentIndex = 0;
+            openOverlay(currentIndex);
+        }
+
+        function toggleMenu() {
+            const fullMenu = document.getElementById('fullMenu');
+            const menuBtn = document.getElementById('menuBtn');
+            const isActive = fullMenu.classList.toggle('active');
+            if (isActive) menuBtn.classList.add('hidden');
+            else menuBtn.classList.remove('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', initGallery);
+        
+        // 如果旋轉手機或調整視窗大小，重新計算顯示狀態
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                // 取得當前激活的分類按鈕文字重新渲染
+                const activeBtn = document.querySelector('.filter-btn.active');
+                if (activeBtn) {
+                    renderCategorizedGallery(activeBtn.innerText.trim());
+                }
+            }, 250);
+        });
+    </script>
+</body>
+</html>
