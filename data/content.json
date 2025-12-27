@@ -4,14 +4,14 @@
     "title": "[series] 測試系列",
     "desc": "系列作品說明",
     "date": "2025-12-27",
-    "cover": "Frame 2.jpg",
+    "cover": "A-02.jpg",
     "img": [
-      "Frame 2.jpg",
-      "Frame 1.jpg",
-      "Frame 3.jpg",
-      "Frame 6.jpg",
-      "Frame 5.jpg",
-      "Frame 4.jpg"
+      "A-02.jpg",
+      "A-03.jpg",
+      "A-01.jpg",
+      "A-05.jpg",
+      "A-04.jpg",
+      "A-06.jpg"
     ],
     "category": "Comic",
     "tags": []
