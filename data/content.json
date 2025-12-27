@@ -1,62 +1,19 @@
 [
   {
-    "type": "single",
-    "title": "新作品",
-    "desc": "請輸入說明",
+    "type": "series",
+    "title": "[series] 測試系列",
+    "desc": "系列作品說明",
     "date": "2025-12-27",
-    "cover": "",
-    "img": "Frame 2.jpg",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "type": "single",
-    "title": "新作品",
-    "desc": "請輸入說明",
-    "date": "2025-12-27",
-    "cover": "",
-    "img": "Frame 1.jpg",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "type": "single",
-    "title": "新作品",
-    "desc": "請輸入說明",
-    "date": "2025-12-27",
-    "cover": "",
-    "img": "Frame 3.jpg",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "type": "single",
-    "title": "新作品",
-    "desc": "請輸入說明",
-    "date": "2025-12-27",
-    "cover": "",
-    "img": "Frame 6.jpg",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "type": "single",
-    "title": "新作品",
-    "desc": "請輸入說明",
-    "date": "2025-12-27",
-    "cover": "",
-    "img": "Frame 5.jpg",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "type": "single",
-    "title": "新作品",
-    "desc": "請輸入說明",
-    "date": "2025-12-27",
-    "cover": "",
-    "img": "Frame 4.jpg",
-    "category": "Uncategorized",
+    "cover": "Frame 2.jpg",
+    "img": [
+      "Frame 2.jpg",
+      "Frame 1.jpg",
+      "Frame 3.jpg",
+      "Frame 6.jpg",
+      "Frame 5.jpg",
+      "Frame 4.jpg"
+    ],
+    "category": "Comic",
     "tags": []
   },
   {
@@ -66,7 +23,7 @@
     "date": "2025-12-25",
     "cover": "",
     "img": "test.jpg",
-    "category": "Uncategorized",
+    "category": "Default",
     "tags": [
       "tag1",
       "tag2",
@@ -80,18 +37,11 @@
     "date": "2025-11-30",
     "cover": "",
     "img": "test.jpg",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "type": "series",
-    "title": "測試系列",
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
-    "date": "2025-10-20",
-    "cover": "",
-    "img": "",
-    "category": "Uncategorized",
-    "tags": []
+    "category": "Default",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
   },
   {
     "type": "single",
@@ -100,7 +50,10 @@
     "date": "2025-10-10",
     "cover": "",
     "img": "test.jpg",
-    "category": "Uncategorized",
-    "tags": []
+    "category": "Default",
+    "tags": [
+      "tag1",
+      "tag2"
+    ]
   }
 ]
