@@ -33,7 +33,7 @@
         .overlay.active { display: flex; }
         
         /* 統一按鈕點擊範圍 (電腦版) */
-        .overlay-close, .overlay-back { 
+        /* .overlay-close, .overlay-back { 
             position: fixed; 
             top: 30px; 
             width: 48px;
@@ -48,10 +48,50 @@
             background: rgba(255,255,255,0.05);
             border-radius: 50%;
         }
-        .overlay-close { right: 90px; }
-        .overlay-back { right: 90px; display: none; }
-        .overlay-close:hover, .overlay-back:hover { background: rgba(255,255,255,0.15); opacity: 1; }
-        .overlay-close .material-symbols-outlined, .overlay-back .material-symbols-outlined { font-size: 2rem; }
+        .overlay-close:hover, .overlay-back:hover { background: rgba(255,255,255,0.15); opacity: 1; }*/
+        
+        /* --- 統一燈箱控制按鈕樣式 (關閉與返回) --- */
+        .overlay-close, .overlay-back {
+            position: fixed;
+            top: 30px;
+            right: 90px;
+            display: flex; /* 預設使用 flex 以便置中圖示 */
+            align-items: center !important;
+            justify-content: center !important;
+            width: 48px !important;
+            height: 48px !important;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1010;
+            transition: 0.3s;
+            border: none; /* 確保沒有邊框 */
+        }
+
+        .overlay-close:hover, .overlay-back:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* 統一 Material Icons 在按鈕內的顯示 */
+        .overlay-close .material-symbols-outlined, 
+        .overlay-back .material-symbols-outlined {
+            font-weight: 100;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: auto !important;
+            height: auto !important;
+            font-size: 2rem !important;
+            line-height: 1 !important;
+            color: #fff;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* 初始狀態控制 */
+        .overlay-close { display: flex; }
+        .overlay-back { display: none; } /* 初始隱藏，進入閱讀器後由 JS 切換為 flex */
+
 
         .overlay-content { width: 85%; max-width: 1200px; display: flex; flex-direction: column; position: relative; margin: 0 auto; }
 
@@ -146,6 +186,8 @@
             box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); 
         }
 
+
+
         /* RWD 調整 */
         /*手機版面按鈕移至左上 */
         @media (max-width: 900px) {
@@ -212,6 +254,18 @@
                     <div class="date-tag" id="infoDate"></div>
                     <h2 id="infoTitle">作品標題</h2>
                     <p id="infoDesc">作品描述內容...</p>
+                    <!-- 拍手區塊 -->
+                    <div class="clap-section">
+                        <button id="clapBtn" class="clap-btn">
+                            <span class="material-symbols-outlined">favorite</span>
+                            <span id="clapCount">0</span>
+                        </button>
+                        
+                        <div id="clappedStatus" style="display: none; color: var(--primary-hover); font-weight: bold; align-items: center; gap: 8px;">
+                            <span class="material-symbols-outlined">favorite</span>
+                            <span id="clapCountStatus">0</span><span>已完成拍手</span>
+                        </div>
+                    </div>
                     <button id="infoReadBtn" class="read-btn" onclick="enterViewer()">
                         開始閱讀
                     </button>
@@ -229,7 +283,7 @@
             </div>
         </div>
     </div>
-
+    <!-- 內容渲染 -->
     <script>
         let allWorks = [];
         let currentFilteredWorks = []; 
@@ -312,8 +366,17 @@
         function openOverlay(index) {
             currentIndex = index;
             isViewerActive = false;
+
+            // --- 新增：重設拍手數字為讀取狀態 ---
+            const clapDisplays = [
+                document.querySelector('#clapBtn #clapCount'),
+                document.querySelector('#clappedStatus #clapCountStatus')
+            ];
+            clapDisplays.forEach(el => { if (el) el.innerText = "-"; }); 
+            // 或者設為 "0"，視乎你希望視覺上如何呈現
+            // ----------------------------------
+
             updateOverlayUI();
-            
             document.getElementById('workOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
             resetUIInactivity();
@@ -356,8 +419,13 @@
             } else {
                 document.getElementById('infoLayer').style.display = 'flex';
                 document.getElementById('viewerLayer').classList.remove('active');
-                document.getElementById('overlayCloseBtn').style.display = 'block';
+                // 將原本的 'block' 修改為 'flex'
+                document.getElementById('overlayCloseBtn').style.display = 'flex'; 
                 document.getElementById('overlayBackBtn').style.display = 'none';
+            }
+
+            if (typeof window.syncClaps === 'function') {
+                window.syncClaps(item.id);
             }
         }
 
@@ -460,15 +528,185 @@
             }
         });
 
-        function toggleMenu() {
-            const fullMenu = document.getElementById('fullMenu');
-            const menuBtn = document.getElementById('menuBtn');
-            const isActive = fullMenu.classList.toggle('active');
-            if (isActive) menuBtn.classList.add('hidden');
-            else menuBtn.classList.remove('hidden');
-        }
+        // function toggleMenu() {
+        //     const fullMenu = document.getElementById('fullMenu');
+        //     const menuBtn = document.getElementById('menuBtn');
+        //     const isActive = fullMenu.classList.toggle('active');
+        //     if (isActive) menuBtn.classList.add('hidden');
+        //     else menuBtn.classList.remove('hidden');
+        // }
 
         document.addEventListener('DOMContentLoaded', initGallery);
+    </script>
+
+    <!-- 拍手功能 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+        import { getDatabase, ref, onValue, runTransaction, off } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
+
+        // 1. Firebase 初始化 (這部分在 script 載入時就會執行，達到預熱效果)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDZ9fVnata2mqQb-YPceFKWEdKdQwL6nhA",
+            authDomain: "takami-gallery.firebaseapp.com",
+            databaseURL: "https://takami-gallery-default-rtdb.firebaseio.com",
+            projectId: "takami-gallery",
+            storageBucket: "takami-gallery.firebasestorage.app",
+            messagingSenderId: "777768543738",
+            appId: "1:777768543738:web:f8f0fcf7aa9cdc716f7043",
+            measurementId: "G-JTZ69DZ4F4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        let currentClapRef = null;
+
+        // --- 在這裡可以加入一個「預熱」動作 ---
+        // 隨便讀取一個不存在的節點，強迫瀏覽器在背景完成 WebSocket 連線
+        onValue(ref(db, '.info/connected'), (snapshot) => {
+            if (snapshot.val() === true) {
+                console.log("Firebase connected (pre-heated)");
+            }
+        }, { onlyOnce: true });
+
+        // 監聽點擊
+        document.getElementById('clapBtn').addEventListener('click', handleClap);
+
+        /**
+         * 檢查個別作品紀錄 (與上一步驟邏輯相同)
+         */
+        function checkClapLimit(workId, updateHistory = false) {
+            if (!workId) return true;
+            const now = Date.now();
+            const oneHour = 60 * 60 * 1000;
+            const btn = document.getElementById('clapBtn');
+            const status = document.getElementById('clappedStatus');
+            
+            let allHistory = JSON.parse(localStorage.getItem('clap_history_map') || "{}");
+            let workClaps = allHistory[workId] || [];
+            workClaps = workClaps.filter(timestamp => (now - timestamp) < oneHour);
+
+            if (workClaps.length >= 1) {
+                btn.style.display = "none";
+                status.style.display = "flex";
+                return false;
+            }
+
+            if (updateHistory) {
+                workClaps.push(now);
+                allHistory[workId] = workClaps;
+                localStorage.setItem('clap_history_map', JSON.stringify(allHistory));
+                btn.style.display = "none";
+                status.style.display = "flex";
+            } else {
+                btn.style.display = "flex";
+                status.style.display = "none";
+            }
+            return true;
+        }
+
+        // 同步點讚數的功能 (現在 db 已經預熱好了，執行速度會快很多)
+        window.syncClaps = function(workId) {
+            if (!workId) return;
+            checkClapLimit(workId, false);
+
+            if (currentClapRef) off(currentClapRef);
+
+            const clapDisplays = [
+                document.querySelector('#clapBtn #clapCount'),
+                document.querySelector('#clappedStatus #clapCountStatus')
+            ];
+
+            currentClapRef = ref(db, 'claps/' + workId);
+
+            // 在這裡可以選擇再次確保顯示讀取中，直到 Firebase 回傳
+            onValue(currentClapRef, (snapshot) => {
+                const count = snapshot.val() || 0;
+                clapDisplays.forEach(el => {
+                    if (el) el.innerText = count;
+                });
+            });
+        };
+        function handleClap() {
+            const item = currentFilteredWorks[currentIndex];
+            if (!item || !item.id) return;
+
+            // 樂觀更新：立刻讓使用者看到數字增加
+            const clapCountDisplay = document.querySelector('#clapBtn #clapCount');
+            const clapCountStatus = document.querySelector('#clappedStatus #clapCountStatus');
+            let currentNum = parseInt(clapCountDisplay.innerText) || " ";
+            const optimisticNum = currentNum + 1;
+            
+            if (clapCountDisplay) clapCountDisplay.innerText = optimisticNum;
+            if (clapCountStatus) clapCountStatus.innerText = optimisticNum;
+
+            if (!checkClapLimit(item.id, true)) return;
+
+            const clapRef = ref(db, 'claps/' + item.id);
+            runTransaction(clapRef, (current) => {
+                return (current || 0) + 1;
+            });
+        }
+    </script>
+
+    <!-- 主選單 -->
+    <script>
+        // 1. 將變數宣告放在最上方
+        const menuBtn = document.getElementById('menuBtn');
+        const fullMenu = document.getElementById('fullMenu');
+        let lastScrollY = window.scrollY;
+
+        // 2. 定義切換函式
+        function toggleMenu() {
+            if (!fullMenu || !menuBtn) return; // 防禦性檢查
+
+            const isActive = fullMenu.classList.toggle('active');
+            
+            if (isActive) {
+                // 開啟選單時：隱藏外部按鈕
+                menuBtn.classList.add('hidden');
+            } else {
+                // 關閉選單時：重新顯示按鈕
+                menuBtn.classList.remove('hidden');
+            }
+        }
+
+        // 3. 核心捲動偵測邏輯
+        window.addEventListener('scroll', () => {
+            // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
+            // 避免在操作選單時按鈕狀態被捲動事件干擾
+            if (fullMenu.classList.contains('active')) return;
+
+            const currentScrollY = window.scrollY;
+            const delta = currentScrollY - lastScrollY;
+
+            // 輸出數值到控制台
+            // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
+
+            if (delta > 0 && currentScrollY > 50) {
+                // 向下捲動 -> 隱藏
+                menuBtn.classList.add('hidden');
+            } else if (delta < 0) {
+                // 向上捲動 -> 顯示
+                menuBtn.classList.remove('hidden');
+            }
+
+            lastScrollY = currentScrollY;
+        });
+    </script>
+
+    <!-- 內容保護機制 -->
+    <script>
+        // 禁止右鍵
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // 禁止複製與選取文字
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+
+        // 禁止圖片拖拽
+        document.addEventListener('dragstart', e => {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
     </script>
 </body>
 </html>

@@ -9,6 +9,7 @@
     --primary-hover: #8d6e63;      /* 懸浮色：淺咖啡色 */
     --bg-color: #fdfaf5;           /* 全域背景：米白色 (Creamy White) */
     --bg-color-ts: rgba(55, 55, 55, 0.6);
+    --bg-ts:rgba(55, 55, 55, 0);
     
     /* 文字系統 - 針對淺色背景優化 */
     --text-main: #2c2c2c;          /* 標題與重要文字：深碳灰，提高對比度 */
@@ -372,14 +373,86 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     text-transform: uppercase;
 }
 
-/* Google Material 圖示設定 */
-.material-symbols-outlined {
-  /* 這裡設定你想要的細筆劃 (100-200) */
-    font-variation-settings: 'wght' 200, 'opsz' 24;
-    font-size: 48px;
-    line-height: 1;
-    display: block;
-    width: 1em;
-    height: 1em;
-    text-align: center;
+
+
+
+
+
+/* --- 拍手功能樣式 --- */
+.clap-section {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+}
+
+.clap-btn {
+    /* 核心修正：移除背景、邊框與陰影 */
+    background: transparent; 
+    border: none;
+    box-shadow: none;
+    
+    color: var(--text-light);
+    padding: 8px 0; /* 移除左右內距，因為沒有背景了，靠左對齊較自然 */
+    border-radius: var(--radius-full); 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: var(--transition-base);
+}
+
+.clap-btn:hover {
+    /* 懸浮時僅改變透明度或微調顏色，不添加背景 */
+    opacity: 0.8;
+    transform: translateY(-2px);
+}
+
+.clap-btn:active {
+    transform: scale(0.95);
+}
+
+.clap-btn .material-symbols-outlined {
+    font-size: 24px; /* 稍微加大圖示讓點擊感更好 */
+    font-variation-settings: 'FILL' 0, 'wght' 200; /* 預設空心，細筆劃 */
+}
+
+/* 點讚後的狀態：變更為實心圖示 (若邏輯中有切換 class) */
+.clap-btn.clapped .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 200;
+}
+
+#clapCount {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* 拍手後的狀態樣式 (已完成拍手) */
+#clappedStatus {
+    display: none; /* 由 JS 控制顯示 */
+    color: var(--primary-hover);
+    font-weight: 700;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    
+    /* 核心修正：同樣移除背景與內距 */
+    background: transparent;
+    padding: 8px 0;
+}
+
+/* 確保狀態內的圖示也是細筆劃 */
+#clappedStatus .material-symbols-outlined {
+    font-variation-settings: 'FILL' 1, 'wght' 200;
+    font-size: 24px;
+}
+
+#clapCount, #clapCountStatus {
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* 當內容為 "-" 時稍微變淡 */
+#clapCount:empty, 
+#clapCount[innerText="-"] {
+    opacity: 0.2;
 }

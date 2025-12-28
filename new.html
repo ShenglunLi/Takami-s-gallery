@@ -206,122 +206,127 @@
         </footer>
     </main>
 
-<script>
-    // 1. 將變數宣告放在最上方
-    const menuBtn = document.getElementById('menuBtn');
-    const fullMenu = document.getElementById('fullMenu');
-    let lastScrollY = window.scrollY;
+    <!-- 內容渲染 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('workContainer');
+            // 因為 html 在根目錄，此路徑指向 root/data/content.json
+            const JSON_URL = 'data/content.json'; 
 
-    // 2. 定義切換函式
-    function toggleMenu() {
-        if (!fullMenu || !menuBtn) return; // 防禦性檢查
+            async function fetchAndRenderData() {
+                try {
+                    const response = await fetch(JSON_URL);
+                    if (!response.ok) throw new Error('無法讀取資料檔');
+                    
+                    const data = await response.json();
 
-        const isActive = fullMenu.classList.toggle('active');
-        
-        if (isActive) {
-            // 開啟選單時：隱藏外部按鈕
-            menuBtn.classList.add('hidden');
-        } else {
-            // 關閉選單時：重新顯示按鈕
-            menuBtn.classList.remove('hidden');
-        }
-    }
+                    // 1. 排序邏輯 (依日期從新到舊)
+                    data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    // 3. 核心捲動偵測邏輯
-    window.addEventListener('scroll', () => {
-        // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
-        // 避免在操作選單時按鈕狀態被捲動事件干擾
-        if (fullMenu.classList.contains('active')) return;
+                    // 2. 取得前 10 筆資料
+                    const latestTen = data.slice(0, 10);
 
-        const currentScrollY = window.scrollY;
-        const delta = currentScrollY - lastScrollY;
+                    // 3. 生成 HTML
+                    if (latestTen.length === 0) {
+                        container.innerHTML = '<p class="loading-text">目前尚無作品內容。</p>';
+                        return;
+                    }
 
-        // 輸出數值到控制台
-        // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
+                    container.innerHTML = latestTen.map(item => {
+                        // 生成標籤 HTML 陣列
+                        const tagsHTML = item.tags && item.tags.length > 0 
+                            ? `<div class="tag-container">${item.tags.map(tag => `<span class="tag-item">#${tag}</span>`).join('')}</div>`
+                            : '';
 
-        if (delta > 0 && currentScrollY > 50) {
-            // 向下捲動 -> 隱藏
-            menuBtn.classList.add('hidden');
-        } else if (delta < 0) {
-            // 向上捲動 -> 顯示
-            menuBtn.classList.remove('hidden');
-        }
+                        // 設定圖片完整路徑與預設圖路徑
+                        const imgPath = `img/gallery/${item.cover}`;
+                        const fallbackPath = `img/gallery/default.jpg`;
 
-        lastScrollY = currentScrollY;
-    });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const container = document.getElementById('workContainer');
-        // 因為 html 在根目錄，此路徑指向 root/data/content.json
-        const JSON_URL = 'data/content.json'; 
+                        return `
+                            <div class="work-item">
+                                <div class="work-img-wrap">
+                                    <img src="${imgPath}" 
+                                        alt="${item.title}" 
+                                        onerror="this.onerror=null; this.src='${fallbackPath}';">
+                                </div>
+                                <div class="work-content">
+                                    <span class="date-label" style="font-size: 0.8rem; color: var(--accent-color); font-weight: bold;">${item.date}</span>
+                                    <h2>${item.title}</h2>
+                                    <p>${item.desc}</p>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
 
-        async function fetchAndRenderData() {
-            try {
-                const response = await fetch(JSON_URL);
-                if (!response.ok) throw new Error('無法讀取資料檔');
-                
-                const data = await response.json();
-
-                // 1. 排序邏輯 (依日期從新到舊)
-                data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                // 2. 取得前 10 筆資料
-                const latestTen = data.slice(0, 10);
-
-                // 3. 生成 HTML
-                if (latestTen.length === 0) {
-                    container.innerHTML = '<p class="loading-text">目前尚無作品內容。</p>';
-                    return;
+                } catch (error) {
+                    console.error('Error:', error);
+                    container.innerHTML = `<p class="loading-text">讀取內容時發生錯誤：${error.message}</p>`;
                 }
+            }
 
-                container.innerHTML = latestTen.map(item => {
-                    // 生成標籤 HTML 陣列
-                    const tagsHTML = item.tags && item.tags.length > 0 
-                        ? `<div class="tag-container">${item.tags.map(tag => `<span class="tag-item">#${tag}</span>`).join('')}</div>`
-                        : '';
+            fetchAndRenderData();
+        });
+    </script>
 
-                    // 設定圖片完整路徑與預設圖路徑
-                    const imgPath = `img/gallery/${item.cover}`;
-                    const fallbackPath = `img/gallery/default.jpg`;
+    <!-- 主選單 -->
+    <script>
+        // 1. 將變數宣告放在最上方
+        const menuBtn = document.getElementById('menuBtn');
+        const fullMenu = document.getElementById('fullMenu');
+        let lastScrollY = window.scrollY;
 
-                    return `
-                        <div class="work-item">
-                            <div class="work-img-wrap">
-                                <img src="${imgPath}" 
-                                    alt="${item.title}" 
-                                    onerror="this.onerror=null; this.src='${fallbackPath}';">
-                            </div>
-                            <div class="work-content">
-                                <span class="date-label" style="font-size: 0.8rem; color: var(--accent-color); font-weight: bold;">${item.date}</span>
-                                <h2>${item.title}</h2>
-                                <p>${item.desc}</p>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+        // 2. 定義切換函式
+        function toggleMenu() {
+            if (!fullMenu || !menuBtn) return; // 防禦性檢查
 
-            } catch (error) {
-                console.error('Error:', error);
-                container.innerHTML = `<p class="loading-text">讀取內容時發生錯誤：${error.message}</p>`;
+            const isActive = fullMenu.classList.toggle('active');
+            
+            if (isActive) {
+                // 開啟選單時：隱藏外部按鈕
+                menuBtn.classList.add('hidden');
+            } else {
+                // 關閉選單時：重新顯示按鈕
+                menuBtn.classList.remove('hidden');
             }
         }
 
-        fetchAndRenderData();
-    });
-</script>
-<script>
-    // 禁止右鍵
-    document.addEventListener('contextmenu', e => e.preventDefault());
+        // 3. 核心捲動偵測邏輯
+        window.addEventListener('scroll', () => {
+            // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
+            // 避免在操作選單時按鈕狀態被捲動事件干擾
+            if (fullMenu.classList.contains('active')) return;
 
-    // 禁止複製與選取文字
-    document.addEventListener('selectstart', e => e.preventDefault());
-    document.addEventListener('copy', e => e.preventDefault());
+            const currentScrollY = window.scrollY;
+            const delta = currentScrollY - lastScrollY;
 
-    // 禁止圖片拖拽
-    document.addEventListener('dragstart', e => {
-        if (e.target.tagName === 'IMG') e.preventDefault();
-    });
-</script>
+            // 輸出數值到控制台
+            // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
+
+            if (delta > 0 && currentScrollY > 50) {
+                // 向下捲動 -> 隱藏
+                menuBtn.classList.add('hidden');
+            } else if (delta < 0) {
+                // 向上捲動 -> 顯示
+                menuBtn.classList.remove('hidden');
+            }
+
+            lastScrollY = currentScrollY;
+        });
+    </script>
+
+    <!-- 內容保護機制 -->
+    <script>
+        // 禁止右鍵
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // 禁止複製與選取文字
+        document.addEventListener('selectstart', e => e.preventDefault());
+        document.addEventListener('copy', e => e.preventDefault());
+
+        // 禁止圖片拖拽
+        document.addEventListener('dragstart', e => {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        });
+    </script>
 </body>
 </html>
