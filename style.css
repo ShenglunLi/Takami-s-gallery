@@ -32,6 +32,11 @@
     --icon-light: #fdfaf5;
     --icon-hover: #ab3e03;
 
+    /* 圓點分頁標記顏色 */
+    --dot-color: rgba(255, 255, 255, 0.3);
+    --dot-active-color: rgb(255, 255, 255);
+    --dot-shadow: 0 0 4px rgba(0, 0, 0, 0.8)
+
     /* 陰影 */
     --text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 

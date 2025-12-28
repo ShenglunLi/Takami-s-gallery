@@ -2,9 +2,8 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gallery | TAKAMI's Portfolio</title>
-    <!-- 阻擋機器人及Pinterest -->
     <meta name="robots" content="noindex, nofollow, noimageindex">
     <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!" />
     <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -29,68 +28,38 @@
         .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
         /* --- Overlay 燈箱樣式 --- */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; z-index: 1000; overflow-y: auto; align-items: center; justify-content: center; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; z-index: 1000; overflow: hidden; align-items: center; justify-content: center; }
         .overlay.active { display: flex; }
-        
-        /* 統一按鈕點擊範圍 (電腦版) */
-        /* .overlay-close, .overlay-back { 
-            position: fixed; 
-            top: 30px; 
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff; 
-            cursor: pointer; 
-            z-index: 1010; 
-            transition: 0.3s; 
-            background: rgba(255,255,255,0.05);
-            border-radius: 50%;
-        }
-        .overlay-close:hover, .overlay-back:hover { background: rgba(255,255,255,0.15); opacity: 1; }*/
-        
-        /* --- 統一燈箱控制按鈕樣式 (關閉與返回) --- */
+ 
         .overlay-close, .overlay-back {
             position: fixed;
             top: 30px;
-            right: 90px;
-            display: flex; /* 預設使用 flex 以便置中圖示 */
-            align-items: center !important;
-            justify-content: center !important;
-            width: 48px !important;
-            height: 48px !important;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
             background: rgba(255, 255, 255, 0.05);
             border-radius: 50%;
             cursor: pointer;
             z-index: 1010;
             transition: 0.3s;
-            border: none; /* 確保沒有邊框 */
+            border: none;
         }
 
-        .overlay-close:hover, .overlay-back:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
+        .overlay-close:hover, .overlay-back:hover { background: rgba(255, 255, 255, 0.15); }
 
-        /* 統一 Material Icons 在按鈕內的顯示 */
         .overlay-close .material-symbols-outlined, 
         .overlay-back .material-symbols-outlined {
             font-weight: 100;
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: auto !important;
-            height: auto !important;
-            font-size: 2rem !important;
-            line-height: 1 !important;
+            font-size: 2rem;
             color: #fff;
-            margin: 0 !important;
-            padding: 0 !important;
         }
 
         /* 初始狀態控制 */
         .overlay-close { display: flex; }
-        .overlay-back { display: none; } /* 初始隱藏，進入閱讀器後由 JS 切換為 flex */
+        .overlay-back { display: none; }
 
 
         .overlay-content { width: 85%; max-width: 1200px; display: flex; flex-direction: column; position: relative; margin: 0 auto; }
@@ -104,6 +73,7 @@
             max-height: 85vh; 
             display: flex;
             align-items: center;
+            justify-content: center;
         }
         .info-cover-box.is-series { cursor: pointer; }
         .info-cover-box img { 
@@ -114,6 +84,32 @@
             border-radius: 4px; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             display: block; 
+        }
+
+        /* --- 修正 2：Info Layer 圓形導覽按鈕 & 位置對齊 --- */
+        .info-nav-btn {
+            position: fixed; /* 改為定點位置 */
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            z-index: 1005;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            border-radius: 50%; /* 圓形 */
+        }
+        
+        @media (min-width: 901px) {
+            .info-nav-btn:hover { background: rgba(255, 255, 255, 0.15); }
+            .info-nav-btn.prev { left: 30px; } /* 靠左邊界 */
+            .info-nav-btn.next { right: 30px; } /* 修正：水平位置對齊 overlayCloseBtn */
         }
 
         .page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-family: monospace; display: none; }
@@ -134,7 +130,6 @@
 
         .read-btn {
             margin-top: auto;
-            margin-bottom: 0px;
             align-self: flex-start;
             padding: 12px 45px;
             background-color: transparent;
@@ -150,61 +145,88 @@
             gap: 10px;
         }
         .read-btn.active { display: flex; }
-        .read-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.1); border-color: #fff; }
 
         /* --- 第二層：瀏覽層 (Viewer Layer) --- */
-        .viewer-layer { display: none; width: 100%; height: 90vh; position: relative; flex-direction: column; align-items: center; justify-content: center; }
+        .viewer-layer { 
+            display: none; 
+            width: 100%; 
+            height: 90vh; /* 需求 1：減少高度（從 90vh 改為 80vh 或您需要的高度） */
+            position: relative; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            /* 必須改為 visible，否則 bottom: -10px 的圓點會被切掉看不到 */
+            overflow: visible; 
+        }
         .viewer-layer.active { display: flex; }
-        .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 30px 20px; cursor: pointer; font-size: 1.5rem; transition: opacity 0.5s ease; z-index: 20; }
-        .nav-btn:hover { background: rgba(255,255,255,0.2); }
-        .nav-btn.hidden { opacity: 0; pointer-events: none; }
-        .prev-btn { left: -80px; border-radius: 8px; }
-        .next-btn { right: -80px; border-radius: 8px; }
+        /* 修正 1：Viewer 層按鈕定位 (電腦版保留) */
+        .nav-btn {
+            position: absolute; top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+            border: none;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+            z-index: 20;
+            border-radius: 50%; /* 圓形 */ }
 
-        /* 分頁圓點樣式 */
+        
+        .nav-btn:hover { background: rgba(255,255,255,0.2); }
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+        
+        /* 輔助：隱藏按鈕但保留空間或邏輯 */
+        .btn-hidden { visibility: hidden !important; pointer-events: none !important; }
+
         .viewer-indicator { 
             position: absolute; 
-            bottom: 0px; 
+            bottom: -20px; 
             display: flex; 
             gap: 8px; 
             align-items: center; 
             justify-content: center; 
         }
-        .dot { 
-            width: 8px; 
-            height: 8px; 
-            background: rgba(255, 255, 255, 0.3); 
-            border-radius: 50%; 
-            transition: 0.3s; 
-        }
-        .dot.active { 
-            background: #fff; 
-            transform: scale(1.2); 
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); 
-        }
+        .dot { width: 8px; height: 8px; background: var(--dot-color); border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: var(--dot-active-color); transform: scale(1.2); }
 
-
-
-        /* RWD 調整 */
-        /*手機版面按鈕移至左上 */
+        /* --- RWD 修正 --- */
         @media (max-width: 900px) {
-            .overlay { align-items: flex-start; }
-            .overlay-content { margin-top: 80px; margin-bottom: 40px; width: 95%; }
-            .info-layer { flex-direction: column; gap: 8px; }
-            .info-cover-box { flex: 0 0 auto; width: 100%; max-height: none; }
+            #workOverlay { overflow: hidden; align-items: center; }
+            .viewer-layer {
+                width: 100vw;
+                height: 100vh;
+                height: 100dvh;
+                padding: 0;
+            }
+            .overlay-content { width: 100%; height: 100%; max-width: none; justify-content: center; }
+
+            /* 修正 1: 手機版隱藏左右按鈕 */
+            .nav-btn, .info-nav-btn {
+                display: none !important;
+            }
+
+            .info-layer { flex-direction: column; gap: 8px; padding-top: 60px; overflow-y: auto; height: 100%; }
+            .info-cover-box { flex: 0 0 auto; width: 100%; }
             .info-cover-box img { max-height: 50vh; }
-            .info-details { padding: 0 20px; }
-            .info-details h2 { font-size: 1.8rem; }
-            .nav-btn { padding: 15px 10px; }
-            .prev-btn { left: 0; }
-            .next-btn { right: 0; } 
-            .read-btn { width: 100%; justify-content: center; margin-top: 8px; }
-            .viewer-layer { height: 75vh; }
-            .viewer-indicator { bottom: -30px; }
-            .overlay-close, .overlay-back { top: 15px; left: 15px; right: auto; width: 40px; height: 40px }
+            .info-details { padding: 20px; }
+            
+            .overlay-close, .overlay-back {
+                top: 20px;
+                left: 20px;
+                right: auto;
+                background: rgba(0, 0, 0, 0.4);
+                backdrop-filter: blur(4px);
+            }
+            .overlay-back.ui-hidden, .overlay-close.ui-hidden { opacity: 0; pointer-events: none; }
+
+            .viewer-indicator {bottom: 10px; }
         }
     </style>
 </head>
@@ -231,320 +253,59 @@
         <div id="galleryContainer"></div>
     </main>
 
-    <footer class="footer"><p>&copy; 2026 Takami's Gallery. All Rights Reserved.</p></footer>
-
-    <!-- Overlay 燈箱結構 -->
     <div id="workOverlay" class="overlay" onclick="handleOverlayClick(event)" onmousemove="resetUIInactivity()" ontouchstart="resetUIInactivity()">
         <div id="overlayCloseBtn" class="overlay-close" onclick="closeOverlay()">
-            <span class="material-symbols-outlined thin-icon">close</span>
+            <span class="material-symbols-outlined">close</span>
         </div>
         <div id="overlayBackBtn" class="overlay-back" onclick="backToInfo()">
-            <!-- <i class="fas fa-arrow-left"></i> <span>Back</span> -->
-            <span class="material-symbols-outlined thin-icon">arrow_back</span>
+            <span class="material-symbols-outlined">arrow_back</span>
         </div>
 
         <div class="overlay-content">
-            <!-- 第一層：資訊層 -->
             <div id="infoLayer" class="info-layer">
-                <div id="infoCoverBox" class="info-cover-box" onclick="tryEnterViewer()">
-                    <img id="infoCoverImg" src="" alt="Cover">
+                <button class="info-nav-btn prev" id="infoPrev" onclick="changeWork(-1)"><i class="fas fa-chevron-left"></i></button>
+                
+                <div id="infoCoverBox" class="info-cover-box">
+                    <img id="infoCoverImg" src="" alt="Cover" onclick="tryEnterViewer()">
                     <span class="page-count-label" id="infoPageCount"></span>
                 </div>
+
                 <div class="info-details">
                     <div class="date-tag" id="infoDate"></div>
                     <h2 id="infoTitle">作品標題</h2>
                     <p id="infoDesc">作品描述內容...</p>
-                    <!-- 拍手區塊 -->
                     <div class="clap-section">
                         <button id="clapBtn" class="clap-btn">
                             <span class="material-symbols-outlined">favorite</span>
                             <span id="clapCount">0</span>
                         </button>
-                        
                         <div id="clappedStatus" style="display: none; color: var(--primary-hover); font-weight: bold; align-items: center; gap: 8px;">
                             <span class="material-symbols-outlined">favorite</span>
-                            <span id="clapCountStatus">0</span><span>已完成拍手</span>
+                            <span id="clapCountStatus">0</span><span>拍手完了</span>
                         </div>
                     </div>
                     <button id="infoReadBtn" class="read-btn" onclick="enterViewer()">
-                        開始閱讀
+                        <span class="material-symbols-outlined">auto_stories</span> 開始閱讀
                     </button>
                 </div>
+                <button class="info-nav-btn next" id="infoNext" onclick="changeWork(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
 
-            <!-- 第二層：瀏覽層 -->
             <div id="viewerLayer" class="viewer-layer">
                 <div class="viewer-img-container">
-                    <button class="nav-btn prev-btn auto-hide" onclick="changeInnerPage(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <button class="nav-btn prev-btn" id="viewPrev" onclick="changeInnerPage(-1)"><i class="fas fa-chevron-left"></i></button>
                     <img id="viewerImg" src="" alt="Work Page">
-                    <button class="nav-btn next-btn auto-hide" onclick="changeInnerPage(1)"><i class="fas fa-chevron-right"></i></button>
+                    <button class="nav-btn next-btn" id="viewNext" onclick="changeInnerPage(1)"><i class="fas fa-chevron-right"></i></button>
                 </div>
                 <div class="viewer-indicator" id="viewerIndicator"></div>
             </div>
         </div>
     </div>
-    <!-- 內容渲染 -->
-    <script>
-        let allWorks = [];
-        let currentFilteredWorks = []; 
-        let currentIndex = 0;       
-        let currentInnerIndex = 0;  
-        let isViewerActive = false; 
-        let uiInactivityTimeout; 
 
-        async function initGallery() {
-            try {
-                const response = await fetch('data/content.json');
-                allWorks = await response.json();
-                allWorks = allWorks.map(w => ({ ...w, category: w.category || 'Other' }));
-                renderFilters();
-                renderCategorizedGallery('All');
-            } catch (err) { console.error("Load Failed:", err); }
-        }
-
-        function renderFilters() {
-            const categories = ['All', ...new Set(allWorks.map(w => w.category))];
-            const filterBar = document.getElementById('filterBar');
-            filterBar.innerHTML = categories.map(cat => `
-                <button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="handleFilterClick('${cat}', this)">${cat}</button>
-            `).join('');
-        }
-
-        function handleFilterClick(category, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            renderCategorizedGallery(category);
-        }
-
-        function renderCategorizedGallery(filterTag) {
-            const container = document.getElementById('galleryContainer');
-            container.innerHTML = '';
-            currentFilteredWorks = [];
-
-            const categoriesInView = filterTag === 'All' 
-                ? [...new Set(allWorks.map(w => w.category))]
-                : [filterTag];
-
-            categoriesInView.forEach(cat => {
-                const worksInCat = allWorks.filter(w => w.category === cat);
-                if (worksInCat.length === 0) return;
-
-                const groupDiv = document.createElement('div');
-                groupDiv.className = 'category-group';
-                groupDiv.innerHTML = `<h2 class="category-title">${cat}</h2>`;
-
-                const grid = document.createElement('div');
-                grid.className = 'gallery-grid';
-
-                worksInCat.forEach((work) => {
-                    const globalIndex = currentFilteredWorks.length;
-                    currentFilteredWorks.push(work);
-                    
-                    const card = document.createElement('div');
-                    card.className = 'work-card';
-                    card.onclick = () => openOverlay(globalIndex);
-                    
-                    const thumbSrc = `img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}`;
-                    
-                    let badgeHTML = '';
-                    if(work.type === 'series') {
-                        badgeHTML = `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>`;
-                    }
-
-                    card.innerHTML = `
-                        ${badgeHTML}
-                        <img src="${thumbSrc}" alt="${work.title}" onerror="this.src='img/gallery/default.jpg'">
-                    `;
-                    grid.appendChild(card);
-                });
-
-                container.appendChild(groupDiv);
-                groupDiv.appendChild(grid);
-            });
-        }
-
-        function openOverlay(index) {
-            currentIndex = index;
-            isViewerActive = false;
-
-            // --- 新增：重設拍手數字為讀取狀態 ---
-            const clapDisplays = [
-                document.querySelector('#clapBtn #clapCount'),
-                document.querySelector('#clappedStatus #clapCountStatus')
-            ];
-            clapDisplays.forEach(el => { if (el) el.innerText = "-"; }); 
-            // 或者設為 "0"，視乎你希望視覺上如何呈現
-            // ----------------------------------
-
-            updateOverlayUI();
-            document.getElementById('workOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-            resetUIInactivity();
-        }
-
-        function updateOverlayUI() {
-            const item = currentFilteredWorks[currentIndex];
-            const isSeries = item.type === 'series';
-            
-            document.getElementById('infoCoverImg').src = `img/gallery/${item.cover || (Array.isArray(item.img) ? item.img[0] : item.img)}`;
-            document.getElementById('infoTitle').innerText = item.title;
-            document.getElementById('infoDesc').innerText = item.desc || "";
-            document.getElementById('infoDate').innerText = item.date;
-            
-            const pageBadge = document.getElementById('infoPageCount');
-            const readBtn = document.getElementById('infoReadBtn');
-            const coverBox = document.getElementById('infoCoverBox');
-
-            if (isSeries) {
-                const pageCount = Array.isArray(item.img) ? item.img.length : 1;
-                pageBadge.innerText = `[${pageCount}P]`;
-                pageBadge.classList.add('active');
-                readBtn.classList.add('active');
-                coverBox.classList.add('is-series');
-            } else {
-                pageBadge.classList.remove('active');
-                readBtn.classList.remove('active');
-                coverBox.classList.remove('is-series');
-            }
-
-            if (isViewerActive && isSeries) {
-                document.getElementById('infoLayer').style.display = 'none';
-                document.getElementById('viewerLayer').classList.add('active');
-                document.getElementById('overlayCloseBtn').style.display = 'none';
-                document.getElementById('overlayBackBtn').style.display = 'flex';
-                
-                // 初次進入瀏覽層時生成圓點
-                renderDots(); 
-                updateViewerImage();
-            } else {
-                document.getElementById('infoLayer').style.display = 'flex';
-                document.getElementById('viewerLayer').classList.remove('active');
-                // 將原本的 'block' 修改為 'flex'
-                document.getElementById('overlayCloseBtn').style.display = 'flex'; 
-                document.getElementById('overlayBackBtn').style.display = 'none';
-            }
-
-            if (typeof window.syncClaps === 'function') {
-                window.syncClaps(item.id);
-            }
-        }
-
-        // 生成分頁圓點
-        function renderDots() {
-            const item = currentFilteredWorks[currentIndex];
-            const indicator = document.getElementById('viewerIndicator');
-            indicator.innerHTML = '';
-            
-            if (Array.isArray(item.img)) {
-                item.img.forEach((_, i) => {
-                    const dot = document.createElement('span');
-                    dot.className = 'dot';
-                    if (i === currentInnerIndex) dot.classList.add('active');
-                    indicator.appendChild(dot);
-                });
-            }
-        }
-
-        function updateViewerImage() {
-            const item = currentFilteredWorks[currentIndex];
-            const displayImg = document.getElementById('viewerImg');
-            
-            if (Array.isArray(item.img)) {
-                displayImg.src = `img/gallery/${item.img[currentInnerIndex]}`;
-                
-                // 更新圓點狀態
-                const dots = document.querySelectorAll('.dot');
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === currentInnerIndex);
-                });
-            } else {
-                displayImg.src = `img/gallery/${item.img}`;
-            }
-            resetUIInactivity();
-        }
-
-        function tryEnterViewer() {
-            const item = currentFilteredWorks[currentIndex];
-            if (item.type === 'series') {
-                enterViewer();
-            }
-        }
-
-        function enterViewer() {
-            currentInnerIndex = 0;
-            isViewerActive = true;
-            updateOverlayUI();
-        }
-
-        function backToInfo() {
-            isViewerActive = false;
-            updateOverlayUI();
-        }
-
-        function changeInnerPage(step) {
-            const item = currentFilteredWorks[currentIndex];
-            if (!Array.isArray(item.img)) return;
-
-            currentInnerIndex += step;
-            if (currentInnerIndex < 0) currentInnerIndex = item.img.length - 1;
-            if (currentInnerIndex >= item.img.length) currentInnerIndex = 0;
-            
-            updateViewerImage();
-        }
-
-        function closeOverlay() {
-            document.getElementById('workOverlay').classList.remove('active');
-            document.body.style.overflow = 'auto';
-            clearTimeout(uiInactivityTimeout);
-        }
-
-        function handleOverlayClick(e) {
-            if (e.target.id === 'workOverlay') {
-                closeOverlay();
-            }
-        }
-
-        function resetUIInactivity() {
-            if (!isViewerActive) return;
-            document.querySelectorAll('.auto-hide').forEach(el => el.classList.remove('hidden'));
-            clearTimeout(uiInactivityTimeout);
-            uiInactivityTimeout = setTimeout(() => {
-                if (isViewerActive) {
-                    document.querySelectorAll('.auto-hide').forEach(el => el.classList.add('hidden'));
-                }
-            }, 1000); 
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (!document.getElementById('workOverlay').classList.contains('active')) return;
-            resetUIInactivity();
-            const item = currentFilteredWorks[currentIndex];
-            if (isViewerActive && item.type === 'series') {
-                if (e.key === 'ArrowLeft') changeInnerPage(-1);
-                if (e.key === 'ArrowRight') changeInnerPage(1);
-                if (e.key === 'Escape') backToInfo();
-            } else {
-                if (e.key === 'Escape') closeOverlay();
-            }
-        });
-
-        // function toggleMenu() {
-        //     const fullMenu = document.getElementById('fullMenu');
-        //     const menuBtn = document.getElementById('menuBtn');
-        //     const isActive = fullMenu.classList.toggle('active');
-        //     if (isActive) menuBtn.classList.add('hidden');
-        //     else menuBtn.classList.remove('hidden');
-        // }
-
-        document.addEventListener('DOMContentLoaded', initGallery);
-    </script>
-
-    <!-- 拍手功能 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
         import { getDatabase, ref, onValue, runTransaction, off } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-database.js";
 
-        // 1. Firebase 初始化 (這部分在 script 載入時就會執行，達到預熱效果)
         const firebaseConfig = {
             apiKey: "AIzaSyDZ9fVnata2mqQb-YPceFKWEdKdQwL6nhA",
             authDomain: "takami-gallery.firebaseapp.com",
@@ -560,153 +321,272 @@
         const db = getDatabase(app);
         let currentClapRef = null;
 
-        // --- 在這裡可以加入一個「預熱」動作 ---
-        // 隨便讀取一個不存在的節點，強迫瀏覽器在背景完成 WebSocket 連線
-        onValue(ref(db, '.info/connected'), (snapshot) => {
-            if (snapshot.val() === true) {
-                console.log("Firebase connected (pre-heated)");
-            }
-        }, { onlyOnce: true });
-
-        // 監聽點擊
         document.getElementById('clapBtn').addEventListener('click', handleClap);
 
-        /**
-         * 檢查個別作品紀錄 (與上一步驟邏輯相同)
-         */
-        function checkClapLimit(workId, updateHistory = false) {
-            if (!workId) return true;
-            const now = Date.now();
-            const oneHour = 60 * 60 * 1000;
-            const btn = document.getElementById('clapBtn');
-            const status = document.getElementById('clappedStatus');
-            
-            let allHistory = JSON.parse(localStorage.getItem('clap_history_map') || "{}");
-            let workClaps = allHistory[workId] || [];
-            workClaps = workClaps.filter(timestamp => (now - timestamp) < oneHour);
-
-            if (workClaps.length >= 1) {
-                btn.style.display = "none";
-                status.style.display = "flex";
-                return false;
-            }
-
-            if (updateHistory) {
-                workClaps.push(now);
-                allHistory[workId] = workClaps;
-                localStorage.setItem('clap_history_map', JSON.stringify(allHistory));
-                btn.style.display = "none";
-                status.style.display = "flex";
-            } else {
-                btn.style.display = "flex";
-                status.style.display = "none";
-            }
-            return true;
-        }
-
-        // 同步點讚數的功能 (現在 db 已經預熱好了，執行速度會快很多)
         window.syncClaps = function(workId) {
             if (!workId) return;
-            checkClapLimit(workId, false);
-
+            checkClapLimit(workId);
             if (currentClapRef) off(currentClapRef);
-
-            const clapDisplays = [
-                document.querySelector('#clapBtn #clapCount'),
-                document.querySelector('#clappedStatus #clapCountStatus')
-            ];
-
             currentClapRef = ref(db, 'claps/' + workId);
-
-            // 在這裡可以選擇再次確保顯示讀取中，直到 Firebase 回傳
             onValue(currentClapRef, (snapshot) => {
                 const count = snapshot.val() || 0;
-                clapDisplays.forEach(el => {
-                    if (el) el.innerText = count;
-                });
+                document.getElementById('clapCount').innerText = count;
+                document.getElementById('clapCountStatus').innerText = count;
             });
         };
+
         function handleClap() {
             const item = currentFilteredWorks[currentIndex];
-            if (!item || !item.id) return;
-
-            // 樂觀更新：立刻讓使用者看到數字增加
-            const clapCountDisplay = document.querySelector('#clapBtn #clapCount');
-            const clapCountStatus = document.querySelector('#clappedStatus #clapCountStatus');
-            let currentNum = parseInt(clapCountDisplay.innerText) || " ";
-            const optimisticNum = currentNum + 1;
-            
-            if (clapCountDisplay) clapCountDisplay.innerText = optimisticNum;
-            if (clapCountStatus) clapCountStatus.innerText = optimisticNum;
-
-            if (!checkClapLimit(item.id, true)) return;
-
+            if (!item) return;
             const clapRef = ref(db, 'claps/' + item.id);
-            runTransaction(clapRef, (current) => {
-                return (current || 0) + 1;
-            });
+            runTransaction(clapRef, (current) => (current || 0) + 1);
+            saveClapToLocal(item.id);
+        }
+
+        function checkClapLimit(workId) {
+            const history = JSON.parse(localStorage.getItem('clap_history') || "[]");
+            const isClapped = history.includes(workId);
+            document.getElementById('clapBtn').style.display = isClapped ? 'none' : 'flex';
+            document.getElementById('clappedStatus').style.display = isClapped ? 'flex' : 'none';
+        }
+
+        function saveClapToLocal(workId) {
+            const history = JSON.parse(localStorage.getItem('clap_history') || "[]");
+            history.push(workId);
+            localStorage.setItem('clap_history', JSON.stringify(history));
+            checkClapLimit(workId);
         }
     </script>
 
-    <!-- 主選單 -->
     <script>
-        // 1. 將變數宣告放在最上方
+        let allWorks = [];
+        let currentFilteredWorks = []; 
+        let currentIndex = 0;       
+        let currentInnerIndex = 0;  
+        let isViewerActive = false; 
+        let uiInactivityTimeout; 
+        let touchStartX = 0, touchStartY = 0, isSwiping = false;
+
+        async function initGallery() {
+            try {
+                const response = await fetch('data/content.json');
+                allWorks = await response.json();
+                renderFilters();
+                renderCategorizedGallery('All');
+                initTouchEvents();
+            } catch (err) { console.error("Load Failed:", err); }
+        }
+
+        function renderFilters() {
+            const categories = ['All', ...new Set(allWorks.map(w => w.category))];
+            document.getElementById('filterBar').innerHTML = categories.map(cat => `
+                <button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="handleFilterClick('${cat}', this)">${cat}</button>
+            `).join('');
+        }
+
+        function handleFilterClick(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderCategorizedGallery(category);
+        }
+
+        function renderCategorizedGallery(filterTag) {
+            const container = document.getElementById('galleryContainer');
+            container.innerHTML = '';
+            currentFilteredWorks = [];
+            const cats = filterTag === 'All' ? [...new Set(allWorks.map(w => w.category))] : [filterTag];
+
+            cats.forEach(cat => {
+                const works = allWorks.filter(w => w.category === cat);
+                const group = document.createElement('div');
+                group.className = 'category-group';
+                group.innerHTML = `<h2 class="category-title">${cat}</h2><div class="gallery-grid"></div>`;
+                const grid = group.querySelector('.gallery-grid');
+                
+                works.forEach(work => {
+                    const globalIdx = currentFilteredWorks.length;
+                    currentFilteredWorks.push(work);
+                    const card = document.createElement('div');
+                    card.className = 'work-card';
+                    card.onclick = () => openOverlay(globalIdx);
+                    card.innerHTML = `
+                        ${work.type === 'series' ? `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>` : ''}
+                        <img src="img/gallery/${work.cover || work.img[0]}" alt="${work.title}">
+                    `;
+                    grid.appendChild(card);
+                });
+                container.appendChild(group);
+            });
+        }
+
+        function openOverlay(index) {
+            currentIndex = index;
+            isViewerActive = false;
+            updateOverlayUI();
+            document.getElementById('workOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function updateOverlayUI() {
+            const item = currentFilteredWorks[currentIndex];
+            document.getElementById('infoCoverImg').src = `img/gallery/${item.cover || item.img[0]}`;
+            document.getElementById('infoTitle').innerText = item.title;
+            document.getElementById('infoDesc').innerText = item.desc || "";
+            document.getElementById('infoDate').innerText = item.date;
+
+            // Info Layer 換頁按鈕 (同類別顯示)
+            const currentCat = item.category;
+            const infoPrev = document.getElementById('infoPrev');
+            const infoNext = document.getElementById('infoNext');
+            if (infoPrev) infoPrev.style.visibility = (currentIndex > 0 && currentFilteredWorks[currentIndex-1].category === currentCat) ? 'visible' : 'hidden';
+            if (infoNext) infoNext.style.visibility = (currentIndex < currentFilteredWorks.length - 1 && currentFilteredWorks[currentIndex+1].category === currentCat) ? 'visible' : 'hidden';
+
+            const isSeries = item.type === 'series';
+            document.getElementById('infoPageCount').innerText = isSeries ? `繼續閱讀 ${item.img.length}P` : "";
+            document.getElementById('infoPageCount').classList.toggle('active', isSeries);
+            document.getElementById('infoReadBtn').classList.toggle('active', isSeries);
+
+            if (isViewerActive) {
+                document.getElementById('infoLayer').style.display = 'none';
+                document.getElementById('viewerLayer').classList.add('active');
+                document.getElementById('overlayCloseBtn').style.display = 'none';
+                document.getElementById('overlayBackBtn').style.display = 'flex';
+                updateViewerImage();
+            } else {
+                document.getElementById('infoLayer').style.display = 'flex';
+                document.getElementById('viewerLayer').classList.remove('active');
+                document.getElementById('overlayCloseBtn').style.display = 'flex';
+                document.getElementById('overlayBackBtn').style.display = 'none';
+            }
+            if (window.syncClaps) window.syncClaps(item.id);
+        }
+
+        // 修正 3: 更新 Viewer 圖片與按鈕隱藏邏輯 (禁止循環)
+        function updateViewerImage() {
+            const item = currentFilteredWorks[currentIndex];
+            const imgs = item.img;
+            document.getElementById('viewerImg').src = `img/gallery/${imgs[currentInnerIndex]}`;
+            
+            // 處理電腦版按鈕隱藏 (禁止循環換頁)
+            const viewPrev = document.getElementById('viewPrev');
+            const viewNext = document.getElementById('viewNext');
+            
+            if (viewPrev) viewPrev.classList.toggle('btn-hidden', currentInnerIndex === 0);
+            if (viewNext) viewNext.classList.toggle('btn-hidden', currentInnerIndex === imgs.length - 1);
+
+            const indicator = document.getElementById('viewerIndicator');
+            indicator.innerHTML = imgs.map((_, i) => `<span class="dot ${i === currentInnerIndex ? 'active' : ''}"></span>`).join('');
+        }
+
+        function changeWork(step) {
+            const newIdx = currentIndex + step;
+            if (newIdx >= 0 && newIdx < currentFilteredWorks.length) {
+                if (currentFilteredWorks[newIdx].category === currentFilteredWorks[currentIndex].category) {
+                    currentIndex = newIdx;
+                    currentInnerIndex = 0;
+                    updateOverlayUI();
+                }
+            }
+        }
+
+        // 修正 3: 修改換頁邏輯，不允許循環
+        function changeInnerPage(step) {
+            const item = currentFilteredWorks[currentIndex];
+            const imgs = item.img;
+            const targetIndex = currentInnerIndex + step;
+
+            // 禁止循環換頁攔截
+            if (targetIndex < 0 || targetIndex >= imgs.length) {
+                return; 
+            }
+
+            currentInnerIndex = targetIndex;
+            updateViewerImage();
+        }
+
+        function enterViewer() { isViewerActive = true; currentInnerIndex = 0; updateOverlayUI(); }
+        function backToInfo() { isViewerActive = false; updateOverlayUI(); }
+        function closeOverlay() { document.getElementById('workOverlay').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        function handleOverlayClick(e) { if (e.target.id === 'workOverlay') closeOverlay(); }
+        function tryEnterViewer() { if (currentFilteredWorks[currentIndex].type === 'series') enterViewer(); }
+
+        function initTouchEvents() {
+            const overlay = document.getElementById('workOverlay');
+            overlay.addEventListener('touchstart', e => {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                isSwiping = true;
+            }, {passive: true});
+
+            overlay.addEventListener('touchmove', e => {
+                if (!isSwiping) return;
+                let dx = e.touches[0].clientX - touchStartX;
+                let dy = e.touches[0].clientY - touchStartY;
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    const img = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
+                    img.style.transform = `translateX(${dx * 0.2}px)`;
+                }
+            }, {passive: true});
+
+            overlay.addEventListener('touchend', e => {
+                isSwiping = false;
+                let dx = e.changedTouches[0].clientX - touchStartX;
+                const img = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
+                img.style.transform = '';
+                if (Math.abs(dx) > 80) {
+                    dx < 0 ? (isViewerActive ? changeInnerPage(1) : changeWork(1)) : (isViewerActive ? changeInnerPage(-1) : changeWork(-1));
+                }
+            }, {passive: true});
+        }
+
+        function resetUIInactivity() {
+            const btns = [document.getElementById('overlayBackBtn'), document.getElementById('overlayCloseBtn')];
+            btns.forEach(b => b && b.classList.remove('ui-hidden'));
+            clearTimeout(uiInactivityTimeout);
+            uiInactivityTimeout = setTimeout(() => {
+                if (isViewerActive && window.innerWidth <= 900) btns.forEach(b => b && b.classList.add('ui-hidden'));
+            }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', initGallery);
+    </script>
+
+    <script>
         const menuBtn = document.getElementById('menuBtn');
         const fullMenu = document.getElementById('fullMenu');
         let lastScrollY = window.scrollY;
 
-        // 2. 定義切換函式
         function toggleMenu() {
-            if (!fullMenu || !menuBtn) return; // 防禦性檢查
-
+            if (!fullMenu || !menuBtn) return;
             const isActive = fullMenu.classList.toggle('active');
-            
             if (isActive) {
-                // 開啟選單時：隱藏外部按鈕
                 menuBtn.classList.add('hidden');
             } else {
-                // 關閉選單時：重新顯示按鈕
                 menuBtn.classList.remove('hidden');
             }
         }
 
-        // 3. 核心捲動偵測邏輯
         window.addEventListener('scroll', () => {
-            // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
-            // 避免在操作選單時按鈕狀態被捲動事件干擾
             if (fullMenu.classList.contains('active')) return;
-
             const currentScrollY = window.scrollY;
             const delta = currentScrollY - lastScrollY;
-
-            // 輸出數值到控制台
-            // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
-
             if (delta > 0 && currentScrollY > 50) {
-                // 向下捲動 -> 隱藏
                 menuBtn.classList.add('hidden');
             } else if (delta < 0) {
-                // 向上捲動 -> 顯示
                 menuBtn.classList.remove('hidden');
             }
-
             lastScrollY = currentScrollY;
         });
     </script>
 
-    <!-- 內容保護機制 -->
     <script>
-        // 禁止右鍵
         document.addEventListener('contextmenu', e => e.preventDefault());
-
-        // 禁止複製與選取文字
         document.addEventListener('selectstart', e => e.preventDefault());
         document.addEventListener('copy', e => e.preventDefault());
-
-        // 禁止圖片拖拽
         document.addEventListener('dragstart', e => {
             if (e.target.tagName === 'IMG') e.preventDefault();
         });
     </script>
+
 </body>
 </html>

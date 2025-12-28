@@ -1,5 +1,23 @@
 [
   {
+    "id": "TKM-0009",
+    "type": "series",
+    "title": "seriesTest02",
+    "desc": "系列作品說明",
+    "date": "2025-12-28",
+    "cover": "Test-01.jpg",
+    "img": [
+      "Test-01.jpg",
+      "Test-02.jpg",
+      "Test-03.jpg",
+      "Test-04.jpg",
+      "Test-05.jpg",
+      "Test-06.jpg"
+    ],
+    "category": "Comic",
+    "tags": []
+  },
+  {
     "id": "TKM-0004",
     "type": "series",
     "title": "測試系列",
