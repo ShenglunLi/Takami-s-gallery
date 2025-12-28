@@ -49,7 +49,8 @@
     --fs-h2: 1.5rem;     
     --fs-h3: 1.25rem;    
     --fs-p: 1rem;        
-    --fs-label: 1.2rem;  
+    --fs-label: 1.2rem;
+    --fs-span: 0.8rem;  
 
     /* 圓角與間距 */
     --radius-md: 12px;
@@ -87,6 +88,7 @@ h1 { font-size: var(--fs-h1); font-weight: 700; color: var(--text-main); }
 h2 { font-size: var(--fs-h2); font-weight: 700; color: var(--text-main); }
 h3 { font-size: var(--fs-h3); font-weight: 500; color: var(--text-main); }
 p  { font-size: var(--fs-p); color: var(--text-body); }
+span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* --- 佈局結構 --- */
 .wrapper {
@@ -188,9 +190,9 @@ p  { font-size: var(--fs-p); color: var(--text-body); }
 .card-gallery { --card-img: url('img/index/gallery.jpg'); }
 .card-life { --card-img: url('img/index/life.jpg'); }
 
-.card:hover { transform: var(--hover-lift); }
-.card:hover::before { transform: scale(1.1); }
-.card:hover::after { background: var(--overlay-hover); }
+/* .card:hover { transform: var(--hover-lift); } */
+/* .card:hover::before { transform: scale(1.1); }
+.card:hover::after { background: var(--overlay-hover); } */
 
 /* --- 4. Footer 區塊修正 --- */
 .footer {
@@ -368,4 +370,16 @@ p  { font-size: var(--fs-p); color: var(--text-body); }
     font-size: 0.9rem;
     margin-bottom: 8px;
     text-transform: uppercase;
+}
+
+/* Google Material 圖示設定 */
+.material-symbols-outlined {
+  /* 這裡設定你想要的細筆劃 (100-200) */
+    font-variation-settings: 'wght' 200, 'opsz' 24;
+    font-size: 48px;
+    line-height: 1;
+    display: block;
+    width: 1em;
+    height: 1em;
+    text-align: center;
 }

@@ -4,146 +4,175 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery | TAKAMI's Portfolio</title>
+    <!-- 阻擋機器人及Pinterest -->
+    <meta name="robots" content="noindex, nofollow, noimageindex">
+    <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!" />
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
     <link rel="stylesheet" href="style.css">
     <style>
-        /* --- Gallery 專屬樣式 --- */
+        /* --- Gallery 基礎樣式 --- */
         .gallery-main { padding: 40px 0; min-height: 80vh; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .category-filter { display: flex; justify-content: flex-start; gap: 12px; margin-top: 20px; margin-bottom: 40px; flex-wrap: wrap; }
+        .filter-btn { padding: 6px 24px; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); border-radius: var(--radius-full); cursor: pointer; transition: 0.3s; }
+        .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: #fff; }
+        .category-group { margin-bottom: 60px; position: relative; }
+        .category-title { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--text-light-subtitle); font-weight: 700; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
 
-        /* 1. FilterBar 按鈕配置靠左對齊 */
-        .category-filter {
-            display: flex;
-            justify-content: flex-start;
-            gap: 12px;
-            margin-top: 20px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-        }
-        .filter-btn {
-            padding: 6px 24px;
-            border: 1px solid var(--primary-color);
-            background: transparent;
-            color: var(--primary-color);
-            border-radius: var(--radius-full);
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-        }
-        .filter-btn.active, .filter-btn:hover {
-            background: var(--primary-color);
-            color: #fff;
-        }
-
-        /* 2. 類別分組樣式 */
-        .category-group {
-            margin-bottom: 60px;
-            position: relative;
-        }
-        .category-title {
-            font-size: 1.5rem;
-            color: var(--primary-color);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--text-light-subtitle);
-            font-weight: 700;
-        }
-
-        /* 3. Instagram 風格網格佈局 */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 稍微調大最小寬度增加質感 */
-            gap: 8px;
-        }
-
-        .work-card {
-            position: relative;
-            background: #eee;
-            aspect-ratio: 1 / 1;
-            overflow: hidden;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-        }
-        /* 初始隱藏超出的項目 */
-        .work-card.is-hidden {
-            display: none;
-        }
-
-        .work-card:hover { opacity: 0.9; }
+        /* --- 網格卡片樣式 --- */
+        .work-card { position: relative; background: #eee; aspect-ratio: 1 / 1; overflow: hidden; cursor: pointer; transition: 0.3s; }
+        .work-card:hover { opacity: 0.9; transform: scale(1.02); }
         .work-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
-        /* 4. 顯示更多按鈕樣式 */
-        .show-more-container {
-            margin-top: 15px;
-            display: flex;
-            justify-content: flex-start;
-        }
-        .show-more-btn {
-            background: none;
-            border: none;
-            color: var(--primary-hover);
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            padding: 5px 0;
+        /* --- Overlay 燈箱樣式 --- */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; z-index: 1000; overflow-y: auto; align-items: center; justify-content: center; }
+        .overlay.active { display: flex; }
+        
+        /* 統一按鈕點擊範圍 (電腦版) */
+        .overlay-close, .overlay-back { 
+            position: fixed; 
+            top: 30px; 
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
-            gap: 5px;
+            justify-content: center;
+            color: #fff; 
+            cursor: pointer; 
+            z-index: 1010; 
+            transition: 0.3s; 
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+        .overlay-close { right: 90px; }
+        .overlay-back { right: 90px; display: none; }
+        .overlay-close:hover, .overlay-back:hover { background: rgba(255,255,255,0.15); opacity: 1; }
+        .overlay-close .material-symbols-outlined, .overlay-back .material-symbols-outlined { font-size: 2rem; }
+
+        .overlay-content { width: 85%; max-width: 1200px; display: flex; flex-direction: column; position: relative; margin: 0 auto; }
+
+        /* --- 第一層：資訊層 (Info Layer) --- */
+        .info-layer { display: flex; gap: 60px; align-items: stretch; background: transparent; }
+        
+        .info-cover-box { 
+            flex: 0 0 60%; 
+            position: relative; 
+            max-height: 85vh; 
+            display: flex;
+            align-items: center;
+        }
+        .info-cover-box.is-series { cursor: pointer; }
+        .info-cover-box img { 
+            width: 100%; 
+            height: 100%; 
+            max-height: 85vh; 
+            object-fit: contain; 
+            border-radius: 4px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            display: block; 
+        }
+
+        .page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-family: monospace; display: none; }
+        .page-count-label.active { display: block; }
+        
+        .info-details { 
+            flex: 1; 
+            color: #fff; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: flex-start; 
+            text-align: left; 
+            padding: 20px 0; 
+        }
+        .info-details h2 { font-size: 2.4rem; margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
+        .info-details p { font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-bottom: 25px; overflow-y: auto; }
+        .info-details .date-tag { font-size: 0.95rem; color: var(--primary-hover); font-weight: bold; margin-bottom: 5px; opacity: 0.9; }
+
+        .read-btn {
+            margin-top: auto;
+            margin-bottom: 0px;
+            align-self: flex-start;
+            padding: 12px 45px;
+            background-color: transparent;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.8);
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
             transition: 0.3s;
-        }
-        .show-more-btn:hover {
-            color: var(--primary-color);
-            text-decoration: underline;
-        }
-        .show-more-btn i { font-size: 0.8rem; }
-
-        /* Overlay 彈窗 */
-        .overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
             display: none; 
-            z-index: 1000;
-            overflow-y: auto;
-            padding: 40px 0;
+            align-items: center;
+            gap: 10px;
         }
-        .overlay.active { display: flex; }
-        .overlay-close {
-            position: fixed; top: 20px; right: 25px;
-            color: #fff; font-size: 2.5rem; cursor: pointer; z-index: 1010;
-        }
-        .overlay-content {
-            width: 90%; max-width: 900px; margin: auto;
-            background: #fff; border-radius: 12px; overflow: hidden;
-        }
-        .overlay-image-container { position: relative; background: #000; display: flex; justify-content: center; }
-        .overlay-image-container img { max-width: 100%; max-height: 75vh; object-fit: contain; }
-        .overlay-details { padding: 30px; }
-        .work-meta { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px; }
+        .read-btn.active { display: flex; }
+        .read-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.1); border-color: #fff; }
 
-        .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(0,0,0,0.3); color: #fff; border: none;
-            padding: 15px; cursor: pointer; font-size: 1.2rem;
-        }
-        .nav-btn:hover { background: rgba(0,0,0,0.6); }
-        .prev-btn { left: 0; }
-        .next-btn { right: 0; }
+        /* --- 第二層：瀏覽層 (Viewer Layer) --- */
+        .viewer-layer { display: none; width: 100%; height: 90vh; position: relative; flex-direction: column; align-items: center; justify-content: center; }
+        .viewer-layer.active { display: flex; }
+        .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        @media (max-width: 600px) {
-            .gallery-grid { grid-template-columns: repeat(3, 1fr); gap: 2px; }
-            .category-title { font-size: 1.2rem; }
+        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: #fff; border: none; padding: 30px 20px; cursor: pointer; font-size: 1.5rem; transition: opacity 0.5s ease; z-index: 20; }
+        .nav-btn:hover { background: rgba(255,255,255,0.2); }
+        .nav-btn.hidden { opacity: 0; pointer-events: none; }
+        .prev-btn { left: -80px; border-radius: 8px; }
+        .next-btn { right: -80px; border-radius: 8px; }
+
+        /* 分頁圓點樣式 */
+        .viewer-indicator { 
+            position: absolute; 
+            bottom: 0px; 
+            display: flex; 
+            gap: 8px; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .dot { 
+            width: 8px; 
+            height: 8px; 
+            background: rgba(255, 255, 255, 0.3); 
+            border-radius: 50%; 
+            transition: 0.3s; 
+        }
+        .dot.active { 
+            background: #fff; 
+            transform: scale(1.2); 
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.5); 
+        }
+
+        /* RWD 調整 */
+        /*手機版面按鈕移至左上 */
+        @media (max-width: 900px) {
+            .overlay { align-items: flex-start; }
+            .overlay-content { margin-top: 80px; margin-bottom: 40px; width: 95%; }
+            .info-layer { flex-direction: column; gap: 8px; }
+            .info-cover-box { flex: 0 0 auto; width: 100%; max-height: none; }
+            .info-cover-box img { max-height: 50vh; }
+            .info-details { padding: 0 20px; }
+            .info-details h2 { font-size: 1.8rem; }
+            .nav-btn { padding: 15px 10px; }
+            .prev-btn { left: 0; }
+            .next-btn { right: 0; } 
+            .read-btn { width: 100%; justify-content: center; margin-top: 8px; }
+            .viewer-layer { height: 75vh; }
+            .viewer-indicator { bottom: -30px; }
+            .overlay-close, .overlay-back { top: 15px; left: 15px; right: auto; width: 40px; height: 40px }
         }
     </style>
 </head>
 <body>
+
     <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
         <i class="fa-solid fa-bars menu-icon"></i>
     </div>
-
     <nav class="full-menu" id="fullMenu">
-        <div class="close-menu" onclick="toggleMenu()">
-            <i class="fa-solid fa-xmark"></i>
-        </div>
+        <div class="close-menu" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></div>
         <a href="index.html">Home</a>
         <a href="new.html">New</a>
         <a href="gallery.html">Gallery</a>
@@ -152,10 +181,7 @@
 
     <header class="new-hero" style="height: 30vh;">
         <div class="new-hero-bg" style="background-image: url('img/index/gallery.jpg');"></div>
-        <div class="hero-content">
-            <p>Gallery</p>
-            <h1>作品全集</h1>
-        </div>
+        <div class="hero-content"><p>Gallery</p><h1>作品全集</h1></div>
     </header>
 
     <main class="gallery-main">
@@ -163,22 +189,43 @@
         <div id="galleryContainer"></div>
     </main>
 
-    <footer class="footer">
-        <p>&copy; 2026 Takami's Gallery. All Rights Reserved.</p>
-    </footer>
+    <footer class="footer"><p>&copy; 2026 Takami's Gallery. All Rights Reserved.</p></footer>
 
-    <div id="workOverlay" class="overlay">
-        <span class="overlay-close" onclick="closeOverlay()">&times;</span>
+    <!-- Overlay 燈箱結構 -->
+    <div id="workOverlay" class="overlay" onclick="handleOverlayClick(event)" onmousemove="resetUIInactivity()" ontouchstart="resetUIInactivity()">
+        <div id="overlayCloseBtn" class="overlay-close" onclick="closeOverlay()">
+            <span class="material-symbols-outlined thin-icon">close</span>
+        </div>
+        <div id="overlayBackBtn" class="overlay-back" onclick="backToInfo()">
+            <!-- <i class="fas fa-arrow-left"></i> <span>Back</span> -->
+            <span class="material-symbols-outlined thin-icon">arrow_back</span>
+        </div>
+
         <div class="overlay-content">
-            <div class="overlay-image-container">
-                <button class="nav-btn prev-btn" onclick="changeWork(-1)"><i class="fas fa-chevron-left"></i></button>
-                <img id="modalImg" src="" alt="">
-                <button class="nav-btn next-btn" onclick="changeWork(1)"><i class="fas fa-chevron-right"></i></button>
+            <!-- 第一層：資訊層 -->
+            <div id="infoLayer" class="info-layer">
+                <div id="infoCoverBox" class="info-cover-box" onclick="tryEnterViewer()">
+                    <img id="infoCoverImg" src="" alt="Cover">
+                    <span class="page-count-label" id="infoPageCount"></span>
+                </div>
+                <div class="info-details">
+                    <div class="date-tag" id="infoDate"></div>
+                    <h2 id="infoTitle">作品標題</h2>
+                    <p id="infoDesc">作品描述內容...</p>
+                    <button id="infoReadBtn" class="read-btn" onclick="enterViewer()">
+                        開始閱讀
+                    </button>
+                </div>
             </div>
-            <div class="overlay-details">
-                <h2 id="modalTitle">標題</h2>
-                <div class="work-meta" id="modalMeta"></div>
-                <p id="modalDesc"></p>
+
+            <!-- 第二層：瀏覽層 -->
+            <div id="viewerLayer" class="viewer-layer">
+                <div class="viewer-img-container">
+                    <button class="nav-btn prev-btn auto-hide" onclick="changeInnerPage(-1)"><i class="fas fa-chevron-left"></i></button>
+                    <img id="viewerImg" src="" alt="Work Page">
+                    <button class="nav-btn next-btn auto-hide" onclick="changeInnerPage(1)"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="viewer-indicator" id="viewerIndicator"></div>
             </div>
         </div>
     </div>
@@ -186,7 +233,10 @@
     <script>
         let allWorks = [];
         let currentFilteredWorks = []; 
-        let currentIndex = 0;
+        let currentIndex = 0;       
+        let currentInnerIndex = 0;  
+        let isViewerActive = false; 
+        let uiInactivityTimeout; 
 
         async function initGallery() {
             try {
@@ -195,18 +245,14 @@
                 allWorks = allWorks.map(w => ({ ...w, category: w.category || 'Other' }));
                 renderFilters();
                 renderCategorizedGallery('All');
-            } catch (err) {
-                console.error("Load Failed:", err);
-            }
+            } catch (err) { console.error("Load Failed:", err); }
         }
 
         function renderFilters() {
             const categories = ['All', ...new Set(allWorks.map(w => w.category))];
             const filterBar = document.getElementById('filterBar');
             filterBar.innerHTML = categories.map(cat => `
-                <button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="handleFilterClick('${cat}', this)">
-                    ${cat}
-                </button>
+                <button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="handleFilterClick('${cat}', this)">${cat}</button>
             `).join('');
         }
 
@@ -231,91 +277,188 @@
 
                 const groupDiv = document.createElement('div');
                 groupDiv.className = 'category-group';
-
-                const title = document.createElement('h2');
-                title.className = 'category-title';
-                title.innerText = cat;
-                groupDiv.appendChild(title);
+                groupDiv.innerHTML = `<h2 class="category-title">${cat}</h2>`;
 
                 const grid = document.createElement('div');
                 grid.className = 'gallery-grid';
 
-                worksInCat.forEach((work, idx) => {
+                worksInCat.forEach((work) => {
                     const globalIndex = currentFilteredWorks.length;
                     currentFilteredWorks.push(work);
+                    
                     const card = document.createElement('div');
                     card.className = 'work-card';
                     card.onclick = () => openOverlay(globalIndex);
-                    card.innerHTML = `<img src="img/gallery/${work.img}" alt="${work.title}" onerror="this.src='img/gallery/default.jpg'">`;
+                    
+                    const thumbSrc = `img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}`;
+                    
+                    let badgeHTML = '';
+                    if(work.type === 'series') {
+                        badgeHTML = `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>`;
+                    }
+
+                    card.innerHTML = `
+                        ${badgeHTML}
+                        <img src="${thumbSrc}" alt="${work.title}" onerror="this.src='img/gallery/default.jpg'">
+                    `;
                     grid.appendChild(card);
                 });
 
-                groupDiv.appendChild(grid);
                 container.appendChild(groupDiv);
-
-                applyLimit(grid, groupDiv);
+                groupDiv.appendChild(grid);
             });
-        }
-
-        function applyLimit(grid, groupDiv) {
-            // 透過 getComputedStyle 取得當前網格實際的列數
-            const gridStyle = window.getComputedStyle(grid);
-            const columns = gridStyle.getPropertyValue('grid-template-columns').split(' ').length;
-            
-            // 判斷是否為手機版 (小於 600px)
-            const isMobile = window.innerWidth <= 600;
-            
-            // 設定限制數量：電腦版 2 列，手機版 3 列
-            const maxRows = isMobile ? 3 : 2;
-            const limit = columns * maxRows;
-            
-            const cards = grid.querySelectorAll('.work-card');
-            
-            if (cards.length > limit) {
-                cards.forEach((card, i) => {
-                    if (i >= limit) card.classList.add('is-hidden');
-                });
-
-                const btnContainer = document.createElement('div');
-                btnContainer.className = 'show-more-container';
-                btnContainer.innerHTML = `
-                    <button class="show-more-btn" onclick="toggleExpand(this)">
-                        more... <i class="fas fa-chevron-down"></i>
-                    </button>
-                `;
-                groupDiv.appendChild(btnContainer);
-            }
-        }
-
-        function toggleExpand(btn) {
-            const group = btn.closest('.category-group');
-            const hiddenCards = group.querySelectorAll('.work-card.is-hidden');
-            hiddenCards.forEach(card => card.classList.remove('is-hidden'));
-            btn.parentElement.remove();
         }
 
         function openOverlay(index) {
             currentIndex = index;
-            const item = currentFilteredWorks[currentIndex];
-            document.getElementById('modalImg').src = `img/gallery/${item.img}`;
-            document.getElementById('modalTitle').innerText = item.title;
-            document.getElementById('modalDesc').innerText = item.desc || "";
-            document.getElementById('modalMeta').innerText = `${item.date} | ${item.category}`;
+            isViewerActive = false;
+            updateOverlayUI();
+            
             document.getElementById('workOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden'; 
+            document.body.style.overflow = 'hidden';
+            resetUIInactivity();
+        }
+
+        function updateOverlayUI() {
+            const item = currentFilteredWorks[currentIndex];
+            const isSeries = item.type === 'series';
+            
+            document.getElementById('infoCoverImg').src = `img/gallery/${item.cover || (Array.isArray(item.img) ? item.img[0] : item.img)}`;
+            document.getElementById('infoTitle').innerText = item.title;
+            document.getElementById('infoDesc').innerText = item.desc || "";
+            document.getElementById('infoDate').innerText = item.date;
+            
+            const pageBadge = document.getElementById('infoPageCount');
+            const readBtn = document.getElementById('infoReadBtn');
+            const coverBox = document.getElementById('infoCoverBox');
+
+            if (isSeries) {
+                const pageCount = Array.isArray(item.img) ? item.img.length : 1;
+                pageBadge.innerText = `[${pageCount}P]`;
+                pageBadge.classList.add('active');
+                readBtn.classList.add('active');
+                coverBox.classList.add('is-series');
+            } else {
+                pageBadge.classList.remove('active');
+                readBtn.classList.remove('active');
+                coverBox.classList.remove('is-series');
+            }
+
+            if (isViewerActive && isSeries) {
+                document.getElementById('infoLayer').style.display = 'none';
+                document.getElementById('viewerLayer').classList.add('active');
+                document.getElementById('overlayCloseBtn').style.display = 'none';
+                document.getElementById('overlayBackBtn').style.display = 'flex';
+                
+                // 初次進入瀏覽層時生成圓點
+                renderDots(); 
+                updateViewerImage();
+            } else {
+                document.getElementById('infoLayer').style.display = 'flex';
+                document.getElementById('viewerLayer').classList.remove('active');
+                document.getElementById('overlayCloseBtn').style.display = 'block';
+                document.getElementById('overlayBackBtn').style.display = 'none';
+            }
+        }
+
+        // 生成分頁圓點
+        function renderDots() {
+            const item = currentFilteredWorks[currentIndex];
+            const indicator = document.getElementById('viewerIndicator');
+            indicator.innerHTML = '';
+            
+            if (Array.isArray(item.img)) {
+                item.img.forEach((_, i) => {
+                    const dot = document.createElement('span');
+                    dot.className = 'dot';
+                    if (i === currentInnerIndex) dot.classList.add('active');
+                    indicator.appendChild(dot);
+                });
+            }
+        }
+
+        function updateViewerImage() {
+            const item = currentFilteredWorks[currentIndex];
+            const displayImg = document.getElementById('viewerImg');
+            
+            if (Array.isArray(item.img)) {
+                displayImg.src = `img/gallery/${item.img[currentInnerIndex]}`;
+                
+                // 更新圓點狀態
+                const dots = document.querySelectorAll('.dot');
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === currentInnerIndex);
+                });
+            } else {
+                displayImg.src = `img/gallery/${item.img}`;
+            }
+            resetUIInactivity();
+        }
+
+        function tryEnterViewer() {
+            const item = currentFilteredWorks[currentIndex];
+            if (item.type === 'series') {
+                enterViewer();
+            }
+        }
+
+        function enterViewer() {
+            currentInnerIndex = 0;
+            isViewerActive = true;
+            updateOverlayUI();
+        }
+
+        function backToInfo() {
+            isViewerActive = false;
+            updateOverlayUI();
+        }
+
+        function changeInnerPage(step) {
+            const item = currentFilteredWorks[currentIndex];
+            if (!Array.isArray(item.img)) return;
+
+            currentInnerIndex += step;
+            if (currentInnerIndex < 0) currentInnerIndex = item.img.length - 1;
+            if (currentInnerIndex >= item.img.length) currentInnerIndex = 0;
+            
+            updateViewerImage();
         }
 
         function closeOverlay() {
             document.getElementById('workOverlay').classList.remove('active');
             document.body.style.overflow = 'auto';
+            clearTimeout(uiInactivityTimeout);
         }
 
-        function changeWork(step) {
-            currentIndex += step;
-            if (currentIndex < 0) currentIndex = currentFilteredWorks.length - 1;
-            if (currentIndex >= currentFilteredWorks.length) currentIndex = 0;
-            openOverlay(currentIndex);
+        function handleOverlayClick(e) {
+            if (e.target.id === 'workOverlay') {
+                closeOverlay();
+            }
         }
+
+        function resetUIInactivity() {
+            if (!isViewerActive) return;
+            document.querySelectorAll('.auto-hide').forEach(el => el.classList.remove('hidden'));
+            clearTimeout(uiInactivityTimeout);
+            uiInactivityTimeout = setTimeout(() => {
+                if (isViewerActive) {
+                    document.querySelectorAll('.auto-hide').forEach(el => el.classList.add('hidden'));
+                }
+            }, 1000); 
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('workOverlay').classList.contains('active')) return;
+            resetUIInactivity();
+            const item = currentFilteredWorks[currentIndex];
+            if (isViewerActive && item.type === 'series') {
+                if (e.key === 'ArrowLeft') changeInnerPage(-1);
+                if (e.key === 'ArrowRight') changeInnerPage(1);
+                if (e.key === 'Escape') backToInfo();
+            } else {
+                if (e.key === 'Escape') closeOverlay();
+            }
+        });
 
         function toggleMenu() {
             const fullMenu = document.getElementById('fullMenu');
@@ -326,19 +469,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', initGallery);
-        
-        // 如果旋轉手機或調整視窗大小，重新計算顯示狀態
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(() => {
-                // 取得當前激活的分類按鈕文字重新渲染
-                const activeBtn = document.querySelector('.filter-btn.active');
-                if (activeBtn) {
-                    renderCategorizedGallery(activeBtn.innerText.trim());
-                }
-            }, 250);
-        });
     </script>
 </body>
 </html>

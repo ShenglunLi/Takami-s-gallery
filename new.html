@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TAKAMI's Portfolio - New</title>
+    <title>New | TAKAMI's Portfolio</title>
+    <!-- 阻擋機器人及Pinterest -->
     <meta name="robots" content="noindex, nofollow, noimageindex">
     <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!" />
     <meta name="referrer" content="strict-origin-when-cross-origin">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
     <link rel="stylesheet" href="style.css">
+
     <style>
         /* --- 基礎設定 --- */
         html, body {
@@ -66,6 +68,8 @@
 
         .work-img-wrap img {
             width: 100%;
+            max-height: 90vh;   /* 關鍵設定：最大高度為視窗的 90% */
+            object-fit: contain; /* 保持比例縮放，確保整張圖都能看見 */
             display: block;
             transition: transform 0.5s ease;
             object-fit: cover;
@@ -188,10 +192,10 @@
         </section>
         
 
-        <a href="#" class="btn-more">READ MORE</a>
+        <a href="gallery.html" class="btn-more">READ MORE</a>
         <footer class="footer">
             <p>&copy; 2026 Takami's Gallery. All Rights Reserved.</p>
-            <p>本站圖文受版權保護，禁止未經授權之轉載、AI 訓練與商業使用。</p>
+            <p>本站圖文禁止未經授權之轉載、AI 訓練與商業使用。</p>
             <p>sample@xmail.com</p>
             <ul class="sns-links">
                 <li><a href="#" class="sns-btn png-icon" style="--icon: url('img/icon/icon-plurk.png'); --hover: url('img/icon/icon-plurk-hover.png');"></a></li>
@@ -278,7 +282,7 @@
                         : '';
 
                     // 設定圖片完整路徑與預設圖路徑
-                    const imgPath = `img/gallery/${item.img}`;
+                    const imgPath = `img/gallery/${item.cover}`;
                     const fallbackPath = `img/gallery/default.jpg`;
 
                     return `
