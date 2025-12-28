@@ -1,6 +1,6 @@
 [
   {
-    "id": "TKM-0013",
+    "id": "TKM-0009",
     "type": "series",
     "title": "seriesTest02",
     "desc": "系列作品說明",
@@ -133,49 +133,5 @@
       "tag1",
       "tag2"
     ]
-  },
-  {
-    "id": "TKM-0009",
-    "type": "single",
-    "title": "",
-    "desc": "",
-    "date": "",
-    "cover": "",
-    "img": "",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "id": "TKM-0010",
-    "type": "single",
-    "title": "",
-    "desc": "",
-    "date": "",
-    "cover": "",
-    "img": "",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "id": "TKM-0011",
-    "type": "single",
-    "title": "",
-    "desc": "",
-    "date": "",
-    "cover": "",
-    "img": "",
-    "category": "Uncategorized",
-    "tags": []
-  },
-  {
-    "id": "TKM-0012",
-    "type": "single",
-    "title": "",
-    "desc": "",
-    "date": "",
-    "cover": "同步雲端圖片跟輸入資料的流程確認與使用說明",
-    "img": "同步雲端圖片跟輸入資料的流程確認與使用說明",
-    "category": "Uncategorized",
-    "tags": []
   }
 ]
