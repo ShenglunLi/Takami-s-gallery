@@ -1,5 +1,23 @@
 [
   {
+    "id": "TKM-0013",
+    "type": "series",
+    "title": "seriesTest02",
+    "desc": "系列作品說明",
+    "date": "2025-12-28",
+    "cover": "Test-01.jpg",
+    "img": [
+      "Test-01.jpg",
+      "Test-02.jpg",
+      "Test-03.jpg",
+      "Test-04.jpg",
+      "Test-05.jpg",
+      "Test-06.jpg"
+    ],
+    "category": "Comic",
+    "tags": []
+  },
+  {
     "id": "TKM-0004",
     "type": "series",
     "title": "測試系列",
@@ -115,5 +133,49 @@
       "tag1",
       "tag2"
     ]
+  },
+  {
+    "id": "TKM-0009",
+    "type": "single",
+    "title": "",
+    "desc": "",
+    "date": "",
+    "cover": "",
+    "img": "",
+    "category": "Uncategorized",
+    "tags": []
+  },
+  {
+    "id": "TKM-0010",
+    "type": "single",
+    "title": "",
+    "desc": "",
+    "date": "",
+    "cover": "",
+    "img": "",
+    "category": "Uncategorized",
+    "tags": []
+  },
+  {
+    "id": "TKM-0011",
+    "type": "single",
+    "title": "",
+    "desc": "",
+    "date": "",
+    "cover": "",
+    "img": "",
+    "category": "Uncategorized",
+    "tags": []
+  },
+  {
+    "id": "TKM-0012",
+    "type": "single",
+    "title": "",
+    "desc": "",
+    "date": "",
+    "cover": "同步雲端圖片跟輸入資料的流程確認與使用說明",
+    "img": "同步雲端圖片跟輸入資料的流程確認與使用說明",
+    "category": "Uncategorized",
+    "tags": []
   }
 ]
