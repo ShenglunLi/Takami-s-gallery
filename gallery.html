@@ -17,7 +17,7 @@
         .category-filter { display: flex; justify-content: flex-start; gap: 12px; margin-top: 20px; margin-bottom: 40px; flex-wrap: wrap; }
         .filter-btn { padding: 6px 24px; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); border-radius: var(--radius-full); cursor: pointer; transition: 0.3s; }
         .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: #fff; }
-        .category-group { margin-bottom: 60px; position: relative; }
+        .category-group { margin-bottom: 40px; position: relative; }
         .category-title { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--text-light-subtitle); font-weight: 700; }
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
 
@@ -28,206 +28,122 @@
         .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
         /* --- Overlay 燈箱樣式 --- */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; z-index: 1000; overflow: hidden; align-items: center; justify-content: center; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; display: none; z-index: 1000; overflow: hidden; align-items: center; justify-content: center; }
         .overlay.active { display: flex; }
  
         .overlay-close, .overlay-back {
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 48px;
-            height: 48px;
+            position: fixed; top: 30px; right: 30px;
+            display: flex; align-items: center; justify-content: center;
+            width: 48px; height: 48px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 1010;
-            transition: 0.3s;
-            border: none;
+            border-radius: 50%; cursor: pointer; z-index: 1010; transition: 0.3s; border: none;
         }
-
         .overlay-close:hover, .overlay-back:hover { background: rgba(255, 255, 255, 0.15); }
+        .overlay-close .material-symbols-outlined, .overlay-back .material-symbols-outlined { font-weight: 100; font-size: 2rem; color: #fff; }
 
-        .overlay-close .material-symbols-outlined, 
-        .overlay-back .material-symbols-outlined {
-            font-weight: 100;
-            font-size: 2rem;
-            color: #fff;
+        .overlay-content { 
+            position: relative; width: 85%; max-width: 1200px; height: 85vh; 
+            display: flex; align-items: center; justify-content: center; margin: 0 auto; 
         }
-
-        /* 初始狀態控制 */
-        .overlay-close { display: flex; }
-        .overlay-back { display: none; }
-
-
-        .overlay-content { width: 85%; max-width: 1200px; display: flex; flex-direction: column; position: relative; margin: 0 auto; }
 
         /* --- 第一層：資訊層 (Info Layer) --- */
-        .info-layer { display: flex; gap: 60px; align-items: stretch; background: transparent; }
+        .info-layer { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; gap: 60px; align-items: center; background: transparent; 
+        }
         
         .info-cover-box { 
-            flex: 0 0 60%; 
-            position: relative; 
-            max-height: 85vh; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            flex: 0 0 60%; position: relative; max-height: 85vh; 
+            display: flex; align-items: center; justify-content: center;
         }
-        .info-cover-box.is-series { cursor: pointer; }
         .info-cover-box img { 
-            width: 100%; 
-            height: 100%; 
-            max-height: 85vh; 
-            object-fit: contain; 
-            border-radius: 4px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            display: block; 
+            width: 100%; height: 100%; max-height: 85vh; object-fit: contain; 
+            border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
         }
+        .info-cover-box.is-series { cursor: pointer; transition: transform 0.3s ease; }
+        .info-cover-box.is-series:hover { transform: scale(1.01); }
 
-        /* --- 修正 2：Info Layer 圓形導覽按鈕 & 位置對齊 --- */
         .info-nav-btn {
-            position: fixed; /* 改為定點位置 */
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.05);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            z-index: 1005;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            border-radius: 50%; /* 圓形 */
+            position: fixed; top: 50%; transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05); color: white; border: none;
+            width: 50px; height: 50px; cursor: pointer; z-index: 1005;
+            transition: 0.3s; display: flex; align-items: center; justify-content: center;
+            border-radius: 50%;
         }
-        
-        @media (min-width: 901px) {
-            .info-nav-btn:hover { background: rgba(255, 255, 255, 0.15); }
-            .info-nav-btn.prev { left: 30px; } /* 靠左邊界 */
-            .info-nav-btn.next { right: 30px; } /* 修正：水平位置對齊 overlayCloseBtn */
-        }
+        .info-nav-btn.prev { left: 30px; }
+        .info-nav-btn.next { right: 30px; }
 
-        .page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; font-family: monospace; display: none; }
+        .page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; display: none; }
         .page-count-label.active { display: block; }
         
-        .info-details { 
-            flex: 1; 
-            color: #fff; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: flex-start; 
-            text-align: left; 
-            padding: 20px 0; 
+        .info-details {
+            flex: 1; display: flex; flex-direction: column; align-items: flex-start;
+            padding: 20px 0; min-width: 300px;
         }
         .info-details h2 { font-size: 2.4rem; margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
-        .info-details p { font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-bottom: 25px; overflow-y: auto; }
-        .info-details .date-tag { font-size: 0.95rem; color: var(--primary-hover); font-weight: bold; margin-bottom: 5px; opacity: 0.9; }
+        .info-details p { font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-bottom: 25px; }
 
-        .read-btn {
-            margin-top: auto;
-            align-self: flex-start;
-            padding: 12px 45px;
-            background-color: transparent;
-            color: #fff;
-            border: 1px solid rgba(255,255,255,0.8);
-            border-radius: 4px;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            display: none; 
-            align-items: center;
-            gap: 10px;
+        /* --- 拍手與日期排版 --- */
+        .info-header-meta {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            width: 100%; margin-bottom: 10px; min-height: 32px;
         }
-        .read-btn.active { display: flex; }
+        .date-tag { font-size: 0.95rem; color: var(--primary-hover); font-weight: bold; line-height: 1.8; }
+
+        .clap-section {
+            flex-shrink: 0; opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease; min-height: 32px;
+            display: flex; align-items: center;
+        }
+        .clap-section.ready { opacity: 1; visibility: visible; }
+
+        .clap-btn, #clappedStatus {
+            background: transparent; border: none; color: #ccc;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.95rem !important; font-weight: 500;
+            padding: 4px 0; cursor: pointer; transition: 0.3s;
+        }
+        #clappedStatus { color: var(--primary-hover) !important; cursor: default; }
+        .clap-btn:hover { opacity: 0.8; transform: translateY(-1px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 200; font-size: 22px; }
+        #clappedStatus .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 200; }
 
         /* --- 第二層：瀏覽層 (Viewer Layer) --- */
         .viewer-layer { 
-            display: none; 
-            width: 100%; 
-            height: 90vh; /* 需求 1：減少高度（從 90vh 改為 80vh 或您需要的高度） */
-            position: relative; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: center; 
-            /* 必須改為 visible，否則 bottom: -10px 的圓點會被切掉看不到 */
-            overflow: visible; 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; flex-direction: column; align-items: center; justify-content: center;
+            z-index: 20; background: #000;
         }
         .viewer-layer.active { display: flex; }
-        .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-        /* 修正 1：Viewer 層按鈕定位 (電腦版保留) */
         .nav-btn {
-            position: absolute; top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-            border: none;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: 0.3s;
-            z-index: 20;
-            border-radius: 50%; /* 圓形 */ }
-
-        
-        .nav-btn:hover { background: rgba(255,255,255,0.2); }
-        .prev-btn { left: 20px; }
-        .next-btn { right: 20px; }
-        
-        /* 輔助：隱藏按鈕但保留空間或邏輯 */
-        .btn-hidden { visibility: hidden !important; pointer-events: none !important; }
-
-        .viewer-indicator { 
-            position: absolute; 
-            bottom: -20px; 
-            display: flex; 
-            gap: 8px; 
-            align-items: center; 
-            justify-content: center; 
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.05); color: #fff; border: none;
+            width: 50px; height: 50px; cursor: pointer; border-radius: 50%; z-index: 30;
         }
-        .dot { width: 8px; height: 8px; background: var(--dot-color); border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: var(--dot-active-color); transform: scale(1.2); }
+        .prev-btn { left: 20px; } .next-btn { right: 20px; }
+        .btn-hidden { visibility: hidden !important; }
+
+        .viewer-indicator { position: absolute; bottom: -20px; display: flex; gap: 8px; }
+        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.3s; }
+        .dot.active { background: #fff; transform: scale(1.2); }
 
         /* --- RWD 修正 --- */
         @media (max-width: 900px) {
-            #workOverlay { overflow: hidden; align-items: center; }
-            .viewer-layer {
-                width: 100vw;
-                height: 100vh;
-                height: 100dvh;
-                padding: 0;
-            }
-            .overlay-content { width: 100%; height: 100%; max-width: none; justify-content: center; }
-
-            /* 修正 1: 手機版隱藏左右按鈕 */
-            .nav-btn, .info-nav-btn {
-                display: none !important;
-            }
-
-            .info-layer { flex-direction: column; gap: 8px; padding-top: 60px; overflow-y: auto; height: 100%; }
+            .overlay-content { width: 100%; height: 100%; }
+            .info-layer { flex-direction: column; gap: 8px; padding-top: 60px; overflow-y: auto; position: relative; }
             .info-cover-box { flex: 0 0 auto; width: 100%; }
             .info-cover-box img { max-height: 50vh; }
-            .info-details { padding: 20px; }
-            
-            .overlay-close, .overlay-back {
-                top: 20px;
-                left: 20px;
-                right: auto;
-                background: rgba(0, 0, 0, 0.4);
-                backdrop-filter: blur(4px);
-            }
-            .overlay-back.ui-hidden, .overlay-close.ui-hidden { opacity: 0; pointer-events: none; }
-
-            .viewer-indicator {bottom: 10px; }
+            .info-details { padding: 20px; width: 100%; box-sizing: border-box; }
+            .viewer-layer {height: 95%;}
+            .nav-btn, .info-nav-btn { display: none !important; }
+            .overlay-close, .overlay-back { top: 20px; left: 20px; right: auto; background: rgba(0,0,0,0.5); }
+            .ui-hidden { opacity: 0; pointer-events: none; }
         }
+
+        
     </style>
 </head>
 <body>
@@ -264,29 +180,26 @@
         <div class="overlay-content">
             <div id="infoLayer" class="info-layer">
                 <button class="info-nav-btn prev" id="infoPrev" onclick="changeWork(-1)"><i class="fas fa-chevron-left"></i></button>
-                
-                <div id="infoCoverBox" class="info-cover-box">
-                    <img id="infoCoverImg" src="" alt="Cover" onclick="tryEnterViewer()">
+                <div id="infoCoverBox" class="info-cover-box" onclick="tryEnterViewer()">
+                    <img id="infoCoverImg" src="" alt="Cover">
                     <span class="page-count-label" id="infoPageCount"></span>
                 </div>
-
                 <div class="info-details">
-                    <div class="date-tag" id="infoDate"></div>
-                    <h2 id="infoTitle">作品標題</h2>
-                    <p id="infoDesc">作品描述內容...</p>
-                    <div class="clap-section">
-                        <button id="clapBtn" class="clap-btn">
-                            <span class="material-symbols-outlined">favorite</span>
-                            <span id="clapCount">0</span>
-                        </button>
-                        <div id="clappedStatus" style="display: none; color: var(--primary-hover); font-weight: bold; align-items: center; gap: 8px;">
-                            <span class="material-symbols-outlined">favorite</span>
-                            <span id="clapCountStatus">0</span><span>拍手完了</span>
+                    <div class="info-header-meta">
+                        <div class="date-tag" id="infoDate"></div>
+                        <div class="clap-section" id="clapSection">
+                            <button id="clapBtn" class="clap-btn">
+                                <span class="material-symbols-outlined">favorite</span>
+                                <span id="clapCount">-</span>
+                            </button>
+                            <div id="clappedStatus" style="display: none;">
+                                <span class="material-symbols-outlined">favorite</span>
+                                <span id="clapCountStatus">-</span><span>拍手完了</span>
+                            </div>
                         </div>
                     </div>
-                    <button id="infoReadBtn" class="read-btn" onclick="enterViewer()">
-                        <span class="material-symbols-outlined">auto_stories</span> 開始閱讀
-                    </button>
+                    <h2 id="infoTitle">作品標題</h2>
+                    <p id="infoDesc">作品描述內容...</p>
                 </div>
                 <button class="info-nav-btn next" id="infoNext" onclick="changeWork(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
@@ -325,16 +238,44 @@
 
         window.syncClaps = function(workId) {
             if (!workId) return;
+
+            const clapSection = document.getElementById('clapSection');
+            const clapCountDisplay = document.getElementById('clapCount');
+            const clapCountStatus = document.getElementById('clapCountStatus');
+
+            // 1. 立即進入「載入中」狀態
+            // 移除 ready 類名觸發 CSS opacity: 0，並將數字設為佔位符防止舊數據閃爍
+            clapSection.classList.remove('ready');
+            if (clapCountDisplay) clapCountDisplay.innerText = "-";
+            if (clapCountStatus) clapCountStatus.innerText = "-";
+
+            // 2. 檢查本地拍手限制 (顯示按鈕或已拍手勾選)
             checkClapLimit(workId);
+
+            // 3. 清理舊的 Firebase 監聽器，避免多重回調
             if (currentClapRef) off(currentClapRef);
+
+            // 4. 建立新路徑監聽
             currentClapRef = ref(db, 'claps/' + workId);
+            
+            // 監聽數據變化
             onValue(currentClapRef, (snapshot) => {
                 const count = snapshot.val() || 0;
-                document.getElementById('clapCount').innerText = count;
-                document.getElementById('clapCountStatus').innerText = count;
+                
+                // 更新界面上的數字
+                if (clapCountDisplay) clapCountDisplay.innerText = count;
+                if (clapCountStatus) clapCountStatus.innerText = count;
+
+                /* 5. 關鍵修正：確保資料寫入 DOM 後才顯示
+                使用 setTimeout 50ms 避開瀏覽器同時處理樣式與數據更新的衝突
+                */
+                setTimeout(() => {
+                    clapSection.classList.add('ready');
+                }, 50);
+            }, (error) => {
+                console.error("Firebase Read Error:", error);
             });
         };
-
         function handleClap() {
             const item = currentFilteredWorks[currentIndex];
             if (!item) return;
@@ -422,6 +363,8 @@
         function openOverlay(index) {
             currentIndex = index;
             isViewerActive = false;
+            currentInnerIndex = 0;
+            document.getElementById('clapSection').classList.remove('ready');
             updateOverlayUI();
             document.getElementById('workOverlay').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -429,12 +372,14 @@
 
         function updateOverlayUI() {
             const item = currentFilteredWorks[currentIndex];
-            document.getElementById('infoCoverImg').src = `img/gallery/${item.cover || item.img[0]}`;
+            if (!item) return;
+
+            const coverFile = item.cover || (Array.isArray(item.img) ? item.img[0] : item.img);
+            document.getElementById('infoCoverImg').src = `img/gallery/${coverFile}`;
             document.getElementById('infoTitle').innerText = item.title;
             document.getElementById('infoDesc').innerText = item.desc || "";
             document.getElementById('infoDate').innerText = item.date;
 
-            // Info Layer 換頁按鈕 (同類別顯示)
             const currentCat = item.category;
             const infoPrev = document.getElementById('infoPrev');
             const infoNext = document.getElementById('infoNext');
@@ -442,11 +387,19 @@
             if (infoNext) infoNext.style.visibility = (currentIndex < currentFilteredWorks.length - 1 && currentFilteredWorks[currentIndex+1].category === currentCat) ? 'visible' : 'hidden';
 
             const isSeries = item.type === 'series';
-            document.getElementById('infoPageCount').innerText = isSeries ? `繼續閱讀 ${item.img.length}P` : "";
-            document.getElementById('infoPageCount').classList.toggle('active', isSeries);
-            document.getElementById('infoReadBtn').classList.toggle('active', isSeries);
+            const pageBadge = document.getElementById('infoPageCount');
+            const coverBox = document.getElementById('infoCoverBox');
 
-            if (isViewerActive) {
+            if (isSeries) {
+                pageBadge.innerText = `繼續閱讀 ${item.img.length}P`;
+                pageBadge.classList.add('active');
+                coverBox.classList.add('is-series');
+            } else {
+                pageBadge.classList.remove('active');
+                coverBox.classList.remove('is-series');
+            }
+
+            if (isViewerActive && isSeries) {
                 document.getElementById('infoLayer').style.display = 'none';
                 document.getElementById('viewerLayer').classList.add('active');
                 document.getElementById('overlayCloseBtn').style.display = 'none';
@@ -458,19 +411,17 @@
                 document.getElementById('overlayCloseBtn').style.display = 'flex';
                 document.getElementById('overlayBackBtn').style.display = 'none';
             }
+
             if (window.syncClaps) window.syncClaps(item.id);
         }
 
-        // 修正 3: 更新 Viewer 圖片與按鈕隱藏邏輯 (禁止循環)
         function updateViewerImage() {
             const item = currentFilteredWorks[currentIndex];
             const imgs = item.img;
             document.getElementById('viewerImg').src = `img/gallery/${imgs[currentInnerIndex]}`;
             
-            // 處理電腦版按鈕隱藏 (禁止循環換頁)
             const viewPrev = document.getElementById('viewPrev');
             const viewNext = document.getElementById('viewNext');
-            
             if (viewPrev) viewPrev.classList.toggle('btn-hidden', currentInnerIndex === 0);
             if (viewNext) viewNext.classList.toggle('btn-hidden', currentInnerIndex === imgs.length - 1);
 
@@ -484,24 +435,20 @@
                 if (currentFilteredWorks[newIdx].category === currentFilteredWorks[currentIndex].category) {
                     currentIndex = newIdx;
                     currentInnerIndex = 0;
+                    document.getElementById('clapCount').innerText = "-";
+                    document.getElementById('clapCountStatus').innerText = "-";
                     updateOverlayUI();
                 }
             }
         }
 
-        // 修正 3: 修改換頁邏輯，不允許循環
         function changeInnerPage(step) {
             const item = currentFilteredWorks[currentIndex];
-            const imgs = item.img;
             const targetIndex = currentInnerIndex + step;
-
-            // 禁止循環換頁攔截
-            if (targetIndex < 0 || targetIndex >= imgs.length) {
-                return; 
+            if (targetIndex >= 0 && targetIndex < item.img.length) {
+                currentInnerIndex = targetIndex;
+                updateViewerImage();
             }
-
-            currentInnerIndex = targetIndex;
-            updateViewerImage();
         }
 
         function enterViewer() { isViewerActive = true; currentInnerIndex = 0; updateOverlayUI(); }
@@ -551,42 +498,65 @@
         document.addEventListener('DOMContentLoaded', initGallery);
     </script>
 
+    <!-- 主選單 -->
     <script>
+        // 1. 將變數宣告放在最上方
         const menuBtn = document.getElementById('menuBtn');
         const fullMenu = document.getElementById('fullMenu');
         let lastScrollY = window.scrollY;
 
+        // 2. 定義切換函式
         function toggleMenu() {
-            if (!fullMenu || !menuBtn) return;
+            if (!fullMenu || !menuBtn) return; // 防禦性檢查
+
             const isActive = fullMenu.classList.toggle('active');
+            
             if (isActive) {
+                // 開啟選單時：隱藏外部按鈕
                 menuBtn.classList.add('hidden');
             } else {
+                // 關閉選單時：重新顯示按鈕
                 menuBtn.classList.remove('hidden');
             }
         }
 
+        // 3. 核心捲動偵測邏輯
         window.addEventListener('scroll', () => {
+            // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
+            // 避免在操作選單時按鈕狀態被捲動事件干擾
             if (fullMenu.classList.contains('active')) return;
+
             const currentScrollY = window.scrollY;
             const delta = currentScrollY - lastScrollY;
+
+            // 輸出數值到控制台
+            // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
+
             if (delta > 0 && currentScrollY > 50) {
+                // 向下捲動 -> 隱藏
                 menuBtn.classList.add('hidden');
             } else if (delta < 0) {
+                // 向上捲動 -> 顯示
                 menuBtn.classList.remove('hidden');
             }
+
             lastScrollY = currentScrollY;
         });
     </script>
 
+    <!-- 內容保護機制 -->
     <script>
+        // 禁止右鍵
         document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // 禁止複製與選取文字
         document.addEventListener('selectstart', e => e.preventDefault());
         document.addEventListener('copy', e => e.preventDefault());
+
+        // 禁止圖片拖拽
         document.addEventListener('dragstart', e => {
             if (e.target.tagName === 'IMG') e.preventDefault();
         });
     </script>
-
 </body>
 </html>
