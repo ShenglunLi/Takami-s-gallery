@@ -28,7 +28,12 @@
         .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
         /* --- Overlay 燈箱樣式 --- */
-        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000000; display: none; z-index: 1000; overflow: hidden; align-items: center; justify-content: center; }
+        .overlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #000000; display: none; z-index: 1000; overflow: hidden; 
+            align-items: center; justify-content: center;
+            touch-action: none; /* 關鍵：禁止瀏覽器預設的觸控行為 */
+        }
         .overlay.active { display: flex; }
  
         .overlay-close, .overlay-back {
@@ -58,7 +63,8 @@
         }
         .info-cover-box img { 
             width: 100%; height: 100%; max-height: 85vh; object-fit: contain; 
-            border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: transform 0.1s ease-out; /* 讓跟手動畫平滑 */
         }
         .info-cover-box.is-series { cursor: pointer; transition: transform 0.3s ease; }
         .info-cover-box.is-series:hover { transform: scale(1.01); }
@@ -83,7 +89,6 @@
         .info-details h2 { font-size: 2.4rem; margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
         .info-details p { font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-bottom: 25px; }
 
-        /* --- 拍手與日期排版 --- */
         .info-header-meta {
             display: flex; justify-content: space-between; align-items: flex-start;
             width: 100%; margin-bottom: 10px; min-height: 32px;
@@ -116,7 +121,7 @@
         }
         .viewer-layer.active { display: flex; }
         .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; }
+        .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
 
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
@@ -133,17 +138,19 @@
         /* --- RWD 修正 --- */
         @media (max-width: 900px) {
             .overlay-content { width: 100%; height: 100%; }
-            .info-layer { flex-direction: column; gap: 8px; padding-top: 60px; overflow-y: auto; position: relative; }
-            .info-cover-box { flex: 0 0 auto; width: 100%; }
+            .info-layer { 
+                flex-direction: column; gap: 8px; padding-top: 60px; 
+                overflow-y: auto; position: relative; 
+                touch-action: pan-y; /* 手機板資訊層允許垂直捲動文字 */
+            }
+            .info-cover-box { flex: 0 0 auto; width: 100%; touch-action: none; }
             .info-cover-box img { max-height: 50vh; }
             .info-details { padding: 20px; width: 100%; box-sizing: border-box; }
-            .viewer-layer {height: 95%;}
+            .viewer-layer { height: 100%; touch-action: none; }
             .nav-btn, .info-nav-btn { display: none !important; }
             .overlay-close, .overlay-back { top: 20px; left: 20px; right: auto; background: rgba(0,0,0,0.5); }
             .ui-hidden { opacity: 0; pointer-events: none; }
         }
-
-        
     </style>
 </head>
 <body>
@@ -238,44 +245,26 @@
 
         window.syncClaps = function(workId) {
             if (!workId) return;
-
             const clapSection = document.getElementById('clapSection');
             const clapCountDisplay = document.getElementById('clapCount');
             const clapCountStatus = document.getElementById('clapCountStatus');
 
-            // 1. 立即進入「載入中」狀態
-            // 移除 ready 類名觸發 CSS opacity: 0，並將數字設為佔位符防止舊數據閃爍
             clapSection.classList.remove('ready');
             if (clapCountDisplay) clapCountDisplay.innerText = "-";
             if (clapCountStatus) clapCountStatus.innerText = "-";
 
-            // 2. 檢查本地拍手限制 (顯示按鈕或已拍手勾選)
             checkClapLimit(workId);
-
-            // 3. 清理舊的 Firebase 監聽器，避免多重回調
             if (currentClapRef) off(currentClapRef);
 
-            // 4. 建立新路徑監聽
             currentClapRef = ref(db, 'claps/' + workId);
-            
-            // 監聽數據變化
             onValue(currentClapRef, (snapshot) => {
                 const count = snapshot.val() || 0;
-                
-                // 更新界面上的數字
                 if (clapCountDisplay) clapCountDisplay.innerText = count;
                 if (clapCountStatus) clapCountStatus.innerText = count;
-
-                /* 5. 關鍵修正：確保資料寫入 DOM 後才顯示
-                使用 setTimeout 50ms 避開瀏覽器同時處理樣式與數據更新的衝突
-                */
-                setTimeout(() => {
-                    clapSection.classList.add('ready');
-                }, 50);
-            }, (error) => {
-                console.error("Firebase Read Error:", error);
+                setTimeout(() => { clapSection.classList.add('ready'); }, 50);
             });
         };
+
         function handleClap() {
             const item = currentFilteredWorks[currentIndex];
             if (!item) return;
@@ -459,29 +448,52 @@
 
         function initTouchEvents() {
             const overlay = document.getElementById('workOverlay');
+            
             overlay.addEventListener('touchstart', e => {
                 touchStartX = e.touches[0].clientX;
                 touchStartY = e.touches[0].clientY;
                 isSwiping = true;
-            }, {passive: true});
+            }, {passive: false});
 
             overlay.addEventListener('touchmove', e => {
                 if (!isSwiping) return;
                 let dx = e.touches[0].clientX - touchStartX;
                 let dy = e.touches[0].clientY - touchStartY;
+                
+                // 判斷是否為水平滑動
                 if (Math.abs(dx) > Math.abs(dy)) {
+                    // 禁止背景滾動
+                    if (e.cancelable) e.preventDefault();
+                    
                     const img = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
-                    img.style.transform = `translateX(${dx * 0.2}px)`;
+                    if(img) {
+                        img.style.transform = `translateX(${dx * 0.25}px)`; // 移動圖片
+                        img.style.transition = 'none'; // 拖動時不需要過渡動畫
+                    }
                 }
-            }, {passive: true});
+            }, {passive: false});
 
             overlay.addEventListener('touchend', e => {
+                if (!isSwiping) return;
                 isSwiping = false;
+                
                 let dx = e.changedTouches[0].clientX - touchStartX;
                 const img = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
-                img.style.transform = '';
-                if (Math.abs(dx) > 80) {
-                    dx < 0 ? (isViewerActive ? changeInnerPage(1) : changeWork(1)) : (isViewerActive ? changeInnerPage(-1) : changeWork(-1));
+                
+                if(img) {
+                    img.style.transition = 'transform 0.3s ease';
+                    img.style.transform = '';
+                }
+
+                // 滑動閾值 70px
+                if (Math.abs(dx) > 70) {
+                    if (dx < 0) {
+                        // 向左滑 -> 下一張
+                        isViewerActive ? changeInnerPage(1) : changeWork(1);
+                    } else {
+                        // 向右滑 -> 上一張
+                        isViewerActive ? changeInnerPage(-1) : changeWork(-1);
+                    }
                 }
             }, {passive: true});
         }
@@ -498,65 +510,32 @@
         document.addEventListener('DOMContentLoaded', initGallery);
     </script>
 
-    <!-- 主選單 -->
     <script>
-        // 1. 將變數宣告放在最上方
         const menuBtn = document.getElementById('menuBtn');
         const fullMenu = document.getElementById('fullMenu');
         let lastScrollY = window.scrollY;
 
-        // 2. 定義切換函式
         function toggleMenu() {
-            if (!fullMenu || !menuBtn) return; // 防禦性檢查
-
+            if (!fullMenu || !menuBtn) return;
             const isActive = fullMenu.classList.toggle('active');
-            
-            if (isActive) {
-                // 開啟選單時：隱藏外部按鈕
-                menuBtn.classList.add('hidden');
-            } else {
-                // 關閉選單時：重新顯示按鈕
-                menuBtn.classList.remove('hidden');
-            }
+            isActive ? menuBtn.classList.add('hidden') : menuBtn.classList.remove('hidden');
         }
 
-        // 3. 核心捲動偵測邏輯
         window.addEventListener('scroll', () => {
-            // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
-            // 避免在操作選單時按鈕狀態被捲動事件干擾
             if (fullMenu.classList.contains('active')) return;
-
             const currentScrollY = window.scrollY;
             const delta = currentScrollY - lastScrollY;
-
-            // 輸出數值到控制台
-            // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
-
             if (delta > 0 && currentScrollY > 50) {
-                // 向下捲動 -> 隱藏
                 menuBtn.classList.add('hidden');
             } else if (delta < 0) {
-                // 向上捲動 -> 顯示
                 menuBtn.classList.remove('hidden');
             }
-
             lastScrollY = currentScrollY;
         });
-    </script>
 
-    <!-- 內容保護機制 -->
-    <script>
-        // 禁止右鍵
         document.addEventListener('contextmenu', e => e.preventDefault());
-
-        // 禁止複製與選取文字
         document.addEventListener('selectstart', e => e.preventDefault());
         document.addEventListener('copy', e => e.preventDefault());
-
-        // 禁止圖片拖拽
-        document.addEventListener('dragstart', e => {
-            if (e.target.tagName === 'IMG') e.preventDefault();
-        });
     </script>
 </body>
 </html>
