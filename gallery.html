@@ -27,24 +27,24 @@
         .work-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
-        /* --- Overlay 燈箱樣式 --- */
-        /* .overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100dvh; 
-            background: #000000; display: none; z-index: 1000; overflow: hidden; 
-            align-items: center; justify-content: center;
-            touch-action: none; 
-        } */
-
+/* --- Overlay 燈箱樣式修正 --- */
         .overlay { 
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0; /* 讓容器自動撐滿底部，即使導覽列變動也會嘗試填滿 */
-            /* 移除 height: 100%; */
-            background: #000000; display: none; z-index: 1000; overflow: hidden; 
-            align-items: center; justify-content: center;
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            /* 預設使用 100dvh，JS 會再賦予精確像素值 */
+            height: 100dvh; 
+            background: #000000; 
+            display: none; 
+            z-index: 1000; 
+            overflow: hidden; 
+            align-items: center; 
+            justify-content: center;
             touch-action: none; 
+            /* 處理 iOS 安全區域 */
+            padding-bottom: env(safe-area-inset-bottom);
+            box-sizing: border-box;
         }
         
         .overlay.active { display: flex; }
@@ -278,27 +278,80 @@
             });
         };
 
-        function handleClap() {
-            const item = currentFilteredWorks[currentIndex];
-            if (!item) return;
-            const clapRef = ref(db, 'claps/' + item.id);
-            runTransaction(clapRef, (current) => (current || 0) + 1);
-            saveClapToLocal(item.id);
-        }
-
+        // 檢查是否還在冷卻時間內 (60分鐘 = 3,600,000 毫秒)
         function checkClapLimit(workId) {
-            const history = JSON.parse(localStorage.getItem('clap_history') || "[]");
-            const isClapped = history.includes(workId);
-            document.getElementById('clapBtn').style.display = isClapped ? 'none' : 'flex';
-            document.getElementById('clappedStatus').style.display = isClapped ? 'flex' : 'none';
+            const history = JSON.parse(localStorage.getItem('clap_history_map') || "{}");
+            const lastClapTime = history[workId]; // 取得該作品上次點擊的時間戳記
+            const now = Date.now();
+            const cooldown = 60 * 60 * 1000; // 60 分鐘的毫秒數
+
+            let isLocked = false;
+            if (lastClapTime) {
+                // 如果現在時間距離上次點擊小於冷卻時間，則鎖定按鈕
+                if (now - lastClapTime < cooldown) {
+                    isLocked = true;
+                }
+            }
+
+            const clapBtn = document.getElementById('clapBtn');
+            const clappedStatus = document.getElementById('clappedStatus');
+
+            if (isLocked) {
+                clapBtn.style.display = 'none';
+                clappedStatus.style.display = 'flex';
+            } else {
+                clapBtn.style.display = 'flex';
+                clappedStatus.style.display = 'none';
+            }
         }
 
-        function saveClapToLocal(workId) {
-            const history = JSON.parse(localStorage.getItem('clap_history') || "[]");
-            history.push(workId);
-            localStorage.setItem('clap_history', JSON.stringify(history));
-            checkClapLimit(workId);
-        }
+    // 儲存拍手時間戳記到 LocalStorage
+    function saveClapToLocal(workId) {
+        const history = JSON.parse(localStorage.getItem('clap_history_map') || "{}");
+        history[workId] = Date.now(); // 紀錄目前時間
+        localStorage.setItem('clap_history_map', JSON.stringify(history));
+        checkClapLimit(workId);
+    }
+
+    // 處理點擊拍手
+    function handleClap() {
+        // 這裡需要能存取到 currentIndex 與 currentFilteredWorks
+        // 確保這兩個變數在您的 global scope 或可存取範圍內
+        const item = currentFilteredWorks[currentIndex];
+        if (!item) return;
+
+        const clapRef = ref(db, 'claps/' + item.id);
+        runTransaction(clapRef, (current) => (current || 0) + 1);
+        
+        saveClapToLocal(item.id);
+    }
+
+    // 監聽按鈕點擊
+    document.getElementById('clapBtn').addEventListener('click', handleClap);
+
+    // 修改原本的 syncClaps 呼叫名
+    window.syncClaps = function(workId) {
+        if (!workId) return;
+        const clapSection = document.getElementById('clapSection');
+        const clapCountDisplay = document.getElementById('clapCount');
+        const clapCountStatus = document.getElementById('clapCountStatus');
+
+        clapSection.classList.remove('ready');
+        if (clapCountDisplay) clapCountDisplay.innerText = "-";
+        if (clapCountStatus) clapCountStatus.innerText = "-";
+
+        // 每次切換作品時檢查該作品是否在冷卻中
+        checkClapLimit(workId);
+
+        if (currentClapRef) off(currentClapRef);
+        currentClapRef = ref(db, 'claps/' + workId);
+        onValue(currentClapRef, (snapshot) => {
+            const count = snapshot.val() || 0;
+            if (clapCountDisplay) clapCountDisplay.innerText = count;
+            if (clapCountStatus) clapCountStatus.innerText = count;
+            setTimeout(() => { clapSection.classList.add('ready'); }, 50);
+        });
+    }
     </script>
 
     <script>
@@ -362,15 +415,42 @@
             });
         }
 
+        // 建立一個統一修正高度的函式
+        function fixOverlayHeight() {
+            const overlay = document.getElementById('workOverlay');
+            if (overlay && overlay.classList.contains('active')) {
+                // 使用 window.innerHeight 取得排除瀏覽器工具欄後的真實像素高度
+                overlay.style.height = window.innerHeight + 'px';
+            }
+        }
+
         function openOverlay(index) {
             currentIndex = index;
             isViewerActive = false;
             currentInnerIndex = 0;
             document.getElementById('clapSection').classList.remove('ready');
+            
             updateOverlayUI();
-            document.getElementById('workOverlay').classList.add('active');
+            
+            const overlay = document.getElementById('workOverlay');
+            overlay.classList.add('active');
+            
+            // 開啟時立即修正一次高度
+            fixOverlayHeight();
+            
             document.body.style.overflow = 'hidden';
+            document.body.style.backgroundColor = '#000000'; // 開啟時將底色變黑
         }
+
+        // 監聽螢幕旋轉或視窗大小改變（例如導覽列隱藏時）
+        window.addEventListener('resize', fixOverlayHeight);
+
+        // 額外處理：針對 iOS Chrome 導覽列消失後的瞬間補償
+        window.addEventListener('scroll', () => {
+            if (document.getElementById('workOverlay').classList.contains('active')) {
+                fixOverlayHeight();
+            }
+        });
 
         function updateOverlayUI() {
             const item = currentFilteredWorks[currentIndex];
@@ -455,7 +535,11 @@
 
         function enterViewer() { isViewerActive = true; currentInnerIndex = 0; updateOverlayUI(); }
         function backToInfo() { isViewerActive = false; updateOverlayUI(); }
-        function closeOverlay() { document.getElementById('workOverlay').classList.remove('active'); document.body.style.overflow = 'auto'; }
+        function closeOverlay() {
+        document.getElementById('workOverlay').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        document.body.style.backgroundColor = ''; // 關閉時還原底色
+    }
         function handleOverlayClick(e) { if (e.target.id === 'workOverlay') closeOverlay(); }
         function tryEnterViewer() { if (currentFilteredWorks[currentIndex].type === 'series') enterViewer(); }
 
