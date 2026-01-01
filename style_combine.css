@@ -744,7 +744,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     .info-cover-box { flex: 0 0 auto; width: 100%; touch-action: none; }
     .info-cover-box img { max-height: 50vh; }
     .info-details { padding: 20px; width: 100%; box-sizing: border-box; }
-    .viewer-layer { height: 100%; touch-action: none; }
+    .viewer-layer { height: 95%; touch-action: none; }
     .nav-btn, .info-nav-btn { display: none !important; }
     .overlay-close, .overlay-back { top: 20px; left: 20px; right: auto; background: rgba(0,0,0,0.5); }
     .ui-hidden { opacity: 0; pointer-events: none; }
