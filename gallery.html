@@ -10,163 +10,12 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_combine.css">
     <style>
-        /* --- Gallery 基礎樣式 --- */
-        .gallery-main { padding: 40px 0; min-height: 80vh; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .category-filter { display: flex; justify-content: flex-start; gap: 12px; margin-top: 20px; margin-bottom: 40px; flex-wrap: wrap; }
-        .filter-btn { padding: 6px 24px; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); border-radius: var(--radius-full); cursor: pointer; transition: 0.3s; }
-        .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: #fff; }
-        .category-group { margin-bottom: 40px; position: relative; }
-        .category-title { font-size: 1.5rem; color: var(--primary-color); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--text-light-subtitle); font-weight: 700; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px; }
-
-        /* --- 網格卡片樣式 --- */
-        .work-card { position: relative; background: #eee; aspect-ratio: 1 / 1; overflow: hidden; cursor: pointer; transition: 0.3s; }
-        .work-card:hover { opacity: 0.9; transform: scale(1.02); }
-        .work-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
-        .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
-
-/* --- Overlay 燈箱樣式修正 --- */
-        .overlay { 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%; 
-            /* 預設使用 100dvh，JS 會再賦予精確像素值 */
-            height: 100dvh; 
-            background: #000000; 
-            display: none; 
-            z-index: 1000; 
-            overflow: hidden; 
-            align-items: center; 
-            justify-content: center;
-            touch-action: none; 
-            /* 處理 iOS 安全區域 */
-            padding-bottom: env(safe-area-inset-bottom);
-            box-sizing: border-box;
-        }
         
-        .overlay.active { display: flex; }
- 
-        .overlay-close, .overlay-back {
-            position: fixed; top: 30px; right: 30px;
-            display: flex; align-items: center; justify-content: center;
-            width: 48px; height: 48px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%; cursor: pointer; z-index: 1010; transition: 0.3s; border: none;
-        }
-        .overlay-close:hover, .overlay-back:hover { background: rgba(255, 255, 255, 0.15); }
-        .overlay-close .material-symbols-outlined, .overlay-back .material-symbols-outlined { font-weight: 100; font-size: 2rem; color: #fff; }
-
-        .overlay-content { 
-            position: relative; width: 85%; max-width: 1200px; height: 85vh; 
-            display: flex; align-items: center; justify-content: center; margin: 0 auto; 
-        }
-
-        /* --- 第一層：資訊層 (Info Layer) --- */
-        .info-layer { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; gap: 60px; align-items: center; background: transparent; 
-        }
-        
-        .info-cover-box { 
-            flex: 0 0 60%; position: relative; max-height: 85vh; 
-            display: flex; align-items: center; justify-content: center;
-        }
-        .info-cover-box img { 
-            width: 100%; height: 100%; max-height: 85vh; object-fit: contain; 
-            border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: transform 0.1s ease-out; /* 讓跟手動畫平滑 */
-        }
-        .info-cover-box.is-series { cursor: pointer; transition: transform 0.3s ease; }
-        .info-cover-box.is-series:hover { transform: scale(1.01); }
-
-        .info-nav-btn {
-            position: fixed; top: 50%; transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.05); color: white; border: none;
-            width: 50px; height: 50px; cursor: pointer; z-index: 1005;
-            transition: 0.3s; display: flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-        }
-        .info-nav-btn.prev { left: 30px; }
-        .info-nav-btn.next { right: 30px; }
-
-        .page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; display: none; }
-        .page-count-label.active { display: block; }
-        
-        .info-details {
-            flex: 1; display: flex; flex-direction: column; align-items: flex-start;
-            padding: 20px 0; min-width: 300px;
-        }
-        .info-details h2 { font-size: 2.4rem; margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
-        .info-details p { font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-bottom: 25px; }
-
-        .info-header-meta {
-            display: flex; justify-content: space-between; align-items: flex-start;
-            width: 100%; margin-bottom: 10px; min-height: 32px;
-        }
-        .date-tag { font-size: 0.95rem; color: var(--primary-hover); font-weight: bold; line-height: 1.8; }
-
-        /* .clap-section {
-            flex-shrink: 0; opacity: 0; visibility: hidden;
-            transition: opacity 0.4s ease; min-height: 32px;
-            display: flex; align-items: center;
-        }
-        .clap-section.ready { opacity: 1; visibility: visible; }
-
-        .clap-btn, #clappedStatus {
-            background: transparent; border: none; color: #ccc;
-            display: flex; align-items: center; gap: 8px;
-            font-size: 0.95rem !important; font-weight: 500;
-            padding: 4px 0; cursor: pointer; transition: 0.3s;
-        }
-        #clappedStatus { color: var(--primary-hover) !important; cursor: default; }
-        .clap-btn:hover { opacity: 0.8; transform: translateY(-1px); }
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 200; font-size: 22px; }
-        #clappedStatus .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 200; } */
-
-        /* --- 第二層：瀏覽層 (Viewer Layer) --- */
-        .viewer-layer { 
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 20; background: #000;
-        }
-        .viewer-layer.active { display: flex; }
-        .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
-
-        .nav-btn {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            background: rgba(255,255,255,0.05); color: #fff; border: none;
-            width: 50px; height: 50px; cursor: pointer; border-radius: 50%; z-index: 30;
-        }
-        .prev-btn { left: 20px; } .next-btn { right: 20px; }
-        .btn-hidden { visibility: hidden !important; }
-
-        .viewer-indicator { position: absolute; bottom: -20px; display: flex; gap: 8px; }
-        .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.3s; }
-        .dot.active { background: #fff; transform: scale(1.2); }
-
-        /* --- RWD 修正 --- */
-        @media (max-width: 900px) {
-            .overlay-content { width: 100%; height: 100%; }
-            .info-layer { 
-                flex-direction: column; gap: 8px; padding-top: 60px; 
-                overflow-y: auto; position: relative; 
-                touch-action: pan-y; /* 手機板資訊層允許垂直捲動文字 */
-            }
-            .info-cover-box { flex: 0 0 auto; width: 100%; touch-action: none; }
-            .info-cover-box img { max-height: 50vh; }
-            .info-details { padding: 20px; width: 100%; box-sizing: border-box; }
-            .viewer-layer { height: 100%; touch-action: none; }
-            .nav-btn, .info-nav-btn { display: none !important; }
-            .overlay-close, .overlay-back { top: 20px; left: 20px; right: auto; background: rgba(0,0,0,0.5); }
-            .ui-hidden { opacity: 0; pointer-events: none; }
-        }
     </style>
 </head>
-<body>
+<body class="page-gallery">
 
     <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
         <i class="fa-solid fa-bars menu-icon"></i>
@@ -179,9 +28,9 @@
         <a href="life.html">Life</a>
     </nav>
 
-    <header class="new-hero" style="height: 30vh;">
-        <div class="new-hero-bg" style="background-image: url('img/index/gallery.jpg');"></div>
-        <div class="hero-content"><p>Gallery</p><h1>作品全集</h1></div>
+    <header class="page-hero page-hero-large ">
+        <div class="page-hero-bg" style="background-image: url('img/index/gallery.jpg');"></div>
+        <div class="hero-content"><h1>Gallery</h1><p>作品全集</p></div>
     </header>
 
     <main class="gallery-main">
@@ -618,32 +467,6 @@
         document.addEventListener('DOMContentLoaded', initGallery);
     </script>
 
-    <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const fullMenu = document.getElementById('fullMenu');
-        let lastScrollY = window.scrollY;
-
-        function toggleMenu() {
-            if (!fullMenu || !menuBtn) return;
-            const isActive = fullMenu.classList.toggle('active');
-            isActive ? menuBtn.classList.add('hidden') : menuBtn.classList.remove('hidden');
-        }
-
-        window.addEventListener('scroll', () => {
-            if (fullMenu.classList.contains('active')) return;
-            const currentScrollY = window.scrollY;
-            const delta = currentScrollY - lastScrollY;
-            if (delta > 0 && currentScrollY > 50) {
-                menuBtn.classList.add('hidden');
-            } else if (delta < 0) {
-                menuBtn.classList.remove('hidden');
-            }
-            lastScrollY = currentScrollY;
-        });
-
-        document.addEventListener('contextmenu', e => e.preventDefault());
-        document.addEventListener('selectstart', e => e.preventDefault());
-        document.addEventListener('copy', e => e.preventDefault());
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>

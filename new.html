@@ -11,155 +11,22 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style_combine.css">
 
     <style>
         /* --- 基礎設定 --- */
-        html, body {
+        /* html, body {
             margin: 0;
             padding: 0;
             background-color: var(--bg-color);
             color: var(--text-body);
             min-height: 200vh; 
-        }
-
-        .new-container {
-            flex: 1;
-            display: flex;          /* 使用 Flex 佈局 */
-            flex-direction: column; /* 讓內容垂直排列 */
-            align-items: center;    /* 關鍵：將子元素（包含按鈕）水平置中 */
-
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 20px;
-        }
-
-
-
-        /* --- 動態內容容器 (work Section) --- */
-        .work-row {
-            max-width: 1200px;
-            margin: 60px auto;
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 80px; /* 控制各筆作品之間的距離 */
-        }
-
-        .work-item {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-            width: 100%;
-        }
-
-        /* 關鍵：維持原始結構，偶數筆圖片在右側 */
-        .work-item:nth-child(even) {
-            flex-direction: row-reverse;
-        }
-
-        /* 圖片包裝層 */
-        .work-img-wrap {
-            flex: 1.2; /* 圖片佔比略大 */
-            overflow: hidden;
-            border-radius: var(--radius-md);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .work-img-wrap img {
-            width: 100%;
-            max-height: 90vh;   /* 關鍵設定：最大高度為視窗的 90% */
-            object-fit: contain; /* 保持比例縮放，確保整張圖都能看見 */
-            display: block;
-            transition: transform 0.5s ease;
-            object-fit: cover;
-        }
-
-        /* .work-item:hover .work-img-wrap img {
-            transform: scale(1.03);
         } */
 
-        /* 文字內容層 */
-        .work-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            /* 如果希望文字也置中，可開啟下方兩行，目前維持原始靠左/靠右感 */
-            /* align-items: center; */
-            /* text-align: center; */
-        }
-
-        .date-label {
-            font-size: 0.85rem;
-            color: var(--accent-color);
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .work-content h2 {
-            color: var(--text-main);
-            font-size: 2.2rem;
-            margin: 0 0 15px 0;
-        }
-
-        .work-content p {
-            color: var(--text-body);
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-
-        /* 按鈕樣式 */
-        .btn-more {
-            width: 200px;           /* 1. 設定固定寬度 (依需求調整數值) */
-            display: inline-flex;   /* 2. 使用 inline-flex 讓按鈕寬度受控 */
-            display: flex;
-            justify-content: center;
-            padding: 12px 30px;
-            border: 1px solid var(--accent-color);
-            color: var(--accent-color);
-            border-radius: var(--radius-full);
-            font-weight: 500;
-            transition: var(--transition-base);
-        }
-
-        .btn-more:hover {
-            background: var(--accent-color);
-            color: white;
-        }
-
-        /* 加載中與錯誤提示 */
-        .loading-text {
-            text-align: center;
-            padding: 100px 0;
-            color: var(--text-muted);
-        }
-
-        /* 電腦版尺寸調整 */
-        @media (min-width: 768px) {
-            :root {
-                --container-gap: 32px;
-            }
-        }
-
-        /* --- 手機版 RWD 排版 --- */
-        @media (max-width: 768px) {
-            .work-item, .work-item:nth-child(even) {
-                flex-direction: column;
-                gap: 30px;
-            }
-            /* .work-content {
-                align-items: center;
-                text-align: center;
-            } */
-            .work-content h2 {
-                font-size: 1.8rem;
-            }
-        }
+        
     </style>
 </head>
-<body>
+<body class="page-new">
 
     <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
         <i class="fa-solid fa-bars menu-icon"></i>
@@ -175,13 +42,13 @@
         <a href="life.html">Life</a>
     </nav>
 
-    <header class="new-hero">
-        <div class="new-hero-bg"></div>
+    <header class="page-hero page-hero-large">
+        <div class="page-hero-bg"></div>
         
         <div class="hero-content">
-            <p>New</p>
-            <h1>最新作品</h1>
-            <p>Explore the newest stories captured through our lens.</p>
+            
+            <h1>New</h1>
+            <p>最新作品</p>
         </div>
     </header>
 
@@ -223,8 +90,8 @@
                     // 1. 排序邏輯 (依日期從新到舊)
                     data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                    // 2. 取得前 10 筆資料
-                    const latestTen = data.slice(0, 10);
+                    // 2. 取得前 5 筆資料
+                    const latestTen = data.slice(0, 5);
 
                     // 3. 生成 HTML
                     if (latestTen.length === 0) {
@@ -268,65 +135,6 @@
         });
     </script>
 
-    <!-- 主選單 -->
-    <script>
-        // 1. 將變數宣告放在最上方
-        const menuBtn = document.getElementById('menuBtn');
-        const fullMenu = document.getElementById('fullMenu');
-        let lastScrollY = window.scrollY;
-
-        // 2. 定義切換函式
-        function toggleMenu() {
-            if (!fullMenu || !menuBtn) return; // 防禦性檢查
-
-            const isActive = fullMenu.classList.toggle('active');
-            
-            if (isActive) {
-                // 開啟選單時：隱藏外部按鈕
-                menuBtn.classList.add('hidden');
-            } else {
-                // 關閉選單時：重新顯示按鈕
-                menuBtn.classList.remove('hidden');
-            }
-        }
-
-        // 3. 核心捲動偵測邏輯
-        window.addEventListener('scroll', () => {
-            // 關鍵：如果選單目前是「開啟」狀態，停止執行捲動隱藏邏輯
-            // 避免在操作選單時按鈕狀態被捲動事件干擾
-            if (fullMenu.classList.contains('active')) return;
-
-            const currentScrollY = window.scrollY;
-            const delta = currentScrollY - lastScrollY;
-
-            // 輸出數值到控制台
-            // console.log(`ScrollY: ${currentScrollY.toFixed(0)}, Delta: ${delta.toFixed(0)}`);
-
-            if (delta > 0 && currentScrollY > 50) {
-                // 向下捲動 -> 隱藏
-                menuBtn.classList.add('hidden');
-            } else if (delta < 0) {
-                // 向上捲動 -> 顯示
-                menuBtn.classList.remove('hidden');
-            }
-
-            lastScrollY = currentScrollY;
-        });
-    </script>
-
-    <!-- 內容保護機制 -->
-    <script>
-        // 禁止右鍵
-        document.addEventListener('contextmenu', e => e.preventDefault());
-
-        // 禁止複製與選取文字
-        document.addEventListener('selectstart', e => e.preventDefault());
-        document.addEventListener('copy', e => e.preventDefault());
-
-        // 禁止圖片拖拽
-        document.addEventListener('dragstart', e => {
-            if (e.target.tagName === 'IMG') e.preventDefault();
-        });
-    </script>
+    <script src="main.js"></script>
 </body>
 </html>
