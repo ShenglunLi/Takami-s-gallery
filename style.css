@@ -644,7 +644,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     overflow: hidden; 
     align-items: center; 
     justify-content: center;
-    touch-action: none; 
+    /* touch-action: none;  */
     /* 處理 iOS 安全區域 */
     padding-bottom: env(safe-area-inset-bottom);
     box-sizing: border-box;
@@ -673,15 +673,34 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     display: flex; gap: 60px; align-items: center; background: transparent; 
 }
 
-.info-cover-box { 
+/* .info-cover-box { 
     flex: 0 0 60%; position: relative; max-height: 85vh; 
     display: flex; align-items: center; justify-content: center;
-}
+} */
 .info-cover-box img { 
     width: 100%; height: 100%; max-height: 85vh; object-fit: contain; 
     border-radius: 4px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     transition: transform 0.1s ease-out; /* 讓跟手動畫平滑 */
 }
+
+/* gallery.html 中的 <style> 區塊 */
+        .info-cover-box, .viewer-img-container {
+            overflow: hidden !important; 
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none; /* 禁用瀏覽器預設手勢，交由 PinchZoom 處理 */
+        }
+
+        /* 確保圖片在容器內正確顯示 */
+        #infoCoverImg, #viewerImg {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            will-change: transform; /* 優化硬體加速 */
+        }
+
 .info-cover-box.is-series { cursor: pointer; transition: transform 0.3s ease; }
 .info-cover-box.is-series:hover { transform: scale(1.01); }
 
@@ -718,6 +737,15 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     z-index: 20; background: #000;
 }
 .viewer-layer.active { display: flex; }
+
+/* 修正：確保閱覽層垂直排列並填滿高度 */
+#viewerLayer.active {
+    display: flex !important; /* 強制覆蓋 JS 的 block */
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
 .viewer-img-container { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .viewer-img-container img { max-width: 100%; max-height: 100%; object-fit: contain; transition: transform 0.1s ease-out; }
 
@@ -729,7 +757,17 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .prev-btn { left: 20px; } .next-btn { right: 20px; }
 .btn-hidden { visibility: hidden !important; }
 
-.viewer-indicator { position: absolute; bottom: -20px; display: flex; gap: 8px; }
+/* 修正：Indicator 置中並確保在最上層 */
+.viewer-indicator {
+    position: absolute;
+    bottom: 30px; /* 距離底部距離 */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+    pointer-events: none; /* 防止遮擋點擊 */
+}
 .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.3s; }
 .dot.active { background: #fff; transform: scale(1.2); }
 
@@ -741,10 +779,12 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         overflow-y: auto; position: relative; 
         touch-action: pan-y; /* 手機板資訊層允許垂直捲動文字 */
     }
-    .info-cover-box { flex: 0 0 auto; width: 100%; touch-action: none; }
+    .info-cover-box { flex: 0 0 auto; width: 100%; 
+        touch-action: none; 
+    }
     .info-cover-box img { max-height: 50vh; }
     .info-details { padding: 20px; width: 100%; box-sizing: border-box; }
-    .viewer-layer { height: 100%; touch-action: none; }
+    .viewer-layer { height: 100% }
     .viewer-indicator { bottom: 20px; }
     .nav-btn, .info-nav-btn { display: none !important; }
     .overlay-close, .overlay-back { top: 20px; left: 20px; right: auto; background: rgba(0,0,0,0.5); }
