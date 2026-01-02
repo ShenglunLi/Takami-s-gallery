@@ -11,10 +11,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
     <link rel="stylesheet" href="style.css">
-    <!-- 導入PinchZoom.js -->
-    <!-- <script src="https://unpkg.com/pinch-zoom-js@2.3.5/dist/pinch-zoom.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/pinch-zoom-js@2.3.5/dist/pinch-zoom.min.js"></script>
 
+    <style>
+        .info-cover-box, .viewer-img-container {
+            overflow: hidden; /* 這是必須的，防止縮放後的圖片溢出到 UI 上 */
+            touch-action: none; /* 禁用瀏覽器預設手勢，交給我們寫的 JS */
+            position: relative;
+            min-height: 300px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #infoCoverImg, #viewerImg {
+            pointer-events: none; /* 讓點擊事件穿透到父容器 info-cover-box 處理 */
+            user-select: none;
+            -webkit-user-drag: none;
+            will-change: transform;
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+
+    </style>
 
 </head>
 <body class="page-gallery">
@@ -216,20 +236,21 @@
     }
     </script>
 
-
-
-    <!-- 主要邏輯 -->
     <script>
         let allWorks = [];
         let currentFilteredWorks = []; 
-        let currentIndex = 0; 
-        let currentInnerIndex = 0; 
+        let currentIndex = 0;       
+        let currentInnerIndex = 0;  
         let isViewerActive = false; 
         let uiInactivityTimeout; 
-        let touchStartX = 0, isSwiping = false;
-
-        let pzInfo = null;
-        let pzViewer = null;
+        let touchStartX = 0, touchStartY = 0, isSwiping = false;
+        let scale = 1;
+        let lastScale = 1;
+        let startDist = 0;
+        let posX = 0, posY = 0;
+        let lastPosX = 0, lastPosY = 0;
+        let startTouchX = 0, startTouchY = 0;
+        let isZooming = false;
 
         async function initGallery() {
             try {
@@ -237,37 +258,8 @@
                 allWorks = await response.json();
                 renderFilters();
                 renderCategorizedGallery('All');
-                initPinchZoom();
                 initTouchEvents();
             } catch (err) { console.error("Load Failed:", err); }
-        }
-
-        function initPinchZoom() {
-            const infoBox = document.getElementById('infoCoverBox');
-            const viewerBox = document.querySelector('.viewer-img-container');
-
-            // 修正：PinchZoom 構造函數通常直接在全域物件下
-            const PZ = window.PinchZoom || (window.PinchZoom && window.PinchZoom.default);
-            
-            if (infoBox && PZ) {
-                pzInfo = new PZ(infoBox, {
-                    draggableUnzoomed: false,
-                    minZoom: 1,
-                    onZoomUpdate: () => resetUIInactivity()
-                });
-            }
-            if (viewerBox && PZ) {
-                pzViewer = new PZ(viewerBox, {
-                    draggableUnzoomed: false,
-                    minZoom: 1,
-                    onZoomUpdate: () => resetUIInactivity()
-                });
-            }
-        }
-
-        function resetAllZoom(animated = false) {
-            if (pzInfo) pzInfo.setZoomFactor(1, animated);
-            if (pzViewer) pzViewer.setZoomFactor(1, animated);
         }
 
         function renderFilters() {
@@ -312,9 +304,11 @@
             });
         }
 
+        // 建立一個統一修正高度的函式
         function fixOverlayHeight() {
             const overlay = document.getElementById('workOverlay');
             if (overlay && overlay.classList.contains('active')) {
+                // 使用 window.innerHeight 取得排除瀏覽器工具欄後的真實像素高度
                 overlay.style.height = window.innerHeight + 'px';
             }
         }
@@ -323,16 +317,35 @@
             currentIndex = index;
             isViewerActive = false;
             currentInnerIndex = 0;
-            resetAllZoom(false);
+            document.getElementById('clapSection').classList.remove('ready');
+            
             updateOverlayUI();
             
             const overlay = document.getElementById('workOverlay');
             overlay.classList.add('active');
+            
+            // 開啟時立即修正一次高度
             fixOverlayHeight();
+            
             document.body.style.overflow = 'hidden';
+            document.body.style.backgroundColor = '#000000'; // 開啟時將底色變黑
         }
 
+        // 監聽螢幕旋轉或視窗大小改變（例如導覽列隱藏時）
+        window.addEventListener('resize', fixOverlayHeight);
+
+        // 額外處理：針對 iOS Chrome 導覽列消失後的瞬間補償
+        window.addEventListener('scroll', () => {
+            if (document.getElementById('workOverlay').classList.contains('active')) {
+                fixOverlayHeight();
+            }
+        });
+
         function updateOverlayUI() {
+
+            // 切換作品前，務必將縮放數值歸零
+            resetAllZoom(); 
+
             const item = currentFilteredWorks[currentIndex];
             if (!item) return;
 
@@ -345,8 +358,8 @@
             const currentCat = item.category;
             const infoPrev = document.getElementById('infoPrev');
             const infoNext = document.getElementById('infoNext');
-            infoPrev.style.visibility = (currentIndex > 0 && currentFilteredWorks[currentIndex-1].category === currentCat) ? 'visible' : 'hidden';
-            infoNext.style.visibility = (currentIndex < currentFilteredWorks.length - 1 && currentFilteredWorks[currentIndex+1].category === currentCat) ? 'visible' : 'hidden';
+            if (infoPrev) infoPrev.style.visibility = (currentIndex > 0 && currentFilteredWorks[currentIndex-1].category === currentCat) ? 'visible' : 'hidden';
+            if (infoNext) infoNext.style.visibility = (currentIndex < currentFilteredWorks.length - 1 && currentFilteredWorks[currentIndex+1].category === currentCat) ? 'visible' : 'hidden';
 
             const isSeries = item.type === 'series';
             const pageBadge = document.getElementById('infoPageCount');
@@ -354,48 +367,41 @@
 
             if (isSeries) {
                 pageBadge.innerText = `繼續閱讀 ${item.img.length}P`;
-                pageBadge.style.display = 'block';
+                pageBadge.classList.add('active');
                 coverBox.classList.add('is-series');
             } else {
-                pageBadge.style.display = 'none';
+                pageBadge.classList.remove('active');
                 coverBox.classList.remove('is-series');
             }
 
             if (isViewerActive && isSeries) {
                 document.getElementById('infoLayer').style.display = 'none';
-                document.getElementById('viewerLayer').style.display = 'block';
+                document.getElementById('viewerLayer').classList.add('active');
                 document.getElementById('overlayCloseBtn').style.display = 'none';
                 document.getElementById('overlayBackBtn').style.display = 'flex';
                 updateViewerImage();
             } else {
                 document.getElementById('infoLayer').style.display = 'flex';
-                document.getElementById('viewerLayer').style.display = 'none';
+                document.getElementById('viewerLayer').classList.remove('active');
                 document.getElementById('overlayCloseBtn').style.display = 'flex';
                 document.getElementById('overlayBackBtn').style.display = 'none';
             }
 
             if (window.syncClaps) window.syncClaps(item.id);
-
-            setTimeout(() => {
-                if (pzInfo) pzInfo.update();
-                if (pzViewer) pzViewer.update();
-            }, 150);
         }
 
         function updateViewerImage() {
+
+            resetAllZoom(); // 換頁時重置縮放
+
             const item = currentFilteredWorks[currentIndex];
             const imgs = item.img;
-            const imgElement = document.getElementById('viewerImg');
+            document.getElementById('viewerImg').src = `img/gallery/${imgs[currentInnerIndex]}`;
             
-            if (pzViewer) pzViewer.setZoomFactor(1, false);
-            imgElement.src = `img/gallery/${imgs[currentInnerIndex]}`;
-            
-            imgElement.onload = function() {
-                if (pzViewer) pzViewer.update();
-            };
-
-            document.getElementById('viewPrev').style.visibility = currentInnerIndex === 0 ? 'hidden' : 'visible';
-            document.getElementById('viewNext').style.visibility = currentInnerIndex === imgs.length - 1 ? 'hidden' : 'visible';
+            const viewPrev = document.getElementById('viewPrev');
+            const viewNext = document.getElementById('viewNext');
+            if (viewPrev) viewPrev.classList.toggle('btn-hidden', currentInnerIndex === 0);
+            if (viewNext) viewNext.classList.toggle('btn-hidden', currentInnerIndex === imgs.length - 1);
 
             const indicator = document.getElementById('viewerIndicator');
             indicator.innerHTML = imgs.map((_, i) => `<span class="dot ${i === currentInnerIndex ? 'active' : ''}"></span>`).join('');
@@ -405,9 +411,10 @@
             const newIdx = currentIndex + step;
             if (newIdx >= 0 && newIdx < currentFilteredWorks.length) {
                 if (currentFilteredWorks[newIdx].category === currentFilteredWorks[currentIndex].category) {
-                    resetAllZoom(false);
                     currentIndex = newIdx;
                     currentInnerIndex = 0;
+                    document.getElementById('clapCount').innerText = "-";
+                    document.getElementById('clapCountStatus').innerText = "-";
                     updateOverlayUI();
                 }
             }
@@ -417,7 +424,6 @@
             const item = currentFilteredWorks[currentIndex];
             const targetIndex = currentInnerIndex + step;
             if (targetIndex >= 0 && targetIndex < item.img.length) {
-                resetAllZoom(false);
                 currentInnerIndex = targetIndex;
                 updateViewerImage();
             }
@@ -425,63 +431,139 @@
 
         function enterViewer() { isViewerActive = true; currentInnerIndex = 0; updateOverlayUI(); }
         function backToInfo() { isViewerActive = false; updateOverlayUI(); }
+        function closeOverlay() {
+        document.getElementById('workOverlay').classList.remove('active');
+        document.body.style.overflow = 'auto';
+        document.body.style.backgroundColor = ''; // 關閉時還原底色
+    }
         function handleOverlayClick(e) { if (e.target.id === 'workOverlay') closeOverlay(); }
         function tryEnterViewer() { if (currentFilteredWorks[currentIndex].type === 'series') enterViewer(); }
 
-        function closeOverlay() {
-            resetAllZoom(false);
-            document.getElementById('workOverlay').classList.remove('active');
-            document.body.style.overflow = 'auto';
-        }
-
         function initTouchEvents() {
-            const infoBox = document.getElementById('infoCoverBox');
-            const viewerBox = document.querySelector('.viewer-img-container');
+    const infoBox = document.getElementById('infoCoverBox');
+    const viewerBox = document.querySelector('.viewer-img-container');
 
-            const handleStart = (e) => {
-                const activePZ = isViewerActive ? pzViewer : pzInfo;
-                // 只有在單指且倍率約等於 1 時才允許滑動切換
-                if (e.touches.length === 1 && (!activePZ || activePZ.zoomFactor < 1.1)) {
-                    touchStartX = e.touches[0].clientX;
-                    isSwiping = true;
-                } else {
-                    isSwiping = false;
-                }
-            };
-
-            const handleEnd = (e) => {
-                if (!isSwiping) return;
-                let dx = e.changedTouches[0].clientX - touchStartX;
-                if (Math.abs(dx) > 60) {
-                    if (dx < 0) {
-                        isViewerActive ? changeInnerPage(1) : changeWork(1);
-                    } else {
-                        isViewerActive ? changeInnerPage(-1) : changeWork(-1);
-                    }
-                }
-                isSwiping = false;
-            };
-
-            [infoBox, viewerBox].forEach(box => {
-                if(box) {
-                    box.addEventListener('touchstart', handleStart, {passive: true});
-                    box.addEventListener('touchend', handleEnd, {passive: true});
-                }
-            });
+    const handleStart = (e) => {
+        if (e.touches.length === 2) {
+            // 雙指開始縮放
+            isZooming = true;
+            startDist = getDistance(e.touches[0], e.touches[1]);
+        } else if (e.touches.length === 1) {
+            // 單指開始
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            startTouchX = e.touches[0].clientX - posX;
+            startTouchY = e.touches[0].clientY - posY;
+            isSwiping = (scale <= 1.1); // 只有沒縮放時才啟動滑動切換
         }
+    };
+
+    const handleMove = (e) => {
+        const targetImg = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
+        if (!targetImg) return;
+
+        if (e.touches.length === 2 && isZooming) {
+            // 雙指縮放中
+            e.preventDefault();
+            const currentDist = getDistance(e.touches[0], e.touches[1]);
+            const diff = currentDist / startDist;
+            scale = Math.min(Math.max(1, lastScale * diff), 3); // 限制 1~3 倍
+            updateTransform(targetImg);
+        } else if (e.touches.length === 1) {
+            if (scale > 1.1) {
+                // 縮放狀態下的單指拖動 (Pan)
+                e.preventDefault();
+                posX = e.touches[0].clientX - startTouchX;
+                posY = e.touches[0].clientY - startTouchY;
+                
+                // 簡單的邊界檢查建議 (可選)
+                updateTransform(targetImg);
+            } else if (isSwiping) {
+                // 1x 狀態下的水平滑動預覽
+                let dx = e.touches[0].clientX - touchStartX;
+                let dy = e.touches[0].clientY - touchStartY;
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    if (e.cancelable) e.preventDefault();
+                    targetImg.style.transform = `translateX(${dx * 0.3}px)`;
+                    targetImg.style.transition = 'none';
+                }
+            }
+        }
+    };
+
+    const handleEnd = (e) => {
+        const targetImg = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
+        
+        if (isZooming) {
+            lastScale = scale;
+            if (e.touches.length < 2) isZooming = false;
+        }
+
+        if (scale <= 1.1) {
+            // 處理作品切換
+            let dx = e.changedTouches[0].clientX - touchStartX;
+            if (targetImg) {
+                targetImg.style.transition = 'transform 0.3s ease';
+                targetImg.style.transform = 'scale(1) translate(0,0)';
+            }
+            if (isSwiping && Math.abs(dx) > 70) {
+                isViewerActive ? changeInnerPage(dx < 0 ? 1 : -1) : changeWork(dx < 0 ? 1 : -1);
+            }
+            // 重設位移數值
+            posX = 0; posY = 0; lastPosX = 0; lastPosY = 0;
+        }
+        isSwiping = false;
+    };
+
+    // 輔助函式
+    function getDistance(t1, t2) {
+        return Math.sqrt(Math.pow(t2.pageX - t1.pageX, 2) + Math.pow(t2.pageY - t1.pageY, 2));
+    }
+
+    function updateTransform(el) {
+        el.style.transition = 'none';
+        el.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+    }
+
+    [infoBox, viewerBox].forEach(box => {
+        if (box) {
+            box.addEventListener('touchstart', handleStart, { passive: false });
+            box.addEventListener('touchmove', handleMove, { passive: false });
+            box.addEventListener('touchend', handleEnd, { passive: true });
+        }
+    });
+}
+
+function resetAllZoom() {
+    scale = 1;
+    lastScale = 1;
+    posX = 0;
+    posY = 0;
+    const imgs = [document.getElementById('infoCoverImg'), document.getElementById('viewerImg')];
+    imgs.forEach(img => {
+        if (img) {
+            img.style.transition = 'transform 0.2s ease';
+            img.style.transform = 'scale(1) translate(0,0)';
+        }
+    });
+}
+
+function tryEnterViewer() {
+    // 只有在完全沒縮放，且不是在滑動中才允許進入
+    if (scale <= 1.05 && !isZooming) {
+        if (currentFilteredWorks[currentIndex].type === 'series') enterViewer();
+    }
+}
 
         function resetUIInactivity() {
             const btns = [document.getElementById('overlayBackBtn'), document.getElementById('overlayCloseBtn')];
             btns.forEach(b => b && b.classList.remove('ui-hidden'));
             clearTimeout(uiInactivityTimeout);
             uiInactivityTimeout = setTimeout(() => {
-                if (isViewerActive && window.innerWidth <= 900) {
-                    btns.forEach(b => b && b.classList.add('ui-hidden'));
-                }
+                if (isViewerActive && window.innerWidth <= 900) btns.forEach(b => b && b.classList.add('ui-hidden'));
             }, 3000);
         }
 
-        window.addEventListener('resize', fixOverlayHeight);
         document.addEventListener('DOMContentLoaded', initGallery);
     </script>
 
