@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery | TAKAMI's Portfolio</title>
     <meta name="robots" content="noindex, nofollow, noimageindex">
     <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!" />
@@ -13,19 +13,7 @@
     <link rel="stylesheet" href="style.css">
     <!-- 導入PinchZoom.js -->
     <script src="https://unpkg.com/pinch-zoom-js@2.3.5/dist/pinch-zoom.min.js"></script>
-    <style>
-        /* 修正 CSS 區塊 */
-        .info-cover-box, .viewer-img-container {
-            overflow: hidden !important; /* PinchZoom 需要容器裁剪 */
-            touch-action: none; 
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
 
-
-    </style>
 </head>
 <body class="page-gallery">
 
@@ -227,17 +215,17 @@
     </script>
 
 
-<!-- 修正後的內容渲染及動態效果 -->
+
+    <!-- 主要邏輯 -->
     <script>
         let allWorks = [];
         let currentFilteredWorks = []; 
-        let currentIndex = 0;       
-        let currentInnerIndex = 0;  
+        let currentIndex = 0; 
+        let currentInnerIndex = 0; 
         let isViewerActive = false; 
         let uiInactivityTimeout; 
-        let touchStartX = 0, touchStartY = 0, isSwiping = false;
+        let touchStartX = 0, isSwiping = false;
 
-        // --- 新增：PinchZoom 實例變數 ---
         let pzInfo = null;
         let pzViewer = null;
 
@@ -247,28 +235,27 @@
                 allWorks = await response.json();
                 renderFilters();
                 renderCategorizedGallery('All');
-                
-                // --- 修正：初始化 PinchZoom ---
                 initPinchZoom();
-                
                 initTouchEvents();
             } catch (err) { console.error("Load Failed:", err); }
         }
 
-        // 初始化縮放功能
         function initPinchZoom() {
-            const infoEl = document.getElementById('infoCoverImg');
-            const viewerEl = document.getElementById('viewerImg');
+            const infoBox = document.getElementById('infoCoverBox');
+            const viewerBox = document.querySelector('.viewer-img-container');
 
-            if (infoEl) {
-                pzInfo = new PinchZoom.default(infoEl.parentElement, {
-                    draggableUnzoomed: false, // 未放大時禁止拖動，保留給換頁手勢
+            // 修正：PinchZoom 構造函數通常直接在全域物件下
+            const PZ = window.PinchZoom || (window.PinchZoom && window.PinchZoom.default);
+            
+            if (infoBox && PZ) {
+                pzInfo = new PZ(infoBox, {
+                    draggableUnzoomed: false,
                     minZoom: 1,
-                    onZoomUpdate: () => resetUIInactivity() 
+                    onZoomUpdate: () => resetUIInactivity()
                 });
             }
-            if (viewerEl) {
-                pzViewer = new PinchZoom.default(viewerEl.parentElement, {
+            if (viewerBox && PZ) {
+                pzViewer = new PZ(viewerBox, {
                     draggableUnzoomed: false,
                     minZoom: 1,
                     onZoomUpdate: () => resetUIInactivity()
@@ -276,7 +263,6 @@
             }
         }
 
-        // 輔助函式：換頁或切換作品時重置縮放狀態
         function resetAllZoom(animated = false) {
             if (pzInfo) pzInfo.setZoomFactor(1, animated);
             if (pzViewer) pzViewer.setZoomFactor(1, animated);
@@ -324,31 +310,24 @@
             });
         }
 
-        // 建立一個統一修正高度的函式
         function fixOverlayHeight() {
             const overlay = document.getElementById('workOverlay');
             if (overlay && overlay.classList.contains('active')) {
-                // 使用 window.innerHeight 取得排除瀏覽器工具欄後的真實像素高度
                 overlay.style.height = window.innerHeight + 'px';
             }
         }
-
 
         function openOverlay(index) {
             currentIndex = index;
             isViewerActive = false;
             currentInnerIndex = 0;
-            resetAllZoom(false); // 開啟時重置
-            
-            document.getElementById('clapSection').classList.remove('ready');
+            resetAllZoom(false);
             updateOverlayUI();
             
             const overlay = document.getElementById('workOverlay');
             overlay.classList.add('active');
             fixOverlayHeight();
-            
             document.body.style.overflow = 'hidden';
-            document.body.style.backgroundColor = '#000000';
         }
 
         function updateOverlayUI() {
@@ -364,8 +343,8 @@
             const currentCat = item.category;
             const infoPrev = document.getElementById('infoPrev');
             const infoNext = document.getElementById('infoNext');
-            if (infoPrev) infoPrev.style.visibility = (currentIndex > 0 && currentFilteredWorks[currentIndex-1].category === currentCat) ? 'visible' : 'hidden';
-            if (infoNext) infoNext.style.visibility = (currentIndex < currentFilteredWorks.length - 1 && currentFilteredWorks[currentIndex+1].category === currentCat) ? 'visible' : 'hidden';
+            infoPrev.style.visibility = (currentIndex > 0 && currentFilteredWorks[currentIndex-1].category === currentCat) ? 'visible' : 'hidden';
+            infoNext.style.visibility = (currentIndex < currentFilteredWorks.length - 1 && currentFilteredWorks[currentIndex+1].category === currentCat) ? 'visible' : 'hidden';
 
             const isSeries = item.type === 'series';
             const pageBadge = document.getElementById('infoPageCount');
@@ -373,44 +352,48 @@
 
             if (isSeries) {
                 pageBadge.innerText = `繼續閱讀 ${item.img.length}P`;
-                pageBadge.classList.add('active');
+                pageBadge.style.display = 'block';
                 coverBox.classList.add('is-series');
             } else {
-                pageBadge.classList.remove('active');
+                pageBadge.style.display = 'none';
                 coverBox.classList.remove('is-series');
             }
 
             if (isViewerActive && isSeries) {
                 document.getElementById('infoLayer').style.display = 'none';
-                document.getElementById('viewerLayer').classList.add('active');
+                document.getElementById('viewerLayer').style.display = 'block';
                 document.getElementById('overlayCloseBtn').style.display = 'none';
                 document.getElementById('overlayBackBtn').style.display = 'flex';
                 updateViewerImage();
             } else {
                 document.getElementById('infoLayer').style.display = 'flex';
-                document.getElementById('viewerLayer').classList.remove('active');
+                document.getElementById('viewerLayer').style.display = 'none';
                 document.getElementById('overlayCloseBtn').style.display = 'flex';
                 document.getElementById('overlayBackBtn').style.display = 'none';
             }
 
             if (window.syncClaps) window.syncClaps(item.id);
 
-            // 確保圖片 src 更新後，PinchZoom 重新對齊
             setTimeout(() => {
                 if (pzInfo) pzInfo.update();
                 if (pzViewer) pzViewer.update();
-            }, 100);
+            }, 150);
         }
 
         function updateViewerImage() {
             const item = currentFilteredWorks[currentIndex];
             const imgs = item.img;
-            document.getElementById('viewerImg').src = `img/gallery/${imgs[currentInnerIndex]}`;
+            const imgElement = document.getElementById('viewerImg');
             
-            const viewPrev = document.getElementById('viewPrev');
-            const viewNext = document.getElementById('viewNext');
-            if (viewPrev) viewPrev.classList.toggle('btn-hidden', currentInnerIndex === 0);
-            if (viewNext) viewNext.classList.toggle('btn-hidden', currentInnerIndex === imgs.length - 1);
+            if (pzViewer) pzViewer.setZoomFactor(1, false);
+            imgElement.src = `img/gallery/${imgs[currentInnerIndex]}`;
+            
+            imgElement.onload = function() {
+                if (pzViewer) pzViewer.update();
+            };
+
+            document.getElementById('viewPrev').style.visibility = currentInnerIndex === 0 ? 'hidden' : 'visible';
+            document.getElementById('viewNext').style.visibility = currentInnerIndex === imgs.length - 1 ? 'hidden' : 'visible';
 
             const indicator = document.getElementById('viewerIndicator');
             indicator.innerHTML = imgs.map((_, i) => `<span class="dot ${i === currentInnerIndex ? 'active' : ''}"></span>`).join('');
@@ -420,11 +403,9 @@
             const newIdx = currentIndex + step;
             if (newIdx >= 0 && newIdx < currentFilteredWorks.length) {
                 if (currentFilteredWorks[newIdx].category === currentFilteredWorks[currentIndex].category) {
-                    resetAllZoom(false); // 換作品前重置縮放
+                    resetAllZoom(false);
                     currentIndex = newIdx;
                     currentInnerIndex = 0;
-                    document.getElementById('clapCount').innerText = "-";
-                    document.getElementById('clapCountStatus').innerText = "-";
                     updateOverlayUI();
                 }
             }
@@ -434,7 +415,7 @@
             const item = currentFilteredWorks[currentIndex];
             const targetIndex = currentInnerIndex + step;
             if (targetIndex >= 0 && targetIndex < item.img.length) {
-                resetAllZoom(false); // 換頁前重置縮放
+                resetAllZoom(false);
                 currentInnerIndex = targetIndex;
                 updateViewerImage();
             }
@@ -445,93 +426,61 @@
         function handleOverlayClick(e) { if (e.target.id === 'workOverlay') closeOverlay(); }
         function tryEnterViewer() { if (currentFilteredWorks[currentIndex].type === 'series') enterViewer(); }
 
-
         function closeOverlay() {
-            resetAllZoom(false); // 關閉時重置縮放
+            resetAllZoom(false);
             document.getElementById('workOverlay').classList.remove('active');
             document.body.style.overflow = 'auto';
-            document.body.style.backgroundColor = '';
         }
 
-        // --- 關鍵修正：觸控事件整合 ---
         function initTouchEvents() {
-    // 針對兩個不同的層級分別監聽觸控
-    const infoBox = document.getElementById('infoCoverBox');
-    const viewerBox = document.querySelector('.viewer-img-container');
+            const infoBox = document.getElementById('infoCoverBox');
+            const viewerBox = document.querySelector('.viewer-img-container');
 
-    const handleStart = (e) => {
-        const activePZ = isViewerActive ? pzViewer : pzInfo;
-        // 只有一根手指且倍率接近 1 時才啟動滑動換頁
-        if (e.touches.length === 1 && (!activePZ || activePZ.zoomFactor <= 1.05)) {
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            isSwiping = true;
-        } else {
-            isSwiping = false;
+            const handleStart = (e) => {
+                const activePZ = isViewerActive ? pzViewer : pzInfo;
+                // 只有在單指且倍率約等於 1 時才允許滑動切換
+                if (e.touches.length === 1 && (!activePZ || activePZ.zoomFactor < 1.1)) {
+                    touchStartX = e.touches[0].clientX;
+                    isSwiping = true;
+                } else {
+                    isSwiping = false;
+                }
+            };
+
+            const handleEnd = (e) => {
+                if (!isSwiping) return;
+                let dx = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(dx) > 60) {
+                    if (dx < 0) {
+                        isViewerActive ? changeInnerPage(1) : changeWork(1);
+                    } else {
+                        isViewerActive ? changeInnerPage(-1) : changeWork(-1);
+                    }
+                }
+                isSwiping = false;
+            };
+
+            [infoBox, viewerBox].forEach(box => {
+                if(box) {
+                    box.addEventListener('touchstart', handleStart, {passive: true});
+                    box.addEventListener('touchend', handleEnd, {passive: true});
+                }
+            });
         }
-    };
-
-    const handleMove = (e) => {
-        if (!isSwiping) return;
-        
-        let dx = e.touches[0].clientX - touchStartX;
-        let dy = e.touches[0].clientY - touchStartY;
-
-        if (Math.abs(dx) > Math.abs(dy)) {
-            // 水平滑動時，阻止瀏覽器預設行為（如翻頁或捲動）
-            if (e.cancelable) e.preventDefault();
-            
-            const img = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
-            if(img) {
-                img.style.transition = 'none';
-                img.style.transform = `translateX(${dx * 0.3}px)`; // 稍微增加靈敏度
-            }
-        }
-    };
-
-    const handleEnd = (e) => {
-        if (!isSwiping) return;
-        isSwiping = false;
-        
-        let dx = e.changedTouches[0].clientX - touchStartX;
-        const img = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
-        
-        if(img) {
-            img.style.transition = 'transform 0.3s ease';
-            img.style.transform = '';
-        }
-
-        if (Math.abs(dx) > 60) { // 降低一點閾值提高操作感
-            if (dx < 0) {
-                isViewerActive ? changeInnerPage(1) : changeWork(1);
-            } else {
-                isViewerActive ? changeInnerPage(-1) : changeWork(-1);
-            }
-        }
-    };
-
-    // 掛載事件到 Info 層
-    infoBox.addEventListener('touchstart', handleStart, {passive: false});
-    infoBox.addEventListener('touchmove', handleMove, {passive: false});
-    infoBox.addEventListener('touchend', handleEnd, {passive: false});
-
-    // 掛載事件到 Viewer 層
-    viewerBox.addEventListener('touchstart', handleStart, {passive: false});
-    viewerBox.addEventListener('touchmove', handleMove, {passive: false});
-    viewerBox.addEventListener('touchend', handleEnd, {passive: false});
-}
-
 
         function resetUIInactivity() {
-                const btns = [document.getElementById('overlayBackBtn'), document.getElementById('overlayCloseBtn')];
-                btns.forEach(b => b && b.classList.remove('ui-hidden'));
-                clearTimeout(uiInactivityTimeout);
-                uiInactivityTimeout = setTimeout(() => {
-                    if (isViewerActive && window.innerWidth <= 900) btns.forEach(b => b && b.classList.add('ui-hidden'));
-                }, 3000);
-            }
+            const btns = [document.getElementById('overlayBackBtn'), document.getElementById('overlayCloseBtn')];
+            btns.forEach(b => b && b.classList.remove('ui-hidden'));
+            clearTimeout(uiInactivityTimeout);
+            uiInactivityTimeout = setTimeout(() => {
+                if (isViewerActive && window.innerWidth <= 900) {
+                    btns.forEach(b => b && b.classList.add('ui-hidden'));
+                }
+            }, 3000);
+        }
 
-            document.addEventListener('DOMContentLoaded', initGallery);
+        window.addEventListener('resize', fixOverlayHeight);
+        document.addEventListener('DOMContentLoaded', initGallery);
     </script>
 
     <script src="main.js"></script>
