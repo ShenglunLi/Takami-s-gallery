@@ -1,10 +1,5 @@
-# 排除舊版本與暫存資料夾
-_old/
-reference/
+# 排除暫存資料夾
 not_used/
-
-# 排除備份 CSS 檔
-color_style_bk.css
 
 # 排除系統產生的雜物
 .DS_Store
