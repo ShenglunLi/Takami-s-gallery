@@ -4,3 +4,6 @@ not_used/
 # 排除系統產生的雜物
 .DS_Store
 Thumbs.db
+
+# 排除 Visual Studio Code 工作區設定檔
+作品集網站.code-workspace

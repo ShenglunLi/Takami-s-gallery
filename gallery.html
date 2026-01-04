@@ -13,29 +13,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
     <link rel="stylesheet" href="style.css">
 
-    <style>
-        .info-cover-box, .viewer-img-container {
-            overflow: hidden; /* 這是必須的，防止縮放後的圖片溢出到 UI 上 */
-            touch-action: none; /* 禁用瀏覽器預設手勢，交給我們寫的 JS */
-            position: relative;
-            min-height: 300px; 
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #infoCoverImg, #viewerImg {
-            pointer-events: none; /* 讓點擊事件穿透到父容器 info-cover-box 處理 */
-            user-select: none;
-            -webkit-user-drag: none;
-            will-change: transform;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-
-    </style>
 
 </head>
 <body class="page-gallery">
