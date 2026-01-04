@@ -25,7 +25,7 @@
     --overlay-dark: rgba(0, 0, 0, 0.3);        /* 卡片預設遮罩 (略微調淺) */
     --overlay-hover: rgba(0, 0, 0, 0.15);      /* 卡片懸浮遮罩 */
     --card-default-bg: #f5f0e6;                /* 卡片底色：淺米色 */
-    --hero-fallback-bg: #ebe5d8;               /* Hero 底色 */
+    --hero-fallback-bg: #fdfaf5;                 /* Hero 底色 */
     --sns-btn-bg: rgba(0, 0, 0, 0.05);         /* SNS按鈕背景：極淺灰背景 */
     --sns-btn-icon: #5d4037;                   /* SNS圖示顏色：改用深咖啡色 */
 
@@ -100,6 +100,35 @@ h2 { font-size: var(--fs-h2); font-weight: 700; color: var(--text-main); }
 h3 { font-size: var(--fs-h3); font-weight: 500; color: var(--text-main); }
 p  { font-size: var(--fs-p); color: var(--text-body); }
 span {font-size: var(--fs-span); color: var(--text-muted)}
+
+/* 基礎圖示樣式 */
+.icon-svg {
+    display: inline-block;
+    width: 32px;   /* 圖示寬度 */
+    height: 32px;  /* 圖示高度 */
+    background-color: currentColor; /*關鍵：讓圖示顏色隨文字顏色變化*/
+    color: var(--icon-light);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-position: center;
+    mask-position: center;
+    vertical-align: middle;
+}
+
+/* 關閉圖示 Close */
+.icon-close {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M256-227.69 227.69-256l224-224-224-224L256-732.31l224 224 224-224L732.31-704l-224 224 224 224L704-227.69l-224-224-224 224Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='M256-227.69 227.69-256l224-224-224-224L256-732.31l224 224 224-224L732.31-704l-224 224 224 224L704-227.69l-224-224-224 224Z'/%3E%3C/svg%3E");
+}
+
+/* 返回圖示 Arrow Back */
+.icon-arrow-back {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='m276.85-460 231.69 231.69L480-200 200-480l280-280 28.54 28.31L276.85-500H760v40H276.85Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -960 960 960'%3E%3Cpath d='m276.85-460 231.69 231.69L480-200 200-480l280-280 28.54 28.31L276.85-500H760v40H276.85Z'/%3E%3C/svg%3E");
+}
+
 
 /* --- 佈局結構 --- */
 .wrapper {
@@ -442,6 +471,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 #clappedStatus { color: var(--primary-hover) !important; cursor: default; }
 .clap-btn:hover { opacity: 0.8; transform: translateY(-1px); }
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 200; font-size: 22px; }
+.icon { font-size: 22px; color: var(--icon-light); }
 #clappedStatus .material-symbols-outlined { font-variation-settings: 'FILL' 1, 'wght' 200; }
 
 
@@ -606,6 +636,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .clap-count { font-size: 0.9rem; color: #888; }
 .material-symbols-outlined { font-size: 20px; }
 
+
 /* 分頁樣式 */
 .pagination { display: flex; justify-content: center; gap: 10px; margin-top: 50px; padding-bottom: 50px; }
 .page-btn {
@@ -660,12 +691,13 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     border-radius: 50%; cursor: pointer; z-index: 1010; transition: 0.3s; border: none;
 }
 .overlay-close:hover, .overlay-back:hover { background: rgba(255, 255, 255, 0.15); }
-.overlay-close .material-symbols-outlined, .overlay-back .material-symbols-outlined { font-weight: 100; font-size: 2rem; color: #fff; }
+.material-symbols-outlined, .overlay-back .material-symbols-outlined { font-weight: 100;  color: #fff; }
 
 .overlay-content { 
     position: relative; width: 85%; max-width: 1200px; height: 85vh; 
     display: flex; align-items: center; justify-content: center; margin: 0 auto; 
 }
+
 
 /* --- 第一層：資訊層 (Info Layer) --- */
 .info-layer { 
