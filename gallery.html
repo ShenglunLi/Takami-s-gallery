@@ -261,10 +261,35 @@
             const container = document.getElementById('galleryContainer');
             container.innerHTML = '';
             currentFilteredWorks = [];
-            const cats = filterTag === 'All' ? [...new Set(allWorks.map(w => w.category))] : [filterTag];
+
+            // --- 核心修正：定義您想要的分類順序 ---
+            const customOrder = ['イラスト', '漫画', '落書き'];
+
+            let cats;
+            if (filterTag === 'All') {
+                // 取得所有存在的分類
+                const existingCats = [...new Set(allWorks.map(w => w.category))];
+                
+                // 依照 customOrder 進行排序
+                cats = existingCats.sort((a, b) => {
+                    let indexA = customOrder.indexOf(a);
+                    let indexB = customOrder.indexOf(b);
+                    
+                    // 如果分類不在自定義順序中，則排在最後面
+                    if (indexA === -1) indexA = 999;
+                    if (indexB === -1) indexB = 999;
+                    
+                    return indexA - indexB;
+                });
+            } else {
+                cats = [filterTag];
+            }
 
             cats.forEach(cat => {
                 const works = allWorks.filter(w => w.category === cat);
+                // 如果該分類下沒有作品則跳過
+                if (works.length === 0) return;
+
                 const group = document.createElement('div');
                 group.className = 'category-group';
                 group.innerHTML = `<h2 class="category-title">${cat}</h2><div class="gallery-grid"></div>`;
@@ -278,7 +303,7 @@
                     card.onclick = () => openOverlay(globalIdx);
                     card.innerHTML = `
                         ${work.type === 'series' ? `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>` : ''}
-                        <img src="img/gallery/${work.cover || work.img[0]}" alt="${work.title}">
+                        <img src="img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}" alt="${work.title}">
                     `;
                     grid.appendChild(card);
                 });
@@ -324,8 +349,6 @@
         });
 
         function updateOverlayUI() {
-
-            // 切換作品前，務必將縮放數值歸零
             resetAllZoom(); 
 
             const item = currentFilteredWorks[currentIndex];
@@ -333,10 +356,17 @@
 
             const coverFile = item.cover || (Array.isArray(item.img) ? item.img[0] : item.img);
             document.getElementById('infoCoverImg').src = `img/gallery/${coverFile}`;
+            
+            // 標題顯示：GAS 已淨化，直接顯示純淨標題
             document.getElementById('infoTitle').innerText = item.title;
             document.getElementById('infoDesc').innerText = item.desc || "";
-            document.getElementById('infoDate').innerText = item.date;
 
+            // 日期顯示：確保顯示狀態為 block，並填入日期
+            const dateElement = document.getElementById('infoDate');
+            dateElement.style.display = 'block'; // 強制顯示日期
+            dateElement.innerText = item.date;
+
+            // --- 以下邏輯維持不變 ---
             const currentCat = item.category;
             const infoPrev = document.getElementById('infoPrev');
             const infoNext = document.getElementById('infoNext');

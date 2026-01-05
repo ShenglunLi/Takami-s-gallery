@@ -1,137 +1,520 @@
 [
   {
-    "id": "TKM-0009",
+    "id": "TKM-0042",
     "type": "series",
-    "title": "seriesTest02",
-    "desc": "系列作品說明",
-    "date": "2025-12-28",
-    "cover": "Test-01.jpg",
+    "title": "冬に咲いた青",
+    "desc": "",
+    "date": "2026-01-05",
+    "cover": "B01-冬に咲いた青/1-1.jpg",
     "img": [
-      "Test-01.jpg",
-      "Test-02.jpg",
-      "Test-03.jpg",
-      "Test-04.jpg",
-      "Test-05.jpg",
-      "Test-06.jpg"
+      "B01-冬に咲いた青/1-1.jpg",
+      "B01-冬に咲いた青/1-10.jpg",
+      "B01-冬に咲いた青/1-2.jpg",
+      "B01-冬に咲いた青/1-3.jpg",
+      "B01-冬に咲いた青/1-4.jpg",
+      "B01-冬に咲いた青/1-5.jpg",
+      "B01-冬に咲いた青/1-6.jpg",
+      "B01-冬に咲いた青/1-7.jpg",
+      "B01-冬に咲いた青/1-8.jpg",
+      "B01-冬に咲いた青/1-9.jpg"
     ],
-    "category": "Comic",
-    "tags": []
+    "category": "漫画",
+    "order": 1
   },
   {
-    "id": "TKM-0004",
+    "id": "TKM-0039",
     "type": "series",
-    "title": "測試系列",
-    "desc": "系列作品說明",
-    "date": "2025-12-27",
-    "cover": "A-01.jpg",
+    "title": "誓",
+    "desc": "",
+    "date": "2026-01-05",
+    "cover": "B02-誓/2-0.jpg",
     "img": [
-      "A-01.jpg",
-      "A-02.jpg",
-      "A-03.jpg",
-      "A-04.jpg",
-      "A-05.jpg",
-      "A-06.jpg"
+      "B02-誓/2-0.jpg",
+      "B02-誓/2-1.jpg",
+      "B02-誓/2-2.jpg",
+      "B02-誓/2-3.jpg",
+      "B02-誓/2-4.jpg",
+      "B02-誓/2-5.jpg"
     ],
-    "category": "Comic",
-    "tags": []
+    "category": "漫画",
+    "order": 2
+  },
+  {
+    "id": "TKM-0038",
+    "type": "series",
+    "title": "私の返事",
+    "desc": "",
+    "date": "2026-01-05",
+    "cover": "B03-私の返事/3-1.jpg",
+    "img": [
+      "B03-私の返事/3-1.jpg",
+      "B03-私の返事/3-2.jpg",
+      "B03-私の返事/3-3.jpg",
+      "B03-私の返事/3-4.jpg",
+      "B03-私の返事/3-5.jpg"
+    ],
+    "category": "漫画",
+    "order": 3
+  },
+  {
+    "id": "TKM-0040",
+    "type": "series",
+    "title": "ついこぼれた本音",
+    "desc": "",
+    "date": "2026-01-05",
+    "cover": "B04-ついこぼれた本音/4-1.jpg",
+    "img": [
+      "B04-ついこぼれた本音/4-1.jpg",
+      "B04-ついこぼれた本音/4-2.jpg",
+      "B04-ついこぼれた本音/4-3.jpg"
+    ],
+    "category": "漫画",
+    "order": 4
+  },
+  {
+    "id": "TKM-0037",
+    "type": "series",
+    "title": "思念使然",
+    "desc": "",
+    "date": "2026-01-05",
+    "cover": "B05-思念使然/5-1.jpg",
+    "img": [
+      "B05-思念使然/5-1.jpg",
+      "B05-思念使然/5-2.jpg",
+      "B05-思念使然/5-3.jpg",
+      "B05-思念使然/5-4.jpg"
+    ],
+    "category": "漫画",
+    "order": 5
+  },
+  {
+    "id": "TKM-0041",
+    "type": "series",
+    "title": "道の終わりに",
+    "desc": "",
+    "date": "2026-01-05",
+    "cover": "B06-道の終わりに/6-1.jpg",
+    "img": [
+      "B06-道の終わりに/6-1.jpg",
+      "B06-道の終わりに/6-2.jpg",
+      "B06-道の終わりに/6-3.jpg",
+      "B06-道の終わりに/6-4.jpg",
+      "B06-道の終わりに/6-5.jpg",
+      "B06-道の終わりに/6-7.jpg"
+    ],
+    "category": "漫画",
+    "order": 6
   },
   {
     "id": "TKM-0001",
     "type": "single",
-    "title": "標題1",
-    "desc": "在清晨的森林中捕捉到的光影流動。",
-    "date": "2025-12-25",
-    "cover": "test.jpg",
-    "img": "test.jpg",
-    "category": "Default",
-    "tags": [
-      "tag1",
-      "tag2",
-      "tag3"
-    ]
+    "title": "P",
+    "desc": "",
+    "date": "2025-12-29",
+    "cover": "A-20251229-P.jpg",
+    "img": "A-20251229-P.jpg",
+    "category": "イラスト",
+    "order": 9999
   },
   {
     "id": "TKM-0002",
     "type": "single",
-    "title": "標題2",
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    "date": "2025-11-30",
-    "cover": "test.jpg",
-    "img": "test.jpg",
-    "category": "Default",
-    "tags": [
-      "tag1",
-      "tag2"
-    ]
+    "title": "P",
+    "desc": "",
+    "date": "2025-12-19",
+    "cover": "A-20251219-P.jpg",
+    "img": "A-20251219-P.jpg",
+    "category": "イラスト",
+    "order": 9999
   },
   {
     "id": "TKM-0003",
     "type": "single",
-    "title": "標題3",
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
-    "date": "2025-10-10",
-    "cover": "test.jpg",
-    "img": "test.jpg",
-    "category": "Default",
-    "tags": [
-      "tag1",
-      "tag2"
-    ]
+    "title": "P",
+    "desc": "",
+    "date": "2025-12-13",
+    "cover": "C-20251213-P.jpg",
+    "img": "C-20251213-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0004",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-12-12",
+    "cover": "C-20251212-P.jpg",
+    "img": "C-20251212-P.jpg",
+    "category": "落書き",
+    "order": 9999
   },
   {
     "id": "TKM-0005",
     "type": "single",
-    "title": "標題4",
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    "date": "2025-10-01",
-    "cover": "test.jpg",
-    "img": "test.jpg",
-    "category": "Type A",
-    "tags": [
-      "tag1",
-      "tag2"
-    ]
+    "title": "P",
+    "desc": "",
+    "date": "2025-12-09",
+    "cover": "A-20251209-P.jpg",
+    "img": "A-20251209-P.jpg",
+    "category": "イラスト",
+    "order": 9999
   },
   {
-    "id": "TKM-0006",
+    "id": "TKM-0014",
     "type": "single",
-    "title": "標題5",
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
-    "date": "2025-10-01",
-    "cover": "test.jpg",
-    "img": "test.jpg",
-    "category": "Type A",
-    "tags": [
-      "tag1",
-      "tag2"
-    ]
+    "title": "P",
+    "desc": "",
+    "date": "2025-11-29",
+    "cover": "A-20251129-P.jpg",
+    "img": "A-20251129-P.jpg",
+    "category": "イラスト",
+    "order": 9999
   },
   {
     "id": "TKM-0007",
     "type": "single",
-    "title": "標題6",
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    "date": "2025-10-01",
-    "cover": "test.jpg",
-    "img": "test.jpg",
-    "category": "Type A",
-    "tags": [
-      "tag1",
-      "tag2"
-    ]
+    "title": "P",
+    "desc": "",
+    "date": "2025-11-22",
+    "cover": "A-20251122-P.jpg",
+    "img": "A-20251122-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0017",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-11-19",
+    "cover": "A-20251119-P.jpg",
+    "img": "A-20251119-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0016",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-11-09",
+    "cover": "A-20251109-P.jpg",
+    "img": "A-20251109-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0035",
+    "type": "series",
+    "title": "貓",
+    "desc": "",
+    "date": "2025-11-04",
+    "cover": "C-20251104-貓/20250910-P.jpg",
+    "img": [
+      "C-20251104-貓/20250910-P.jpg",
+      "C-20251104-貓/20250912-P.jpg",
+      "C-20251104-貓/20251104-P.jpg"
+    ],
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0015",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-10-28",
+    "cover": "A-20251028-P.jpg",
+    "img": "A-20251028-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0020",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-10-27",
+    "cover": "C-20251027-P.jpg",
+    "img": "C-20251027-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0019",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-10-19",
+    "cover": "A-20251019-P.jpg",
+    "img": "A-20251019-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0018",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-10-09",
+    "cover": "A-20251009-P.jpg",
+    "img": "A-20251009-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0021",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-10-06",
+    "cover": "C-20251006-P.jpg",
+    "img": "C-20251006-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0034",
+    "type": "series",
+    "title": "日常的なエピソード",
+    "desc": "",
+    "date": "2025-09-30",
+    "cover": "C-20250930-日常的なエピソード/20251003-P1.jpg",
+    "img": [
+      "C-20250930-日常的なエピソード/20251003-P1.jpg",
+      "C-20250930-日常的なエピソード/20251003-P2.jpg"
+    ],
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0013",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-09-29",
+    "cover": "A-20250929-P.jpg",
+    "img": "A-20250929-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0036",
+    "type": "series",
+    "title": "Waltz",
+    "desc": "",
+    "date": "2025-09-22",
+    "cover": "C-20250922-Waltz/20250922-P.jpg",
+    "img": [
+      "C-20250922-Waltz/20250922-P.jpg",
+      "C-20250922-Waltz/20250925-P.jpg"
+    ],
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0022",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-09-21",
+    "cover": "C-20250921-P.jpg",
+    "img": "C-20250921-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0011",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-09-19",
+    "cover": "A-20250919-P.jpg",
+    "img": "A-20250919-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0023",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-09-14",
+    "cover": "C-20250914-P.jpg",
+    "img": "C-20250914-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0012",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-09-09",
+    "cover": "A-20250909-P.jpg",
+    "img": "A-20250909-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0024",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-09-06",
+    "cover": "C-20250906-P.jpg",
+    "img": "C-20250906-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0006",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-08-24",
+    "cover": "A-20250824-P.jpg",
+    "img": "A-20250824-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0025",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-08-22",
+    "cover": "C-20250822-P.jpg",
+    "img": "C-20250822-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0009",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-08-19",
+    "cover": "A-20250819-P.jpg",
+    "img": "A-20250819-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0010",
+    "type": "single",
+    "title": "P2",
+    "desc": "",
+    "date": "2025-08-19",
+    "cover": "A-20250819-P2.jpg",
+    "img": "A-20250819-P2.jpg",
+    "category": "イラスト",
+    "order": 9999
   },
   {
     "id": "TKM-0008",
     "type": "single",
-    "title": "標題7",
-    "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris",
-    "date": "2025-10-01",
-    "cover": "test.jpg",
-    "img": "test.jpg",
-    "category": "Type A",
-    "tags": [
-      "tag1",
-      "tag2"
-    ]
+    "title": "P",
+    "desc": "",
+    "date": "2025-08-09",
+    "cover": "A-20250809-P.jpg",
+    "img": "A-20250809-P.jpg",
+    "category": "イラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0026",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-08-09",
+    "cover": "C-20250809-P.jpg",
+    "img": "C-20250809-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0027",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-08-05",
+    "cover": "C-20250805-P.jpg",
+    "img": "C-20250805-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0028",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-08-02",
+    "cover": "C-20250802-P.jpg",
+    "img": "C-20250802-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0033",
+    "type": "series",
+    "title": "年齡差主張",
+    "desc": "",
+    "date": "2025-06-05",
+    "cover": "C-20250605-年齡差主張/20250606-1.jpg",
+    "img": [
+      "C-20250605-年齡差主張/20250606-1.jpg",
+      "C-20250605-年齡差主張/20250606-2.jpg"
+    ],
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0029",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-05-03",
+    "cover": "C-20250503-P.jpg",
+    "img": "C-20250503-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0030",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-04-02",
+    "cover": "C-20250402-P.jpg",
+    "img": "C-20250402-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0032",
+    "type": "series",
+    "title": "嘉／操にとって",
+    "desc": "",
+    "date": "2025-03-23",
+    "cover": "C-20250323-嘉／操にとって/20250323-1.jpg",
+    "img": [
+      "C-20250323-嘉／操にとって/20250323-1.jpg",
+      "C-20250323-嘉／操にとって/20250323-2.jpg"
+    ],
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0031",
+    "type": "single",
+    "title": "P",
+    "desc": "",
+    "date": "2025-02-15",
+    "cover": "C-20250215-P.jpg",
+    "img": "C-20250215-P.jpg",
+    "category": "落書き",
+    "order": 9999
   }
 ]
