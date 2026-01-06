@@ -57,7 +57,7 @@
     
     /* 文字大小定義 */
     --fs-h1: 2rem;       
-    --fs-h2: 1.5rem;     
+    --fs-h2: 1.3rem;     
     --fs-h3: 1.25rem;    
     --fs-p: 0.9rem;        
     --fs-label: 1.2rem;
@@ -720,61 +720,59 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .info-layer {
     display: flex;
     flex-direction: row; 
-    width: 100%;
+    width: 100%; /* 留一點邊距 */
     max-width: var(--container-width);
-    /* 核心：限制整體高度為螢幕高度的 85%，防止圖片或文字超出 */
     height: 85vh; 
     margin: auto;
-    gap: 60px;
+    gap: 60px; /* 這裡定義了圖片與文字之間的「固定距離」 */
     align-items: center;
-    justify-content: center;
+    /* 關鍵：使用 center 讓整組（圖片+文字）在螢幕居中 */
+    justify-content: center; 
     background: transparent;
 }
 
-/* 圖片容器：透過 flex-grow 達成動態占比 */
+/* 圖片容器：由內容撐開寬度 */
 .info-cover-box {
-    /* 核心邏輯：
-       1. 初始寬度設為 0，完全交由 flex-grow 分配空間
-       2. 當圖片為橫式時，它會嘗試佔滿可用空間，直到達到 max-width
-       3. 設定為 flex: 2 (圖片區) 與 .info-details 的 flex: 1 (文字區) 形成比例
-    */
-    flex: 2 1 0%; 
-    max-width: 80%;      /* 橫式圖片最大占比 */
+    /* 1. 關鍵修改：不固定比例，改為根據內容自動收縮 */
+    flex: 0 1 auto; 
+    
+    /* 2. 限制最大寬度，避免橫式圖片擠壓文字 */
+    max-width: 75%; 
+    
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     
-    /* 關鍵：確保內部 transform (縮放) 不會撐開容器，解決按鈕跳動問題 */
+    /* 確保縮放時不會產生捲動條或影響佈局尺寸 */
     overflow: hidden; 
 }
 
 #infoCoverImg {
-    max-height: 85vh;
+    max-height: 100%;
     max-width: 100%;
-    width: auto;         /* 關鍵：直式圖片會依比例自動縮窄寬度 */
-    height: auto;        /* 關鍵：維持原始比例 */
-    object-fit: contain; 
+    width: auto;
+    height: auto;
+    object-fit: contain;
     box-shadow: 0 15px 50px rgba(0,0,0,0.15);
-    
-    /* 您的跟手動畫設定 */
-    transition: transform 0.1s ease-out; 
+    transition: transform 0.1s ease-out;
     display: block;
-
-    /* 效能優化：告訴瀏覽器 transform 不影響佈局，徹底鎖死容器尺寸 */
+    /* 告訴瀏覽器此元素的變動不影響外部佈局計算 */
     will-change: transform;
 }
 
-/* 文字區塊：保持穩定占比 */
+/* 文字區塊：緊貼圖片容器 */
 .info-details {
-    flex: 1 1 0%;
-    min-width: 300px;    /* 保護文字區不被過度擠壓 */
+    /* 3. 關鍵修改：不再分配剩餘空間，而是維持內容寬度 */
+    flex: 0 0 auto; 
+    width: 300px; /* 給予文字區塊一個穩定的寬度 */
+    min-width: 250px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-left: 20px;
+    /* 移除左側 padding，改由父層 gap 控制距離 */
+    padding-left: 0; 
 }
-
 
 
 .info-cover-box.is-series { cursor: pointer;  transform: scale(1.01);}
@@ -796,8 +794,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     flex: 0.5; display: flex; flex-direction: column; align-items: flex-start;
     padding: 20px 0; min-width: 200px;
 }
-.info-details h2 { margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
-.info-details p { line-height: 1.8; color: #ccc; margin-bottom: 25px; }
+.info-details h2 { font-size: 1.2rem; margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
+.info-details p { font-size: 0.9rem; line-height: 1.8; color: #ccc; margin-bottom: 25px; }
 
 .info-header-meta {
     display: flex; justify-content: space-between; align-items: flex-start;
