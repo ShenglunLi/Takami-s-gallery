@@ -4,7 +4,7 @@
     "type": "series",
     "title": "冬に咲いた青",
     "desc": "",
-    "date": "2026-01-05",
+    "date": "2025-06-16",
     "cover": "B01-冬に咲いた青/1-1.jpg",
     "img": [
       "B01-冬に咲いた青/1-1.jpg",
@@ -26,7 +26,7 @@
     "type": "series",
     "title": "誓",
     "desc": "",
-    "date": "2026-01-05",
+    "date": "2025-07-28",
     "cover": "B02-誓/2-0.jpg",
     "img": [
       "B02-誓/2-0.jpg",
@@ -44,7 +44,7 @@
     "type": "series",
     "title": "私の返事",
     "desc": "",
-    "date": "2026-01-05",
+    "date": "2025-05-18",
     "cover": "B03-私の返事/3-1.jpg",
     "img": [
       "B03-私の返事/3-1.jpg",
@@ -61,7 +61,7 @@
     "type": "series",
     "title": "ついこぼれた本音",
     "desc": "",
-    "date": "2026-01-05",
+    "date": "2025-09-04",
     "cover": "B04-ついこぼれた本音/4-1.jpg",
     "img": [
       "B04-ついこぼれた本音/4-1.jpg",
@@ -76,7 +76,7 @@
     "type": "series",
     "title": "思念使然",
     "desc": "",
-    "date": "2026-01-05",
+    "date": "2025-04-30",
     "cover": "B05-思念使然/5-1.jpg",
     "img": [
       "B05-思念使然/5-1.jpg",
@@ -92,7 +92,7 @@
     "type": "series",
     "title": "道の終わりに",
     "desc": "",
-    "date": "2026-01-05",
+    "date": "2025-12-10",
     "cover": "B06-道の終わりに/6-1.jpg",
     "img": [
       "B06-道の終わりに/6-1.jpg",
@@ -108,8 +108,8 @@
   {
     "id": "TKM-0001",
     "type": "single",
-    "title": "P",
-    "desc": "",
+    "title": "",
+    "desc": "月が満ちても欠けても、あなたにたどり着き、そっと抱きしめる。",
     "date": "2025-12-29",
     "cover": "A-20251229-P.jpg",
     "img": "A-20251229-P.jpg",
@@ -119,8 +119,8 @@
   {
     "id": "TKM-0002",
     "type": "single",
-    "title": "P",
-    "desc": "",
+    "title": "",
+    "desc": "そして月は、私の心に光を注ぎ、静かに染み渡ってくれる。",
     "date": "2025-12-19",
     "cover": "A-20251219-P.jpg",
     "img": "A-20251219-P.jpg",
@@ -130,7 +130,7 @@
   {
     "id": "TKM-0003",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-12-13",
     "cover": "C-20251213-P.jpg",
@@ -141,7 +141,7 @@
   {
     "id": "TKM-0004",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-12-12",
     "cover": "C-20251212-P.jpg",
@@ -152,8 +152,8 @@
   {
     "id": "TKM-0005",
     "type": "single",
-    "title": "P",
-    "desc": "",
+    "title": "",
+    "desc": "大丈夫。夜は、私の弱さをそっと受けとめてくれる。",
     "date": "2025-12-09",
     "cover": "A-20251209-P.jpg",
     "img": "A-20251209-P.jpg",
@@ -163,7 +163,7 @@
   {
     "id": "TKM-0014",
     "type": "single",
-    "title": "P",
+    "title": "戦場のない日に、あなたのもとへ。",
     "desc": "",
     "date": "2025-11-29",
     "cover": "A-20251129-P.jpg",
@@ -174,7 +174,7 @@
   {
     "id": "TKM-0007",
     "type": "single",
-    "title": "P",
+    "title": "あなたの影と共に",
     "desc": "",
     "date": "2025-11-22",
     "cover": "A-20251122-P.jpg",
@@ -185,7 +185,7 @@
   {
     "id": "TKM-0017",
     "type": "single",
-    "title": "P",
+    "title": "それぞれの戦場へ",
     "desc": "",
     "date": "2025-11-19",
     "cover": "A-20251119-P.jpg",
@@ -196,7 +196,7 @@
   {
     "id": "TKM-0016",
     "type": "single",
-    "title": "P",
+    "title": "それぞれの戦場へ",
     "desc": "",
     "date": "2025-11-09",
     "cover": "A-20251109-P.jpg",
@@ -207,8 +207,8 @@
   {
     "id": "TKM-0035",
     "type": "series",
-    "title": "貓",
-    "desc": "",
+    "title": "猫と軍師",
+    "desc": "「ねこさん、あなたは私の好きな人によく似ていますね。」",
     "date": "2025-11-04",
     "cover": "C-20251104-貓/20250910-P.jpg",
     "img": [
@@ -222,7 +222,7 @@
   {
     "id": "TKM-0015",
     "type": "single",
-    "title": "P",
+    "title": "海天一色",
     "desc": "",
     "date": "2025-10-28",
     "cover": "A-20251028-P.jpg",
@@ -233,7 +233,7 @@
   {
     "id": "TKM-0020",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-10-27",
     "cover": "C-20251027-P.jpg",
@@ -244,7 +244,7 @@
   {
     "id": "TKM-0019",
     "type": "single",
-    "title": "P",
+    "title": "海のような心",
     "desc": "",
     "date": "2025-10-19",
     "cover": "A-20251019-P.jpg",
@@ -255,7 +255,7 @@
   {
     "id": "TKM-0018",
     "type": "single",
-    "title": "P",
+    "title": "空のような魂",
     "desc": "",
     "date": "2025-10-09",
     "cover": "A-20251009-P.jpg",
@@ -266,7 +266,7 @@
   {
     "id": "TKM-0021",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-10-06",
     "cover": "C-20251006-P.jpg",
@@ -291,7 +291,7 @@
   {
     "id": "TKM-0013",
     "type": "single",
-    "title": "P",
+    "title": "勿忘我-ワスレナグサ",
     "desc": "",
     "date": "2025-09-29",
     "cover": "A-20250929-P.jpg",
@@ -316,7 +316,7 @@
   {
     "id": "TKM-0022",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-09-21",
     "cover": "C-20250921-P.jpg",
@@ -327,8 +327,8 @@
   {
     "id": "TKM-0011",
     "type": "single",
-    "title": "P",
-    "desc": "",
+    "title": "",
+    "desc": "「ええ、知ってるよ。名前も、花言葉も……」",
     "date": "2025-09-19",
     "cover": "A-20250919-P.jpg",
     "img": "A-20250919-P.jpg",
@@ -338,7 +338,7 @@
   {
     "id": "TKM-0023",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-09-14",
     "cover": "C-20250914-P.jpg",
@@ -349,8 +349,8 @@
   {
     "id": "TKM-0012",
     "type": "single",
-    "title": "P",
-    "desc": "",
+    "title": "",
+    "desc": "「この花の名前を知っていますか？」",
     "date": "2025-09-09",
     "cover": "A-20250909-P.jpg",
     "img": "A-20250909-P.jpg",
@@ -360,7 +360,7 @@
   {
     "id": "TKM-0024",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-09-06",
     "cover": "C-20250906-P.jpg",
@@ -371,7 +371,7 @@
   {
     "id": "TKM-0006",
     "type": "single",
-    "title": "P",
+    "title": "強風の中に、勝利の予感がある。",
     "desc": "",
     "date": "2025-08-24",
     "cover": "A-20250824-P.jpg",
@@ -382,7 +382,7 @@
   {
     "id": "TKM-0025",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-08-22",
     "cover": "C-20250822-P.jpg",
@@ -393,8 +393,8 @@
   {
     "id": "TKM-0009",
     "type": "single",
-    "title": "P",
-    "desc": "",
+    "title": "雨過天晴",
+    "desc": "「もう大丈夫ですよ。」",
     "date": "2025-08-19",
     "cover": "A-20250819-P.jpg",
     "img": "A-20250819-P.jpg",
@@ -404,8 +404,8 @@
   {
     "id": "TKM-0010",
     "type": "single",
-    "title": "P2",
-    "desc": "",
+    "title": "風和日麗",
+    "desc": "「あなたがいれば、私の世界が広がっていく。」",
     "date": "2025-08-19",
     "cover": "A-20250819-P2.jpg",
     "img": "A-20250819-P2.jpg",
@@ -415,8 +415,8 @@
   {
     "id": "TKM-0008",
     "type": "single",
-    "title": "P",
-    "desc": "",
+    "title": "風雨欲來",
+    "desc": "「さあ、いきましょう。」",
     "date": "2025-08-09",
     "cover": "A-20250809-P.jpg",
     "img": "A-20250809-P.jpg",
@@ -426,7 +426,7 @@
   {
     "id": "TKM-0026",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-08-09",
     "cover": "C-20250809-P.jpg",
@@ -437,7 +437,7 @@
   {
     "id": "TKM-0027",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-08-05",
     "cover": "C-20250805-P.jpg",
@@ -448,7 +448,7 @@
   {
     "id": "TKM-0028",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-08-02",
     "cover": "C-20250802-P.jpg",
@@ -473,7 +473,7 @@
   {
     "id": "TKM-0029",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-05-03",
     "cover": "C-20250503-P.jpg",
@@ -484,7 +484,7 @@
   {
     "id": "TKM-0030",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-04-02",
     "cover": "C-20250402-P.jpg",
@@ -509,7 +509,7 @@
   {
     "id": "TKM-0031",
     "type": "single",
-    "title": "P",
+    "title": "",
     "desc": "",
     "date": "2025-02-15",
     "cover": "C-20250215-P.jpg",
