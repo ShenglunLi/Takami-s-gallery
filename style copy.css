@@ -13,7 +13,6 @@
     --bg-color: #fdfaf5;           /* 全域背景：米白色 (Creamy White) */
     --bg-color-ts: rgba(55, 55, 55, 0.6);
     --bg-ts:rgba(55, 55, 55, 0);
-    --bg-black:#0f0e0e;
     
     /* 文字系統 - 針對淺色背景優化 */
     --text-main: #2c2c2c;          /* 標題與重要文字：深碳灰，提高對比度 */
@@ -662,9 +661,27 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .work-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
+/* --- Overlay 燈箱樣式修正 --- */
+.overlay { 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    /* 預設使用 100dvh，JS 會再賦予精確像素值 */
+    height: 100dvh; 
+    background: #000000; 
+    display: none; 
+    z-index: 1000; 
+    overflow: hidden; 
+    align-items: center; 
+    justify-content: center;
+    /* touch-action: none;  */
+    /* 處理 iOS 安全區域 */
+    padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: border-box;
+}
 
-
-.overlay.active { display: flex; top: 0;}
+.overlay.active { display: flex; }
 
 .overlay-close, .overlay-back {
     position: fixed; top: 30px; right: 30px;
@@ -688,96 +705,47 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     display: flex; gap: 60px; align-items: center; background: transparent; 
 }
 
-/* --- Overlay 燈箱樣式修正 --- */
-.overlay { 
-    overflow: hidden; 
-    padding-bottom: env(safe-area-inset-bottom);
-    box-sizing: border-box;
+.info-cover-box { 
+    flex: 0 0 60%; max-height: 85vh; flex: 1;
+}
+.info-cover-box img { 
+    max-height: 85vh; object-fit: contain; 
+    /* border-radius: 4px;  */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transition: transform 0.1s ease-out; /* 讓跟手動畫平滑 */
 }
 
-/* --- Overlay 核心層 --- */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--bg-black); /* 確保背景色一致 */
-    z-index: 2000;
-    display: none; /* 由 JS 切換 active */
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    align-items: center;
-    justify-content: center;
-}
+/* gallery.html 中的 <style> 區塊 */
+        .info-cover-box, .viewer-img-container {
+            overflow: hidden !important; 
+            touch-action: none; /* 禁用瀏覽器預設手勢，交給我們寫的 JS */
+            position: relative;
+            max-height: 100%;
+            /* min-height: 300px;  */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            touch-action: none; /* 禁用瀏覽器預設手勢，交由 PinchZoom 處理 */
+        }
 
-.overlay.active {
-    display: flex;
-    opacity: 1;
-}
+        
 
-/* --- 核心修正：Info Layer 佈局 --- */
-.info-layer {
-    display: flex;
-    flex-direction: row; 
-    width: 100%;
-    max-width: var(--container-width);
-    /* 核心：限制整體高度為螢幕高度的 85%，防止圖片或文字超出 */
-    height: 85vh; 
-    margin: auto;
-    gap: 60px;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-}
+        /* 確保圖片在容器內正確顯示 */
+        #infoCoverImg, #viewerImg {
+            pointer-events: none; /* 讓點擊事件穿透到父容器 info-cover-box 處理 */
+            user-select: none;
+            -webkit-user-drag: none;
+            will-change: transform;
+            /* max-height: 85vh; */
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            object-fit: contain;
+            will-change: transform; /* 優化硬體加速 */
+        }
 
-/* 圖片容器：透過 flex-grow 達成動態占比 */
-.info-cover-box {
-    /* 核心邏輯：
-       1. 初始寬度設為 0，完全交由 flex-grow 分配空間
-       2. 當圖片為橫式時，它會嘗試佔滿可用空間，直到達到 max-width
-       3. 設定為 flex: 2 (圖片區) 與 .info-details 的 flex: 1 (文字區) 形成比例
-    */
-    flex: 2 1 0%; 
-    max-width: 80%;      /* 橫式圖片最大占比 */
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    
-    /* 關鍵：確保內部 transform (縮放) 不會撐開容器，解決按鈕跳動問題 */
-    overflow: hidden; 
-}
-
-#infoCoverImg {
-    max-height: 85vh;
-    max-width: 100%;
-    width: auto;         /* 關鍵：直式圖片會依比例自動縮窄寬度 */
-    height: auto;        /* 關鍵：維持原始比例 */
-    object-fit: contain; 
-    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
-    
-    /* 您的跟手動畫設定 */
-    transition: transform 0.1s ease-out; 
-    display: block;
-
-    /* 效能優化：告訴瀏覽器 transform 不影響佈局，徹底鎖死容器尺寸 */
-    will-change: transform;
-}
-
-/* 文字區塊：保持穩定占比 */
-.info-details {
-    flex: 1 1 0%;
-    min-width: 300px;    /* 保護文字區不被過度擠壓 */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 20px;
-}
-
-
-
-.info-cover-box.is-series { cursor: pointer;  transform: scale(1.01);}
+.info-cover-box.is-series { cursor: pointer; transition: transform 0.3s ease; }
+.info-cover-box.is-series:hover { transform: scale(1.01); }
 
 .info-nav-btn {
     position: fixed; top: 50%; transform: translateY(-50%);
@@ -789,12 +757,12 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .info-nav-btn.prev { left: 30px; }
 .info-nav-btn.next { right: 30px; }
 
-.page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem;  display: none; }
+.page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem; display: none; }
 .page-count-label.active { display: block; }
 
 .info-details {
-    flex: 0.5; display: flex; flex-direction: column; align-items: flex-start;
-    padding: 20px 0; min-width: 200px;
+    flex: 1; display: flex; flex-direction: column; align-items: flex-start;
+    padding: 20px 0; min-width: 300px;
 }
 .info-details h2 { margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
 .info-details p { line-height: 1.8; color: #ccc; margin-bottom: 25px; }
@@ -846,97 +814,24 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.3s; }
 .dot.active { background: #fff; transform: scale(1.2); }
 
-/* --- RWD 修正 (max-width: 900px) --- */
+/* --- RWD 修正 --- */
 @media (max-width: 900px) {
-    /* 1. 基礎佈局 */
-    .overlay-content { 
-        width: 100%; 
-        height: 100%; 
-    }
-
+    .overlay-content { width: 100%; height: 100%; }
     .info-layer { 
-        flex-direction: column; 
-        gap: 8px; 
-        padding-top: 10px; 
-        overflow-y: auto; 
-        position: relative; 
-        touch-action: pan-y; /* 資訊層允許垂直捲動以閱讀文字 */
-        justify-content: flex-start; /* 手機版從頂部開始排列 */
+        flex-direction: column; gap: 8px; padding-top: 60px; 
+        overflow-y: auto; position: relative; 
+        touch-action: pan-y; /* 手機板資訊層允許垂直捲動文字 */
     }
-
-    /* 2. 圖片/檢視容器 (移除重複的 touch-action 與 min-width) */
-    .info-cover-box, 
-    .viewer-img-container {
-        flex: 0 0 auto;
-        top: 10px;
-        height: auto;
-        min-height: 300px;
-        max-width: 100%;
-        width: 100%;             /* 佔滿手機寬度 */
-        max-height: 70vh;        /* 限制高度在螢幕70%，留空間給文字 */
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;        /* 確保縮放動畫不溢出 */
-        touch-action: pan-y;
-        overflow-y: auto; /* 確保內容超出時可以捲動 */
-        overflow-x: hidden; /* 嚴格禁止水平溢出 */
+    .info-cover-box { flex: 0 0 auto; width: 90%; 
+        touch-action: none; 
     }
-
-    /* 3. 圖片主體 (整合 #infoCoverImg 與 #viewerImg，移除衝突設定) */
-    #infoCoverImg, 
-    #viewerImg {
-        max-height: 70vh;        /* 統一高度限制 */
-        max-width: 100%;
-        width: auto;             /* 確保比例正確不拉伸 */
-        height: auto;            /* 確保比例正確不拉伸 */
-        object-fit: contain;     /* 雙重保險：確保不被裁切 */
-        pointer-events: none;    /* 事件穿透 */
-        user-select: none;
-        -webkit-user-drag: none;
-        will-change: transform;  /* 硬體加速 */
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        transition: transform 0.1s ease-out; /* 保留平滑動畫 */
-    }
-
-    /* 4. 詳情與 UI 介面 */
-    .info-details { 
-        padding: 20px; 
-        width: 100%; 
-        box-sizing: border-box; 
-    }
-
-    .viewer-layer { 
-        height: 100%; 
-    }
-
-    .viewer-indicator {
-        position: absolute; 
-        bottom: 20px; 
-        left: 50%;
-        transform: translateX(-50%); 
-    }
-
-    /* 5. 導覽與操作按鈕 */
-    .nav-btn, 
-    .info-nav-btn { 
-        display: none !important; 
-    }
-
-    .overlay-close, 
-    .overlay-back { 
-        top: 20px; 
-        left: 20px; 
-        right: auto; 
-        background: rgba(0,0,0,0.5); 
-    }
-
-    .ui-hidden { 
-        opacity: 0; 
-        pointer-events: none; 
-        transition: opacity 0.3s ease;
-    }
+    .info-cover-box img { max-height: 50vh; }
+    .info-details { padding: 20px; width: 100%; box-sizing: border-box; }
+    .viewer-layer { height: 100% }
+    .viewer-indicator {position: absolute; bottom: 20px; transform: translateX(-50%); }
+    .nav-btn, .info-nav-btn { display: none !important; }
+    .overlay-close, .overlay-back { top: 20px; left: 20px; right: auto; background: rgba(0,0,0,0.5); }
+    .ui-hidden { opacity: 0; pointer-events: none; }
 }
 
 /* New專屬樣式 */
