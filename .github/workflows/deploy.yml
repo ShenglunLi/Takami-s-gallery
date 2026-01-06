@@ -1,0 +1,33 @@
+name: GitHub Pages Deploy
+
+on:
+  push:
+    branches:
+      - main  # 如果您的預設分支名稱是 master，請改為 master
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false  # 關鍵設定：讓任務排隊而不取消
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
