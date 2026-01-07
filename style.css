@@ -973,7 +973,6 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
         /* 圖片包裝層 */
         .work-img-wrap {
-            /* flex: 1.2; 圖片佔比略大 */
             flex: 0 1 auto; 
             max-width: 50%;
             height: 100%;
