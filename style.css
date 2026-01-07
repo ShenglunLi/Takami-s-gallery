@@ -973,7 +973,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
         /* 圖片包裝層 */
         .work-img-wrap {
-            flex: 1.2; /* 圖片佔比略大 */
+            /* flex: 1.2; 圖片佔比略大 */
+            flex: 0 1 auto; 
+            max-width: 50%;
+            height: 100%;
             overflow: hidden;
             border-radius: var(--radius-md);
             box-shadow: 0 20px 40px rgba(0,0,0,0.15);
@@ -982,7 +985,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
         .work-img-wrap img {
             width: 100%;
-            max-height: 90vh;   /* 關鍵設定：最大高度為視窗的 90% */
+            max-height: 80vh;   /* 關鍵設定：最大高度為視窗的 90% */
             display: block;
             transition: transform 0.5s ease;
             object-fit: cover;
@@ -991,8 +994,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
         /* 文字內容層 */
         .work-content {
-            flex: 1;
-            display: flex;
+            flex: 0 0 auto; 
+            width: 300px; /* 給予文字區塊一個穩定的寬度 */
+            /* flex: 1;
+            display: flex; */
             flex-direction: column;
             /* 如果希望文字也置中，可開啟下方兩行，目前維持原始靠左/靠右感 */
             /* align-items: center; */
@@ -1054,14 +1059,30 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
         /* --- 手機版 RWD 排版 --- */
         @media (max-width: 900px) {
+            .new-container{
+                padding: 0px 10px;
+            }
             .work-item, .work-item:nth-child(even) {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 30px;
             }
-            /* .work-content {
-                align-items: center;
-                text-align: center;
-            } */
+            .work-row {
+                padding: 0;
+                gap: 60px; /* 手機版減少作品間距 */
+            }
+            /* 圖片包裝層 */
+            .work-img-wrap {
+                flex: 1.2; /*圖片佔比略大*/
+                max-width: 100%;
+                height: 100%;
+                overflow: hidden;
+                border-radius: var(--radius-md);
+                box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            }
+            .work-content {
+                padding-left: 8px;
+            }
+        
 
         }
