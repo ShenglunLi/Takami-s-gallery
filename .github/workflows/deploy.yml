@@ -3,18 +3,22 @@ name: GitHub Pages Deploy
 on:
   push:
     branches:
-      - main  # 如果您的預設分支名稱是 master，請改為 master
+      - main  # 確保這是您的預設分支名稱
 
+# 核心修正 1：防止任務被取消，改為排隊執行
 concurrency:
   group: "pages"
-  cancel-in-progress: false  # 關鍵設定：讓任務排隊而不取消
+  cancel-in-progress: false 
 
 jobs:
   deploy:
+    environment:
+      name: github-pages  # 核心修正 2：解決 Missing environment 錯誤
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pages: write
+      pages: write      # 賦予寫入 Pages 的權限
       id-token: write
     steps:
       - name: Checkout
