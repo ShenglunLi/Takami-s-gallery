@@ -698,7 +698,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(5, 5, 5, 0.85); /* 確保背景色一致 */
+    background: rgba(5, 5, 5, 0.95); /* 半透明背景 */
     z-index: 2000;
     display: none; /* 由 JS 切換 active */
     opacity: 0;
