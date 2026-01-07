@@ -852,6 +852,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 /* --- RWD 修正 (max-width: 900px) --- */
 @media (max-width: 900px) {
     /* 1. 基礎佈局 */
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));}
     .overlay-content { 
         width: 100%; 
         height: 100%; 
