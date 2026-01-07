@@ -900,10 +900,16 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
     /* 4. 詳情與 UI 介面 */
     .info-details { 
-        padding: 20px; 
+        padding: 8px 16px;
+        gap: 0;
         width: 100%; 
         box-sizing: border-box; 
     }
+    .info-header-meta {
+        margin-bottom: 4px;
+    }
+    .info-details h2 { font-size: 0.9rem; line-height: 1.2; margin: 0 0 4px 0; color: #fff; font-weight: 700; line-height: 1; }
+    .info-details p { font-size: 0.9rem; line-height: 1.2; color: #ccc; margin-bottom: 8px; }
 
     .viewer-layer { 
         height: 100%; 
@@ -1063,7 +1069,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
             }
             .work-item, .work-item:nth-child(even) {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center;
                 gap: 30px;
             }
             .work-row {
