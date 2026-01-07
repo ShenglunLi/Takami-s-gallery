@@ -379,11 +379,11 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     position: fixed;
     top: -100%;
     left: 0;
-    width: 100%;
+    width: 15%;
     height: 100%;
     padding-left: 30px;
     padding-top: 80px;
-    background: var(--bg-color);
+    background: rgba(255, 255, 255, 0.95);
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -398,6 +398,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* 修正：僅在電腦端（有滑鼠）套用 hover 效果 */
 @media (hover: hover) {
+
     .full-menu a:hover {
         color: var(--primary-hover);
         letter-spacing: 2px;
@@ -406,6 +407,11 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* 手機版：取消 hover 狀態，改用 :active 產生點擊回饋（可選） */
 @media (max-width: 900px) {
+    .full-menu{
+        width: 100%;    
+        background: var(--bg-color);    
+    }
+
     .full-menu a:active {
         background: rgba(255, 255, 255, 0.1);
     }
