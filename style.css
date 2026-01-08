@@ -186,7 +186,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.2); 
+    background: rgba(0, 0, 0, 0.6); 
 }
 
 .hero-content {
@@ -684,7 +684,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .material-symbols-outlined, .overlay-back .material-symbols-outlined { font-weight: 100;  color: #fff; }
 
 .overlay-content { 
-    position: relative; width: 85%; max-width: 1200px; height: 85vh; 
+    position: relative; width: 85%; max-width: 1200px; height: 100vh; 
     display: flex; align-items: center; justify-content: center; margin: 0 auto; 
 }
 
@@ -726,47 +726,65 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     display: flex; gap: 60px; align-items: center; background: transparent; 
 } */
 
+/* --- 第一層：資訊層（對齊 Viewer Layer 的尺寸邏輯） --- */
 .info-layer {
     display: flex;
-    flex-direction: row; 
-    width: 100%; /* 留一點邊距 */
+    flex-direction: row;
+
+    width: 100%;
     max-width: var(--container-width);
-    height: 85vh; 
+
+    /* 改為使用整個 viewport 的穩定尺寸 */
+    height: 100vh;
+    max-height: 100vh;
+
     margin: auto;
-    gap: 60px; /* 這裡定義了圖片與文字之間的「固定距離」 */
+    gap: 60px;
+
     align-items: center;
-    /* 關鍵：使用 center 讓整組（圖片+文字）在螢幕居中 */
-    justify-content: center; 
+    justify-content: center;
+
     background: transparent;
 }
 
-/* 圖片容器：由內容撐開寬度 */
+
+/* --- 圖片外層容器：唯一的圖片尺寸參考 --- */
 .info-cover-box {
-    /* 1. 關鍵修改：不固定比例，改為根據內容自動收縮 */
-    flex: 0 1 auto; 
-    /* 2. 限制最大寬度，避免橫式圖片擠壓文字 */
-    max-width: 75%; 
-    /* height: 100%; */ /* 高度隨內容調整 */ 
+    position: relative;
+
+    /* 不讓圖片容器撐爆版面 */
+    flex: 0 1 auto;
+    max-width: 75%;
+
+    /* 關鍵：高度來自 info-layer，而非 vh */
+    height: 100%;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* 確保縮放時不會產生捲動條或影響佈局尺寸 */
-    overflow: hidden; 
+
+    overflow: hidden;
 }
 
+
+/* --- 圖片本體：只做一次等比例縮放 --- */
 #infoCoverImg {
-    max-height: 85vh;
     max-width: 100%;
+    max-height: 100%;
+
     width: auto;
     height: auto;
+
     object-fit: contain;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
-    transition: transform 0.1s ease-out;
     display: block;
-    /* 告訴瀏覽器此元素的變動不影響外部佈局計算 */
-    will-change: transform;
+
+    box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+
+    /* 僅保留必要的 GPU 提示，避免重算模糊 */
+    backface-visibility: hidden;
+    transform: translateZ(0);
 }
+
 
 /* 文字區塊：緊貼圖片容器 */
 .info-details {
