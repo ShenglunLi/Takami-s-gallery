@@ -720,12 +720,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     opacity: 1;
 }
 
-/* --- 核心修正：Info Layer 佈局 --- */
-/* --- 第一層：資訊層 (Info Layer) --- */
-/* .info-layer { 
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; gap: 60px; align-items: center; background: transparent; 
-} */
+
 
 /* --- 第一層：資訊層（對齊 Viewer Layer 的尺寸邏輯） --- */
 .info-layer {
@@ -736,7 +731,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     max-width: var(--container-width);
 
     /* 改為使用整個 viewport 的穩定尺寸 */
-    height: 90vh;
+    height: 90%;
     /* max-height: 100vh; */
 
     margin: auto;
@@ -912,6 +907,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         top: 10px;
         height: auto;
         min-height: 300px;
+        max-height: 80%;
         max-width: 100%;
         width: 100%;             /* 佔滿手機寬度 */
         position: relative;
