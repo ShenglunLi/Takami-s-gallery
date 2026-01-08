@@ -1,6 +1,90 @@
 [
   {
-    "id": "TKM-0042",
+    "id": "TKM-0023",
+    "type": "series",
+    "title": "道の終わりに",
+    "desc": "",
+    "date": "2025-12-10",
+    "cover": "B06-道の終わりに/6-1.jpg",
+    "img": [
+      "B06-道の終わりに/6-1.jpg",
+      "B06-道の終わりに/6-2.jpg",
+      "B06-道の終わりに/6-3.jpg",
+      "B06-道の終わりに/6-4.jpg",
+      "B06-道の終わりに/6-5.jpg",
+      "B06-道の終わりに/6-7.jpg"
+    ],
+    "category": "短編漫画",
+    "order": 1
+  },
+  {
+    "id": "TKM-0022",
+    "type": "series",
+    "title": "思念使然",
+    "desc": "",
+    "date": "2025-04-30",
+    "cover": "B05-思念使然/5-1.jpg",
+    "img": [
+      "B05-思念使然/5-1.jpg",
+      "B05-思念使然/5-2.jpg",
+      "B05-思念使然/5-3.jpg",
+      "B05-思念使然/5-4.jpg"
+    ],
+    "category": "短編漫画",
+    "order": 2
+  },
+  {
+    "id": "TKM-0021",
+    "type": "series",
+    "title": "ついこぼれた本音",
+    "desc": "あなたは幸せを感じた。\"あなたがいれば\"",
+    "date": "2025-09-04",
+    "cover": "B04-ついこぼれた本音/4-1.jpg",
+    "img": [
+      "B04-ついこぼれた本音/4-1.jpg",
+      "B04-ついこぼれた本音/4-2.jpg",
+      "B04-ついこぼれた本音/4-3.jpg"
+    ],
+    "category": "短編漫画",
+    "order": 3
+  },
+  {
+    "id": "TKM-0020",
+    "type": "series",
+    "title": "私の返事",
+    "desc": "",
+    "date": "2025-05-18",
+    "cover": "B03-私の返事/3-1.jpg",
+    "img": [
+      "B03-私の返事/3-1.jpg",
+      "B03-私の返事/3-2.jpg",
+      "B03-私の返事/3-3.jpg",
+      "B03-私の返事/3-4.jpg",
+      "B03-私の返事/3-5.jpg"
+    ],
+    "category": "短編漫画",
+    "order": 4
+  },
+  {
+    "id": "TKM-0019",
+    "type": "series",
+    "title": "誓",
+    "desc": "",
+    "date": "2025-07-28",
+    "cover": "B02-誓/2-0.jpg",
+    "img": [
+      "B02-誓/2-0.jpg",
+      "B02-誓/2-1.jpg",
+      "B02-誓/2-2.jpg",
+      "B02-誓/2-3.jpg",
+      "B02-誓/2-4.jpg",
+      "B02-誓/2-5.jpg"
+    ],
+    "category": "短編漫画",
+    "order": 5
+  },
+  {
+    "id": "TKM-0018",
     "type": "series",
     "title": "冬に咲いた青",
     "desc": "",
@@ -19,90 +103,6 @@
       "B01-冬に咲いた青/1-10.jpg"
     ],
     "category": "短編漫画",
-    "order": 1
-  },
-  {
-    "id": "TKM-0039",
-    "type": "series",
-    "title": "誓",
-    "desc": "",
-    "date": "2025-07-28",
-    "cover": "B02-誓/2-0.jpg",
-    "img": [
-      "B02-誓/2-0.jpg",
-      "B02-誓/2-1.jpg",
-      "B02-誓/2-2.jpg",
-      "B02-誓/2-3.jpg",
-      "B02-誓/2-4.jpg",
-      "B02-誓/2-5.jpg"
-    ],
-    "category": "短編漫画",
-    "order": 2
-  },
-  {
-    "id": "TKM-0038",
-    "type": "series",
-    "title": "私の返事",
-    "desc": "",
-    "date": "2025-05-18",
-    "cover": "B03-私の返事/3-1.jpg",
-    "img": [
-      "B03-私の返事/3-1.jpg",
-      "B03-私の返事/3-2.jpg",
-      "B03-私の返事/3-3.jpg",
-      "B03-私の返事/3-4.jpg",
-      "B03-私の返事/3-5.jpg"
-    ],
-    "category": "短編漫画",
-    "order": 3
-  },
-  {
-    "id": "TKM-0040",
-    "type": "series",
-    "title": "ついこぼれた本音",
-    "desc": "",
-    "date": "2025-09-04",
-    "cover": "B04-ついこぼれた本音/4-1.jpg",
-    "img": [
-      "B04-ついこぼれた本音/4-1.jpg",
-      "B04-ついこぼれた本音/4-2.jpg",
-      "B04-ついこぼれた本音/4-3.jpg"
-    ],
-    "category": "短編漫画",
-    "order": 4
-  },
-  {
-    "id": "TKM-0037",
-    "type": "series",
-    "title": "思念使然",
-    "desc": "",
-    "date": "2025-04-30",
-    "cover": "B05-思念使然/5-1.jpg",
-    "img": [
-      "B05-思念使然/5-1.jpg",
-      "B05-思念使然/5-2.jpg",
-      "B05-思念使然/5-3.jpg",
-      "B05-思念使然/5-4.jpg"
-    ],
-    "category": "短編漫画",
-    "order": 5
-  },
-  {
-    "id": "TKM-0041",
-    "type": "series",
-    "title": "道の終わりに",
-    "desc": "",
-    "date": "2025-12-10",
-    "cover": "B06-道の終わりに/6-1.jpg",
-    "img": [
-      "B06-道の終わりに/6-1.jpg",
-      "B06-道の終わりに/6-2.jpg",
-      "B06-道の終わりに/6-3.jpg",
-      "B06-道の終わりに/6-4.jpg",
-      "B06-道の終わりに/6-5.jpg",
-      "B06-道の終わりに/6-7.jpg"
-    ],
-    "category": "短編漫画",
     "order": 6
   },
   {
@@ -117,6 +117,17 @@
     "order": 9999
   },
   {
+    "id": "TKM-0044",
+    "type": "single",
+    "title": "",
+    "desc": "",
+    "date": "2025-12-22",
+    "cover": "C-20251222-P.jpg",
+    "img": "C-20251222-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0002",
     "type": "single",
     "title": "",
@@ -128,7 +139,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0003",
+    "id": "TKM-0043",
     "type": "single",
     "title": "",
     "desc": "可愛玉璽",
@@ -139,7 +150,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0004",
+    "id": "TKM-0042",
     "type": "single",
     "title": "",
     "desc": "彧：（わ…私にも…！）",
@@ -150,7 +161,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0005",
+    "id": "TKM-0003",
     "type": "single",
     "title": "",
     "desc": "大丈夫。夜は、私の弱さをそっと受けとめてくれる。",
@@ -161,7 +172,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0014",
+    "id": "TKM-0004",
     "type": "single",
     "title": "",
     "desc": "戦場のない日に、あなたのもとへ。",
@@ -183,7 +194,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0017",
+    "id": "TKM-0005",
     "type": "single",
     "title": "",
     "desc": "それぞれの戦場へ",
@@ -194,7 +205,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0016",
+    "id": "TKM-0006",
     "type": "single",
     "title": "",
     "desc": "それぞれの戦場へ",
@@ -205,7 +216,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0035",
+    "id": "TKM-0041",
     "type": "series",
     "title": "猫と軍師",
     "desc": "「ねこさん、あなたは私の好きな人によく似ていますね。」",
@@ -220,7 +231,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0015",
+    "id": "TKM-0008",
     "type": "single",
     "title": "",
     "desc": "海天一色",
@@ -231,7 +242,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0020",
+    "id": "TKM-0040",
     "type": "single",
     "title": "",
     "desc": "心配なところ(?)",
@@ -242,7 +253,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0019",
+    "id": "TKM-0009",
     "type": "single",
     "title": "",
     "desc": "海のような心",
@@ -253,7 +264,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0018",
+    "id": "TKM-0010",
     "type": "single",
     "title": "",
     "desc": "空のような魂",
@@ -264,7 +275,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0021",
+    "id": "TKM-0039",
     "type": "single",
     "title": "",
     "desc": "中秋。酒派とお茶派",
@@ -275,7 +286,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0034",
+    "id": "TKM-0038",
     "type": "series",
     "title": "日常的なエピソード",
     "desc": "",
@@ -289,7 +300,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0013",
+    "id": "TKM-0011",
     "type": "single",
     "title": "",
     "desc": "勿忘我-ワスレナグサ",
@@ -300,7 +311,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0036",
+    "id": "TKM-0037",
     "type": "series",
     "title": "Waltz",
     "desc": "",
@@ -314,7 +325,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0022",
+    "id": "TKM-0036",
     "type": "single",
     "title": "",
     "desc": "知梟雄者，創其霸業。",
@@ -325,7 +336,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0011",
+    "id": "TKM-0012",
     "type": "single",
     "title": "",
     "desc": "「ええ、知ってるよ。名前も、花言葉も……」",
@@ -336,18 +347,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0023",
-    "type": "single",
-    "title": "",
-    "desc": "夢のような世界線",
-    "date": "2025-09-14",
-    "cover": "C-20250914-P.jpg",
-    "img": "C-20250914-P.jpg",
-    "category": "落書き",
-    "order": 9999
-  },
-  {
-    "id": "TKM-0012",
+    "id": "TKM-0013",
     "type": "single",
     "title": "",
     "desc": "「この花の名前を知っていますか？」",
@@ -358,18 +358,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0024",
-    "type": "single",
-    "title": "",
-    "desc": "かわ（盲目",
-    "date": "2025-09-06",
-    "cover": "C-20250906-P.jpg",
-    "img": "C-20250906-P.jpg",
-    "category": "落書き",
-    "order": 9999
-  },
-  {
-    "id": "TKM-0043",
+    "id": "TKM-0035",
     "type": "single",
     "title": "",
     "desc": "強風といえば……\r\n\r\n…\r\nはい、すみません。",
@@ -380,7 +369,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0006",
+    "id": "TKM-0014",
     "type": "single",
     "title": "",
     "desc": "強風の中に、勝利の予感がある。",
@@ -391,29 +380,22 @@
     "order": 9999
   },
   {
-    "id": "TKM-0025",
-    "type": "single",
-    "title": "",
-    "desc": "7かくかかわ",
+    "id": "TKM-0034",
+    "type": "series",
+    "title": "7かくかまとめ",
+    "desc": "",
     "date": "2025-08-22",
-    "cover": "C-20250822-P.jpg",
-    "img": "C-20250822-P.jpg",
+    "cover": "C-20250822-7かくかまとめ/20250822-P.jpg",
+    "img": [
+      "C-20250822-7かくかまとめ/20250822-P.jpg",
+      "C-20250822-7かくかまとめ/20250906-P.jpg",
+      "C-20250822-7かくかまとめ/20250914-P.jpg"
+    ],
     "category": "落書き",
     "order": 9999
   },
   {
-    "id": "TKM-0009",
-    "type": "single",
-    "title": "",
-    "desc": "  雨過天晴\n「もう大丈夫ですよ。」",
-    "date": "2025-08-19",
-    "cover": "A-20250819-P.jpg",
-    "img": "A-20250819-P.jpg",
-    "category": "カラーイラスト",
-    "order": 9999
-  },
-  {
-    "id": "TKM-0010",
+    "id": "TKM-0015",
     "type": "single",
     "title": "",
     "desc": "  風和日麗\n「あなたがいれば、私の世界が広がっていく。」",
@@ -424,7 +406,18 @@
     "order": 9999
   },
   {
-    "id": "TKM-0008",
+    "id": "TKM-0016",
+    "type": "single",
+    "title": "",
+    "desc": "  雨過天晴\n「もう大丈夫ですよ。」",
+    "date": "2025-08-19",
+    "cover": "A-20250819-P1.jpg",
+    "img": "A-20250819-P1.jpg",
+    "category": "カラーイラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0017",
     "type": "single",
     "title": "",
     "desc": "  風雨欲來\n「さあ、いきましょう。」",
@@ -435,7 +428,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0026",
+    "id": "TKM-0033",
     "type": "single",
     "title": "",
     "desc": "ハグの日",
@@ -446,7 +439,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0027",
+    "id": "TKM-0032",
     "type": "single",
     "title": "",
     "desc": "好きなところ",
@@ -457,7 +450,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0028",
+    "id": "TKM-0031",
     "type": "single",
     "title": "",
     "desc": "二人きりの時",
@@ -468,40 +461,22 @@
     "order": 9999
   },
   {
-    "id": "TKM-0044",
-    "type": "single",
-    "title": "",
-    "desc": "\"あなたがいれば\"",
-    "date": "2025-07-29",
-    "cover": "C-20250729-P.jpg",
-    "img": "C-20250729-P.jpg",
-    "category": "落書き",
-    "order": 9999
-  },
-  {
-    "id": "TKM-0045",
-    "type": "single",
-    "title": "",
-    "desc": "あなたも幸せを感じた。",
-    "date": "2025-07-19",
-    "cover": "C-20250719-P.jpg",
-    "img": "C-20250719-P.jpg",
-    "category": "落書き",
-    "order": 9999
-  },
-  {
-    "id": "TKM-0046",
-    "type": "single",
-    "title": "",
-    "desc": "あなたは幸せを感じた。",
+    "id": "TKM-0030",
+    "type": "series",
+    "title": "July",
+    "desc": "",
     "date": "2025-07-09",
-    "cover": "C-20250709-P.jpg",
-    "img": "C-20250709-P.jpg",
+    "cover": "C-20250709-July/20250709-P.jpg",
+    "img": [
+      "C-20250709-July/20250709-P.jpg",
+      "C-20250709-July/20250719-P.jpg",
+      "C-20250709-July/20250729-P.jpg"
+    ],
     "category": "落書き",
     "order": 9999
   },
   {
-    "id": "TKM-0047",
+    "id": "TKM-0029",
     "type": "single",
     "title": "",
     "desc": "軍師達の悪巧み",
@@ -512,7 +487,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0033",
+    "id": "TKM-0028",
     "type": "series",
     "title": "年齡差主張",
     "desc": "",
@@ -526,7 +501,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0029",
+    "id": "TKM-0027",
     "type": "single",
     "title": "",
     "desc": "幼馴染の妄想",
@@ -537,7 +512,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0030",
+    "id": "TKM-0026",
     "type": "single",
     "title": "",
     "desc": "推し ポイント",
@@ -548,7 +523,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0032",
+    "id": "TKM-0025",
     "type": "series",
     "title": "嘉／操にとって",
     "desc": "郭嘉→そうそうは唯一です\r\n曹操→役に立つ人さえあれば、誰でも愛してあげる\r\nと思います",
@@ -562,7 +537,7 @@
     "order": 9999
   },
   {
-    "id": "TKM-0031",
+    "id": "TKM-0024",
     "type": "single",
     "title": "",
     "desc": "practice",
