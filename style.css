@@ -159,7 +159,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     height: 100%;
     position: absolute;
     inset: 0;
-    background-image: url('img/hero-bg.jpg');
+    /* 修改這裡：使用 var() 引用變數，並提供一個預設路徑 */
+    background-image: var(--hero-img, url('img/page-hero.jpg')); 
     background-size: cover;
     background-position: center;
     background-color: var(--hero-fallback-bg);
@@ -171,15 +172,15 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 
 .page-gallery .page-hero-bg {
-    --hero-img: url('img/hero/page-hero.jpg');
+    --hero-img: url('img/hero/gallery.jpg');
 }
 
 .page-life .page-hero-bg {
-    --hero-img: url('img/hero/page-hero.jpg');
+    --hero-img: url('img/hero/life.jpg');
 }
 
 .page-new .page-hero-bg {
-    --hero-img: url('img/hero/page-hero.jpg');
+    --hero-img: url('img/hero/new.jpg');
 }
 
 .page-hero-bg::after {
@@ -289,9 +290,9 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     transition: var(--transition-base);
 }
 
-.card-new { --card-img: url('img/index/new.jpg'); }
-.card-gallery { --card-img: url('img/index/gallery.jpg'); }
-.card-life { --card-img: url('img/index/life.jpg'); }
+.card-new { --card-img: url('img/hero/new.jpg'); }
+.card-gallery { --card-img: url('img/hero/gallery.jpg'); }
+.card-life { --card-img: url('img/hero/life.jpg'); }
 
 /* .card:hover { transform: var(--hover-lift); } */
 /* .card:hover::before { transform: scale(1.1); }
