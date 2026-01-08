@@ -808,7 +808,31 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .info-nav-btn.prev { left: 30px; }
 .info-nav-btn.next { right: 30px; }
 
-.page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem;  display: none; }
+/* .page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem;  display: none; } */
+.page-count-label {
+    /* position: absolute;
+    bottom: 15px; right: 15px; */
+    color: var(--text-main);
+    background: var(--bg-color);
+    padding: 4px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem; 
+    font-weight: 700;
+    display: none; 
+    cursor: pointer;
+}
+.badge-icon::before {
+    content: ""; /* 必須留空字串 */
+    display: inline-block;
+    width: 18px;  /* 手動設定圖示寬度 */
+    height: 18px; /* 手動設定圖示高度 */
+    background-image: url("img/icon/read_more.png");
+    background-size: contain;    /* 確保圖片完整縮放至框架內 */
+    background-repeat: no-repeat;
+    background-position: center;
+    vertical-align: sub;         /* 視視覺效果微調對齊 */
+    margin-right: 6px;
+}
 .page-count-label.active { display: block; }
 
 .info-details {

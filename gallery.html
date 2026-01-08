@@ -55,7 +55,7 @@
                 <button class="info-nav-btn prev" id="infoPrev" onclick="changeWork(-1)"><i class="fas fa-chevron-left"></i></button>
                 <div id="infoCoverBox" class="info-cover-box" onclick="tryEnterViewer()">
                     <img id="infoCoverImg" src="" alt="Cover">
-                    <span class="page-count-label" id="infoPageCount"></span>
+                    <!-- <span class="page-count-label" id="infoPageCount"></span> -->
                 </div>
                 <div class="info-details">
                     <div class="info-header-meta">
@@ -73,6 +73,7 @@
                     </div>
                     <h2 id="infoTitle">作品標題</h2>
                     <p id="infoDesc">作品描述內容...</p>
+                    <a class="page-count-label" id="infoPageCount" onclick="tryEnterViewer()"></a>
                 </div>
                 <button class="info-nav-btn next" id="infoNext" onclick="changeWork(1)"><i class="fas fa-chevron-right"></i></button>
             </div>
@@ -378,7 +379,8 @@
             const coverBox = document.getElementById('infoCoverBox');
 
             if (isSeries) {
-                pageBadge.innerText = `繼續閱讀 ${item.img.length}P`;
+                pageBadge.innerText = `続きを読む [${item.img.length}P]`;
+                pageBadge.classList.add('badge-icon'); // 加入一個標記類別
                 pageBadge.classList.add('active');
                 coverBox.classList.add('is-series');
             } else {
