@@ -735,8 +735,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     max-width: var(--container-width);
 
     /* 改為使用整個 viewport 的穩定尺寸 */
-    height: 100vh;
-    max-height: 100vh;
+    height: 90vh;
+    /* max-height: 100vh; */
 
     margin: auto;
     gap: 60px;
@@ -830,7 +830,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* --- 第二層：瀏覽層 (Viewer Layer) --- */
 .viewer-layer { 
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    position: absolute; top: 0; left: 0; width: 100%; height: 90%;
     display: none; flex-direction: column; align-items: center; 
     justify-content: end;
     z-index: 20; background: #000;
@@ -841,7 +841,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 #viewerLayer.active {
     display: flex !important; /* 強制覆蓋 JS 的 block */
     flex-direction: column;
-    height: 100%;
+    height: 90%;
     width: 100%;
     position: relative;
 }
@@ -861,8 +861,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* 修正：Indicator 置中並確保在最上層 */
 .viewer-indicator {
-    /* position: absolute; */
+    position: absolute;
     left: 50%;
+    bottom: -4px;
+    transform: translateX(-50%);
     display: flex;
     gap: 8px;
     z-index: 1000;
@@ -886,16 +888,22 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
     .info-layer { 
         flex-direction: column; 
-        gap: 8px; 
-        padding-top: 10px; 
+        height: 100%;
+        gap: 16px; 
+        padding-top: 60px; 
         overflow-y: auto; 
         position: relative; 
         touch-action: pan-y; /* 資訊層允許垂直捲動以閱讀文字 */
         justify-content: flex-start; /* 手機版從頂部開始排列 */
     }
     .viewer-layer.active{
-        justify-content: center;
+        justify-content: center;        
     }
+    #viewerLayer.active {
+        height: 100%;
+    }
+    
+
     /* 2. 圖片/檢視容器 (移除重複的 touch-action 與 min-width) */
     .info-cover-box, 
     .viewer-img-container {
@@ -905,7 +913,6 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         min-height: 300px;
         max-width: 100%;
         width: 100%;             /* 佔滿手機寬度 */
-        max-height: 70vh;        /* 限制高度在螢幕70%，留空間給文字 */
         position: relative;
         display: flex;
         align-items: center;
@@ -915,12 +922,17 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         overflow-y: auto; /* 確保內容超出時可以捲動 */
         overflow-x: hidden; /* 嚴格禁止水平溢出 */
     }
+/*     
+    .info-cover-box{
+        top: 40px;
+    } */
+    
 
     /* 3. 圖片主體 (整合 #infoCoverImg 與 #viewerImg，移除衝突設定) */
     #infoCoverImg, 
     #viewerImg {
-        max-height: 70vh;        /* 統一高度限制 */
-        max-width: 100%;
+        max-height: 100%;        /* 統一高度限制 */
+        /* max-width: 100%; */
         width: auto;             /* 確保比例正確不拉伸 */
         height: auto;            /* 確保比例正確不拉伸 */
         object-fit: contain;     /* 雙重保險：確保不被裁切 */
@@ -934,13 +946,14 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
     /* 4. 詳情與 UI 介面 */
     .info-details { 
+        /* margin-top: 8px; */
         padding: 8px 16px;
         gap: 0;
         width: 100%; 
         box-sizing: border-box; 
     }
     .info-header-meta {
-        margin-bottom: 4px;
+        margin-bottom: 0px;
     }
     .info-details h2 { font-size: 0.9rem; line-height: 1.2; margin: 0 0 4px 0; color: #fff; font-weight: 700; line-height: 1; }
     .info-details p { font-size: 0.9rem; line-height: 1.2; color: #ccc; margin-bottom: 8px; }
