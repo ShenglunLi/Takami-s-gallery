@@ -529,7 +529,6 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     padding: 5px 0; 
 }
 .blog-meta { display: flex;  justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.date-tag { font-size: 0.95rem; color: var(--primary-hover); font-weight: bold; }
 
 /* --- 電腦版佈局邏輯修正 --- */
 .blog-body { 
@@ -812,9 +811,12 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .page-count-label {
     /* position: absolute;
     bottom: 15px; right: 15px; */
+    text-align: center;
     color: var(--text-main);
     background: var(--bg-color);
     padding: 4px 16px;
+    margin-bottom: 8px;
+    width: 100%;
     border-radius: 8px;
     font-size: 0.9rem; 
     font-weight: 700;
@@ -835,18 +837,18 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 .page-count-label.active { display: block; }
 
-.info-details {
+/* .info-details {
     flex: 0.5; display: flex; flex-direction: column; align-items: flex-start;
-    padding: 20px 0; min-width: 200px;
-}
+    padding: 16px 0; min-width: 200px;
+} */
 .info-details h2 { font-size: 1.2rem; margin: 10px 0 15px 0; color: #fff; font-weight: 700; line-height: 1.2; }
 .info-details p { font-size: 0.9rem; line-height: 1.8; color: #ccc; margin-bottom: 25px; }
 
 .info-header-meta {
-    display: flex; justify-content: space-between; align-items: flex-start;
+    display: flex; justify-content: space-between; align-items: center;
     width: 100%; margin-bottom: 10px; min-height: 32px;
 }
-.date-tag {  color: var(--primary-hover); font-weight: bold; line-height: 1.8; }
+.date-tag {display: flex; font-size: 0.8em; text-align: center; color: var(--primary-hover); font-weight: bold; line-height: 1.8; }
 
 /* --- 第二層：瀏覽層 (Viewer Layer) --- */
 .viewer-layer { 
