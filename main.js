@@ -55,32 +55,47 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('keydown', function(event) {
     const overlay = document.getElementById('workOverlay');
     
-    // 只有在燈箱打開時才執行 (判斷 classList 是否含有 active)
-    if (overlay && overlay.classList.contains('active')) {
-        
+    // 確保燈箱開啟中
+    if (!overlay || !overlay.classList.contains('active')) return;
+
+    // 檢查目前是否在 Viewer 層 (根據您 updateOverlayUI 的邏輯判斷)
+    const isViewer = typeof isViewerActive !== 'undefined' && isViewerActive;
+
+    if (isViewer) {
+        /* --- Viewer Layer 操控邏輯 (同一作品換頁) --- */
+        const item = currentFilteredWorks[currentIndex];
+        if (!item || !item.img) return;
+
         switch (event.key) {
-            case 'Escape':
-            case 'Esc':
-                // 如果在瀏覽大圖模式 (Viewer)，按 Esc 執行返回；否則關閉燈箱
-                if (typeof isViewerActive !== 'undefined' && isViewerActive) {
-                    exitViewer();
-                } else {
-                    closeOverlay();
-                }
-                break;
-
             case 'ArrowLeft':
-                // 對應 infoPrev：切換到上一個作品
-                if (typeof changeWork === 'function') {
-                    changeWork(-1);
+                if (currentInnerIndex > 0) {
+                    currentInnerIndex--;
+                    updateViewerImage(); // 呼叫您提供的渲染函式
                 }
                 break;
-
             case 'ArrowRight':
-                // 對應 infoNext：切換到下一個作品
-                if (typeof changeWork === 'function') {
-                    changeWork(1);
+                if (currentInnerIndex < item.img.length - 1) {
+                    currentInnerIndex++;
+                    updateViewerImage(); // 呼叫您提供的渲染函式
                 }
+                break;
+            case 'Escape':
+                if (typeof backToInfo === 'function') backToInfo();
+                break;
+        }
+    } else {
+        /* --- Info Layer 操控邏輯 (切換不同作品) --- */
+        switch (event.key) {
+            case 'ArrowLeft':
+                // 觸發切換上一篇作品的邏輯
+                if (typeof changeWork === 'function') changeWork(-1);
+                break;
+            case 'ArrowRight':
+                // 觸發切換下一篇作品的邏輯
+                if (typeof changeWork === 'function') changeWork(1);
+                break;
+            case 'Escape':
+                if (typeof closeOverlay === 'function') closeOverlay();
                 break;
         }
     }
