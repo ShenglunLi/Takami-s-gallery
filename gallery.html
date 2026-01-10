@@ -298,15 +298,26 @@
                 group.innerHTML = `<h2 class="category-title">${cat}</h2><div class="gallery-grid"></div>`;
                 const grid = group.querySelector('.gallery-grid');
                 
+
+
                 works.forEach(work => {
                     const globalIdx = currentFilteredWorks.length;
                     currentFilteredWorks.push(work);
                     const card = document.createElement('div');
                     card.className = 'work-card';
                     card.onclick = () => openOverlay(globalIdx);
+
+                    // 取得圖片路徑
+                    const imgSrc = `img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}`;
+
                     card.innerHTML = `
                         ${work.type === 'series' ? `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>` : ''}
-                        <img src="img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}" alt="${work.title}">
+                        <img 
+                            src="${imgSrc}" 
+                            alt="${work.title}"
+                            onload="this.classList.add('loaded')"
+                            onerror="this.closest('.work-card').remove()"
+                        >
                     `;
                     grid.appendChild(card);
                 });

@@ -697,15 +697,22 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     transform: scale(1.02);
 }
 
+
+
 .work-card img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
     /* 確保圖片未載入前是透明的，才看得到底下的動畫 */
-    background-color: transparent; 
+    background-color: transparent;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
+.work-card img.loaded {
+    opacity: 1;
+}
 
 .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
