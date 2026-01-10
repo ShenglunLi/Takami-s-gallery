@@ -603,10 +603,6 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     .blog-image img {
         width: 100%; 
         height: auto;
-        max-height: 250;
-        /* 關鍵設定：cover 會填滿容器，並根據容器比例裁切多餘部分 */
-        /* 因為容器寬度是 100%，圖片寬度也是 100%，所以水平方向會剛好填滿而不裁切 */
-        /* 垂直方向若超出 250px 則會被裁切 */
         object-fit: cover; 
         object-position: center; /* 裁切時保留圖片中心區域 */
         display: block;
