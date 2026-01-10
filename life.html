@@ -12,6 +12,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* 預設狀態：限制為兩行 */
+        .content-wrapper .content-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 限制顯示兩行 */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.6;      /* 明確設定行高以便 JS 計算 */
+            margin: 0;
+        }
+
+        /* 展開狀態：取消行數限制 */
+        .blog-card.expanded .content-text {
+            display: block;
+            -webkit-line-clamp: initial;
+            overflow: visible;
+        }
+
+        /* 隱藏展開後的 more 按鈕 (選擇性) */
+        .blog-card.expanded .more-btn {
+            display: none;
+        }
+    </style>
     
 </head>
 <body class="page-life">
@@ -50,6 +73,19 @@
             <li><a href="#" class="sns-btn png-icon" style="--icon: url('img/icon/icon-pixiv.png'); --hover: url('img/icon/icon-pixiv-hover.png');"></a></li>
         </ul>
     </footer>
+    <div id="workOverlay" class="overlay" onclick="handleOverlayClick(event)">
+        <div id="overlayCloseBtn" class="overlay-close overlay-icon" onclick="closeOverlay()">
+            <span class="icon-svg icon-close"></span>
+        </div>
+
+        <div class="overlay-content">
+            <div id="viewerLayer" class="viewer-layer viewer-layer-life" style="display: flex;">
+                <div class="viewer-img-container">
+                    <img id="viewerImg" src="" alt="Full Image">
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
@@ -99,6 +135,7 @@
                 pagination.innerHTML = '';
                 return;
             }
+            
             // -------------------------
 
             currentPage = page;
@@ -107,41 +144,60 @@
             const pagedPosts = allPosts.slice(start, end);
 
             pagedPosts.forEach(post => {
-                const card = document.createElement('article');
-                card.className = 'blog-card';
-                card.onclick = (e) => {
-                    // 僅在手機版 (<= 900px) 才切換展開狀態
-                    if (window.innerWidth <= 900) {
-                        card.classList.toggle('expanded');
-                    }
-                };
+            const card = document.createElement('article');
+            card.className = 'blog-card';
+            // 移除原本在這裡的 card.onclick，統一交給內層判斷
 
-                // 修改渲染卡片的 HTML 結構
-                card.innerHTML = `
-                    <div class="blog-image">
-                        <img src="img/life/${post.img}" alt="Blog Image" loading="lazy">
+            card.innerHTML = `
+                <div class="blog-image">
+                    <img src="img/life/${post.img}" alt="Blog Image" loading="lazy" 
+                        onclick="event.stopPropagation(); openLifeViewer('img/life/${post.img}')" style="cursor: pointer;">
+                </div>
+                <div class="blog-main">
+                    <div class="blog-meta">
+                        <span class="date-tag">${post.date}</span>
                     </div>
-                    <div class="blog-main">
-                        <div class="blog-meta">
-                            <span class="date-tag">${post.date}</span>
+                    <div class="blog-body">
+                        <div class="content-wrapper">
+                            <p class="content-text">${post.content}</p>
+                        </div>
+                        <button class="more-btn" style="display: none;">...more</button>
+                    </div>
+                </div>
+            `;
+            blogList.appendChild(card);
 
-                        </div>
-                        <div class="blog-body">
-                            <div class="content-wrapper">
-                                <p>${post.content}</p>
-                            </div>
-                            <button class="more-btn">...more</button>
-                        </div>
-                    </div>
-                `;
-                blogList.appendChild(card);
-                
-                // 串接 Firebase 拍手數據 (僅讀取)
-                const clapRef = ref(db, 'claps/' + post.id);
-                onValue(clapRef, (snap) => {
-                    document.getElementById(`clap-${post.id}`).innerText = snap.val() || 0;
-                });
+            const blogMain = card.querySelector('.blog-main');
+            const contentText = card.querySelector('.content-text');
+            const moreBtn = card.querySelector('.more-btn');
+
+            // 使用 requestAnimationFrame 確保在瀏覽器渲染後的下一幀才計算高度
+            requestAnimationFrame(() => {
+                const style = window.getComputedStyle(contentText);
+                // 確保取得精確的數值
+                const lineHeight = parseFloat(style.lineHeight) || 24; 
+                const textHeight = contentText.scrollHeight;
+
+                // 計算實際行數 (取四捨五入避免小數點誤差)
+                const rowCount = Math.round(textHeight / lineHeight);
+
+                // 只有當實際行數「大於」2 行時才顯示按鈕
+                if (rowCount > 2) {
+                    moreBtn.style.display = 'block'; 
+                    
+                    blogMain.style.cursor = 'pointer';
+                    blogMain.onclick = (e) => {
+                        if (window.innerWidth <= 900) {
+                            card.classList.toggle('expanded');
+                        }
+                    };
+                } else {
+                    moreBtn.style.display = 'none'; // 強制隱藏按鈕
+                    blogMain.style.cursor = 'default';
+                    blogMain.onclick = null; // 確保少於兩行時不具備點擊功能
+                }
             });
+        });
 
             renderPagination();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -164,6 +220,37 @@
         }
 
         document.addEventListener('DOMContentLoaded', initBlog);
+    </script>
+
+    <script>
+        // 開啟查看器
+        function openLifeViewer(imgSrc) {
+            const overlay = document.getElementById('workOverlay');
+            const viewerImg = document.getElementById('viewerImg');
+            
+            if (overlay && viewerImg) {
+                viewerImg.src = imgSrc;
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // 禁止底層捲動
+            }
+        }
+
+        // 關閉查看器
+        function closeOverlay() {
+            const overlay = document.getElementById('workOverlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                document.body.style.overflow = ''; // 恢復捲動
+            }
+        }
+
+        // 點擊背景關閉
+        function handleOverlayClick(e) {
+            if (e.target.id === 'workOverlay') {
+                closeLifeOverlay();
+            }
+        }
+
     </script>
     
 

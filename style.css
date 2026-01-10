@@ -579,10 +579,12 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 
 /* 電腦版下隱藏展開元件與遮罩 */
-.more-btn, .fade-overlay { display: none !important; }
-
+@media (min-width: 901px) {
+    .more-btn, .fade-overlay { display: none !important; }
+}
 /* --- 手機版 RWD 修正 (900px 以下) --- */
-@media (max-width: 900px) {.blog-card { 
+@media (max-width: 900px) {
+    .blog-card { 
         flex-direction: column; 
         gap: 20px; 
         margin-bottom: 40px; 
@@ -606,18 +608,36 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
     .content-wrapper {
         column-count: 1;
-        height: auto;
-        max-height: 1.8em; 
+        /* 移除固定 height，改用 line-height 搭配 clamp */
+        height: auto; 
+        max-height: 3.6em; /* 假設行高 1.8em，兩行為 3.6em */
+        line-height: 1.8em;
         display: -webkit-box;
-        -webkit-line-clamp: 1;
+        -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
         padding-right: 0;
+        transition: max-height 0.3s ease; /* 加入平滑過渡 */
+    }
+
+    /* 修正點：確保選擇器正確指向 .blog-card.expanded 並覆蓋 max-height */
+    .blog-card.expanded .content-wrapper {
+        display: block; /* 移除 flexbox 限制 */
+        -webkit-line-clamp: initial;
+        max-height: none; /* 關鍵：必須取消高度限制 */
+        overflow: visible;
+    }
+
+    /* 修正點：統一處理 .content-text (如果有使用的話) */
+    .blog-card.expanded .content-text {
+        display: block;
+        -webkit-line-clamp: initial;
+        overflow: visible;
     }
 
     /* 手機版：重新啟用更多按鈕 (仿社群樣式) */
     .more-btn {
-        display: inline-block !important;
+        display: inline-block;
         background: none;
         border: none;
         color: var(--icon-hover);
@@ -628,12 +648,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         margin-top: 5px;
     }
 
-    /* 手機版：展開狀態 */
-    .blog-card.expanded .content-wrapper {
-        max-height: none;
-        display: block;
-        -webkit-line-clamp: unset;
-    }
+/* 展開後隱藏按鈕 */
     .blog-card.expanded .more-btn {
         display: none !important;
     }
@@ -940,7 +955,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     position: absolute; top: 0; left: 0; width: 100%; height: 90%;
     display: none; flex-direction: column; align-items: center; 
     justify-content: end;
-    z-index: 20; background: #000;
+    z-index: 20;
 }
 .viewer-layer.active { display: flex; }
 
@@ -980,6 +995,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 @media (min-width: 900px) {
     .viewer-indicator {margin-bottom: -20px; }
+    .viewer-layer-life {height: 100%; }
 }
 .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.3s; }
 .dot.active { background: #fff; transform: scale(1.2); }
@@ -1068,6 +1084,9 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
     .viewer-layer { 
         height: 100%; 
+    }
+    .viewer-layer-life{
+        justify-content: center;
     }
 
     .viewer-indicator {
