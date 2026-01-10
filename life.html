@@ -181,7 +181,7 @@
                 function checkImageRatio() {
                     const width = imgElement.naturalWidth;
                     const height = imgElement.naturalHeight;
-                    if (height > width) {
+                    if (height >= width) {
                         imgContainer.classList.add('portrait-mode'); // 直式：固定 300px
                     } else {
                         imgContainer.classList.add('landscape-mode'); // 橫式：高度自適應

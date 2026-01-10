@@ -598,9 +598,22 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         min-width: auto;
         height: 200px; /* 統一卡片圖片區域高度 */
         overflow: hidden; /* 確保超出垂直範圍的圖片被裁切 */
+        display: flex;
+        justify-content: center; /* 水平居中 */
+        align-items: center;     /* 垂直居中 */
+    }
+
+    .blog-image.portrait-mode img{
+        height: 100%; /* 強制圖片高度填滿容器 */
+        /* 核心 1：讓圖片填滿容器並保持比例，自動裁切多餘部分 */
+        object-fit: cover;
+        /* 核心 2：指定裁切後的對齊位置為正中央 */
+        object-position: center;
+        
+        display: block;
     }
     
-    .blog-image img {
+    .blog-image.landscape-mode img {
         width: 100%; 
         height: auto;
         object-fit: cover; 
