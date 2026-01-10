@@ -125,7 +125,7 @@
             const pagination = document.getElementById('pagination');
             blogList.innerHTML = '';
 
-            // --- 調整：處理空內容情況 ---
+            // 處理空內容情況
             if (allPosts.length === 0) {
                 blogList.innerHTML = `
                     <div style="text-align: center; padding: 100px 0; color: #888; font-size: 1.2rem;">
@@ -135,8 +135,6 @@
                 pagination.innerHTML = '';
                 return;
             }
-            
-            // -------------------------
 
             currentPage = page;
             const start = (page - 1) * postsPerPage;
@@ -144,60 +142,84 @@
             const pagedPosts = allPosts.slice(start, end);
 
             pagedPosts.forEach(post => {
-            const card = document.createElement('article');
-            card.className = 'blog-card';
-            // 移除原本在這裡的 card.onclick，統一交給內層判斷
+                const card = document.createElement('article');
+                card.className = 'blog-card';
 
-            card.innerHTML = `
-                <div class="blog-image">
-                    <img src="img/life/${post.img}" alt="Blog Image" loading="lazy" 
-                        onclick="event.stopPropagation(); openLifeViewer('img/life/${post.img}')" style="cursor: pointer;">
-                </div>
-                <div class="blog-main">
-                    <div class="blog-meta">
-                        <span class="date-tag">${post.date}</span>
+                // 渲染結構：預設加入 loading 類別
+                card.innerHTML = `
+                    <div class="blog-image">
+                        <img src="img/life/${post.img}" alt="Blog Image" loading="lazy" 
+                            onclick="event.stopPropagation(); openLifeViewer('img/life/${post.img}')" style="cursor: pointer;">
                     </div>
-                    <div class="blog-body">
-                        <div class="content-wrapper">
-                            <p class="content-text">${post.content}</p>
+                    <div class="blog-main">
+                        <div class="blog-meta">
+                            <span class="date-tag">${post.date}</span>
                         </div>
-                        <button class="more-btn" style="display: none;">...more</button>
+                        <div class="blog-body">
+                            <div class="content-wrapper">
+                                <p class="content-text">${post.content}</p>
+                            </div>
+                            <button class="more-btn" style="display: none;">...more</button>
+                        </div>
                     </div>
-                </div>
-            `;
-            blogList.appendChild(card);
+                `;
+                blogList.appendChild(card);
 
-            const blogMain = card.querySelector('.blog-main');
-            const contentText = card.querySelector('.content-text');
-            const moreBtn = card.querySelector('.more-btn');
+                const imgContainer = card.querySelector('.blog-image');
+                const imgElement = imgContainer.querySelector('img');
+                const blogMain = card.querySelector('.blog-main');
+                const contentText = card.querySelector('.content-text');
+                const moreBtn = card.querySelector('.more-btn');
 
-            // 使用 requestAnimationFrame 確保在瀏覽器渲染後的下一幀才計算高度
-            requestAnimationFrame(() => {
-                const style = window.getComputedStyle(contentText);
-                // 確保取得精確的數值
-                const lineHeight = parseFloat(style.lineHeight) || 24; 
-                const textHeight = contentText.scrollHeight;
-
-                // 計算實際行數 (取四捨五入避免小數點誤差)
-                const rowCount = Math.round(textHeight / lineHeight);
-
-                // 只有當實際行數「大於」2 行時才顯示按鈕
-                if (rowCount > 2) {
-                    moreBtn.style.display = 'block'; 
-                    
-                    blogMain.style.cursor = 'pointer';
-                    blogMain.onclick = (e) => {
-                        if (window.innerWidth <= 900) {
-                            card.classList.toggle('expanded');
-                        }
-                    };
+                // --- 邏輯 1：偵測圖片比例 (橫式 vs 直式) ---
+                if (imgElement.complete) {
+                    checkImageRatio();
                 } else {
-                    moreBtn.style.display = 'none'; // 強制隱藏按鈕
-                    blogMain.style.cursor = 'default';
-                    blogMain.onclick = null; // 確保少於兩行時不具備點擊功能
+                    imgElement.onload = checkImageRatio;
                 }
+
+                function checkImageRatio() {
+                    const width = imgElement.naturalWidth;
+                    const height = imgElement.naturalHeight;
+                    if (height > width) {
+                        imgContainer.classList.add('portrait-mode'); // 直式：固定 300px
+                    } else {
+                        imgContainer.classList.add('landscape-mode'); // 橫式：高度自適應
+                    }
+                }
+
+                // --- 邏輯 2：計算文字行數與展開功能 ---
+                requestAnimationFrame(() => {
+                    const style = window.getComputedStyle(contentText);
+                    const lineHeight = parseFloat(style.lineHeight) || 24; 
+                    const textHeight = contentText.scrollHeight;
+                    const rowCount = Math.round(textHeight / lineHeight);
+
+                    // 當實際行數「大於 1 行」時顯示按鈕並啟用展開功能
+                    if (rowCount > 2) {
+                        moreBtn.style.display = 'block'; 
+                        blogMain.style.cursor = 'pointer';
+                        blogMain.onclick = (e) => {
+                            if (window.innerWidth <= 900) {
+                                card.classList.toggle('expanded');
+                            }
+                        };
+                    } else {
+                        moreBtn.style.display = 'none';
+                        blogMain.style.cursor = 'default';
+                        blogMain.onclick = null;
+                    }
+                });
+
+                // 串接 Firebase 拍手數據 (維持原本邏輯)
+                const clapRef = ref(db, 'claps/' + post.id);
+                onValue(clapRef, (snap) => {
+                    const clapCount = snap.val() || 0;
+                    // 假設您 HTML 內有拍手顯示元素，請確保 ID 正確
+                    const clapDisplay = card.querySelector(`#clap-${post.id}`);
+                    if (clapDisplay) clapDisplay.innerText = clapCount;
+                });
             });
-        });
 
             renderPagination();
             window.scrollTo({ top: 0, behavior: 'smooth' });
