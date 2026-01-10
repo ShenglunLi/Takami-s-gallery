@@ -54,11 +54,11 @@
             <div id="infoLayer" class="info-layer">
                 <button class="info-nav-btn prev" id="infoPrev" onclick="changeWork(-1)"><i class="fas fa-chevron-left"></i></button>
                 <div id="infoCoverBox" class="info-cover-box" onclick="tryEnterViewer()">
+                    <a class="page-count-label" id="infoPageCount" onclick="tryEnterViewer()"></a>
                     <img id="infoCoverImg" src="" alt="Cover">
-                    <!-- <span class="page-count-label" id="infoPageCount"></span> -->
                 </div>
                 <div class="info-details">
-                    <a class="page-count-label" id="infoPageCount" onclick="tryEnterViewer()"></a>
+                    <!-- <a class="page-count-label" id="infoPageCount" onclick="tryEnterViewer()"></a> -->
                     <div class="info-header-meta">
                         <div class="date-tag" id="infoDate"></div>
                         <div class="clap-section" id="clapSection">
@@ -265,7 +265,7 @@
             container.innerHTML = '';
             currentFilteredWorks = [];
 
-            // --- 核心修正：定義您想要的分類順序 ---
+            // 定義您想要的分類排列順序 (排序)
             const customOrder = ['カラーイラスト', '短編漫画', '落書き'];
 
             let cats;

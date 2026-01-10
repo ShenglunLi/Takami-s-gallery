@@ -664,9 +664,49 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; }
 
 /* --- 網格卡片樣式 --- */
-.work-card { position: relative; background: #eee; aspect-ratio: 1 / 1; overflow: hidden; cursor: pointer; transition: 0.3s; }
+/* .work-card { position: relative; background: #eee; aspect-ratio: 1 / 1; overflow: hidden; cursor: pointer; transition: 0.3s; }
 .work-card:hover { opacity: 0.9; transform: scale(1.02); }
-.work-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.work-card img { width: 100%; height: 100%; object-fit: cover; display: block; } */
+
+.work-card {
+    position: relative;
+    /* 這裡使用淡灰色漸層模擬光影 */
+    background: #eee linear-gradient(
+        90deg, 
+        rgba(255, 255, 255, 0) 0%, 
+        rgba(255, 255, 255, 0.5) 50%, 
+        rgba(255, 255, 255, 0) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite; /* 循環播放閃爍動畫 */
+    
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* 閃爍動畫：控制背景位置產生位移感 */
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.work-card:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.work-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    /* 確保圖片未載入前是透明的，才看得到底下的動畫 */
+    background-color: transparent; 
+}
+
+
 .series-badge { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; display: flex; align-items: center; gap: 5px; z-index: 5; }
 
 
@@ -778,6 +818,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     /* 僅保留必要的 GPU 提示，避免重算模糊 */
     backface-visibility: hidden;
     transform: translateZ(0);
+    z-index: 0;
 }
 
 
@@ -797,6 +838,26 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .info-cover-box.is-series { cursor: pointer;  transform: scale(1.01);}
 
+/* 建立半透明遮罩層 */
+.info-cover-box::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    background-color: rgba(0, 0, 0, 0.5); /* 半透明黑色，可自行調整數值 */
+    backdrop-filter: blur(1px);           /* 關鍵：背景模糊效果 */
+    -webkit-backdrop-filter: blur(8px);    /* 支援 Safari 瀏覽器 */
+    
+    z-index: 1;                            /* 確保在圖片 (預設 0) 之上 */
+    pointer-events: none;                  /* 讓點擊事件可以穿透遮罩，點到下方的圖片或容器 */
+    display: none;
+}
+
+.info-cover-box.is-series::after { display: block;}
+
 .info-nav-btn {
     position: fixed; top: 50%; transform: translateY(-50%);
     background: rgba(255, 255, 255, 0.05); color: white; border: none;
@@ -807,35 +868,52 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .info-nav-btn.prev { left: 30px; }
 .info-nav-btn.next { right: 30px; }
 
-/* .page-count-label { position: absolute; bottom: 15px; right: 15px; color: #fff; background: rgba(0,0,0,0.7); padding: 4px 8px; border-radius: 8px; font-size: 0.9rem;  display: none; } */
+
 .page-count-label {
-    /* position: absolute;
-    bottom: 15px; right: 15px; */
+    position: absolute;
+    top: 50%;              /* 距離頂部 50% */
+    left: 50%;             /* 距離左側 50% */
+    transform: translate(-50%, -50%); /* 關鍵：向左及向上偏移自身寬高的 50% 以達到精準置中 */
     text-align: center;
-    color: var(--text-main);
-    background: var(--bg-color);
+    color: var(--text-light-subtitle);
+    background: var(--bg-black);
     padding: 4px 16px;
-    margin-bottom: 8px;
-    width: 100%;
+    min-width: 200px;
     border-radius: 8px;
     font-size: 0.9rem; 
-    font-weight: 700;
+    font-weight: 500;
     display: none; 
     cursor: pointer;
 }
+
 .badge-icon::before {
-    content: ""; /* 必須留空字串 */
+    content: "";
     display: inline-block;
-    width: 18px;  /* 手動設定圖示寬度 */
-    height: 18px; /* 手動設定圖示高度 */
-    background-image: url("img/icon/read_more.png");
-    background-size: contain;    /* 確保圖片完整縮放至框架內 */
-    background-repeat: no-repeat;
-    background-position: center;
-    vertical-align: sub;         /* 視視覺效果微調對齊 */
+    
+    /* 1. 尺寸與對齊 */
+    width: 16px;
+    height: 16px;
+    vertical-align: -13%; /* 建議用 middle 或 text-bottom 較精準 */
     margin-right: 6px;
+
+    /* 2. 核心遮罩設定 (Masking) */
+    /* 這裡把圖片當成模板，只有有形狀的地方會顯示背景色 */
+    -webkit-mask-image: url("img/icon/icon-read-more.svg");
+    mask-image: url("img/icon/icon-read-more.svg");
+    
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+
+    /* 3. 客製化填色 */
+    /* 只要改這一行，SVG 就會變色 */
+    background-color: var(--text-light-subtitle); 
+    
 }
-.page-count-label.active { display: block; }
+.page-count-label.active { display: block; z-index: 1000; }
 
 /* .info-details {
     flex: 0.5; display: flex; flex-direction: column; align-items: flex-start;
@@ -911,7 +989,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     .info-layer { 
         flex-direction: column; 
         height: 100%;
-        gap: 16px; 
+        gap: 8px; 
         padding-top: 60px; 
         overflow-y: auto; 
         position: relative; 
@@ -930,7 +1008,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     .info-cover-box, 
     .viewer-img-container {
         flex: 0 0 auto;
-        top: 10px;
+        top: 0;
         height: auto;
         min-height: 300px;
         max-height: 80%;
@@ -978,7 +1056,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     .info-header-meta {
         margin-bottom: 0px;
     }
-    .info-details h2 { font-size: 0.9rem; line-height: 1.2; margin: 0 0 4px 0; color: #fff; font-weight: 700; line-height: 1; }
+    .info-details h2 { font-size: 0.9rem; line-height: 1.2; margin: 0 0 8px 0; color: #fff; font-weight: 700; line-height: 1; }
     .info-details p { font-size: 0.9rem; line-height: 1.2; color: #ccc; margin-bottom: 8px; }
 
     .viewer-layer { 
@@ -1000,6 +1078,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
     .overlay-close, 
     .overlay-back { 
+        width: 24px;
+        height: 24px;
         top: 20px; 
         left: 20px; 
         right: auto; 
