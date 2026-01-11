@@ -208,9 +208,12 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 
 /* 配合hero隱藏，調整 main 上邊距 */
-.gallery-container, .new-container, .blog-container, .info-container{
-     margin: 150px auto 0 !important;
+ .info-container, .new-container, .blog-container {
+     margin: 150px auto 0;
 }
+    .gallery-container{
+        margin: 180px auto 0;
+   }
 
 
 
@@ -1368,9 +1371,13 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 @media(min-width: 900px) {
 
     .info-container{
+        margin-top: 180px;
         flex-direction: row;
         align-items: start;
         gap: 40px;
+    }
+    .intro-text{
+        margin-bottom: 80px;
     }
     .sns-links {
         gap: 45px;
