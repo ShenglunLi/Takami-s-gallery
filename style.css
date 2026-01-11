@@ -208,7 +208,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 
 /* 配合hero隱藏，調整 main 上邊距 */
-.gallery-container, .new-container, .blog-container{
+.gallery-container, .new-container, .blog-container, .info-container{
      margin: 150px auto 0 !important;
 }
 
@@ -229,6 +229,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .page-new .page-hero-bg {
     --hero-img: url('img/hero/new.jpg');
+}
+
+.page-info .page-hero-bg {
+    --hero-img: url('img/hero/info.jpg');
 }
 
 .page-hero-bg::after {
@@ -334,7 +338,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     content: "";
     position: absolute;
     inset: 0;
-    background: var(--overlay-dark);
+    /* background: var(--overlay-dark); */
     transition: var(--transition-base);
 }
 
@@ -349,12 +353,15 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 /* --- 4. Footer 區塊修正 --- */
 .footer {
     padding: 20px 0;
-    margin-top: 20px;
+    margin-top: 0px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 8px;
+}
+.index-footer{
+    margin-top: 20px;
 }
 
 .footer p {
@@ -364,43 +371,11 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     text-align: center;
 }
 
-/* --- Footer SNS 區塊修正 --- */
-/* 共用 SNS 按鈕基礎樣式 */
-.sns-links {
-    display: flex;
-    gap: 16px;
-    list-style: none;
-    padding: 0;
-}
-
-.sns-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--radius-full);
-    transition: all 0.3s ease;
-}
-/* PNG 圖示統一處理邏輯 */
-.png-icon {
-    background-image: var(--icon); /* 使用行內定義的預設圖 */
-    background-size: 20px;         /* 統一控制圖示大小 */
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.png-icon:hover {
-    background-image: var(--hover); /* 懸停時自動切換為行內定義的 Hover 圖 */
-    background-color: transparent;  /* 根據需求決定是否保留背景色 */
-    transform: translateY(-3px);
-}
 
 
 /* 電腦版微調 */
 @media (min-width: 900px) {
     .footer { padding: 30px 0; }
-    .sns-btn { width: 40px; height: 40px; }
 }
 /* 手機板微調 */
 @media (max-width: 900px) {
@@ -1339,3 +1314,81 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         
 
         }
+/* info 頁面新增樣式 */
+/* --- 佈局結構 --- */
+.info-container{
+    padding: 20px 30px;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+}
+
+
+.intro{
+    gap: 40px;
+}
+.intro-text{
+    margin-bottom: 40px;
+    line-height: 1.8;
+    color: var(--text-body);
+}
+
+/* --- Footer SNS 區塊修正 --- */
+/* 共用 SNS 按鈕基礎樣式 */
+.sns-links {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    list-style: none;
+    padding: 0;
+}
+
+.sns-links li {
+    gap: 20px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.sns-links p{
+    font-size: 0.75rem;
+}
+@media(min-width: 900px) {
+
+    .info-container{
+        flex-direction: row;
+        align-items: start;
+        gap: 40px;
+    }
+    .sns-links {
+        gap: 45px;
+        display: flex;
+        flex-direction: row;
+    }
+    .sns-links li {
+        gap: 10px;
+    }
+}
+
+.sns-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    transition: all 0.3s ease;
+}
+/* PNG 圖示統一處理邏輯 */
+.png-icon {
+    background-image: var(--icon); /* 使用行內定義的預設圖 */
+    background-size: 32px;         /* 統一控制圖示大小 */
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.png-icon:hover {
+    background-image: var(--hover); /* 懸停時自動切換為行內定義的 Hover 圖 */
+    background-color: transparent;  /* 根據需求決定是否保留背景色 */
+    transform: translateY(-3px);
+}
