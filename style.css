@@ -8,10 +8,10 @@
     --container-width: 1400px;
 
     /* 色彩系統 - 基本 (暖色淺色系) */
-    --primary-color: #91371c;      /* 主色：深咖啡色，取代深藍以符合暖調 */
-    --primary-hover: #8d6e63;      /* 懸浮色：淺咖啡色 */
-    --primary-muted: #878787;     /* 輔助色：淺米色 */
-    --bg-color: #ffffff;           /* 全域背景：米白色 (Creamy White) */
+    --primary-color: #915a1c;      /* 主色 */
+    --primary-hover: #b98448;      /* 懸浮色 */
+    --primary-muted: #878787;     /* 輔助色 */
+    --bg-color: #ffffff;           /* 全域背景 */
     --bg-color-ts: rgba(55, 55, 55, 0.6);
     --bg-ts:rgba(55, 55, 55, 0);
     --bg-black:#0f0e0e;
@@ -239,7 +239,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.6); 
+    background: rgba(0, 0, 0, 0.2); /* 調整遮罩深淺 */
 }
 
 .hero-content {
@@ -519,9 +519,12 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* 1. 卡片容器：確保子元素等高 */
 .blog-card {
+    border-top: 1px solid #d6d6d6;
     display: flex;
-    gap: 40px;
-    margin-bottom: 80px;
+    gap: 20px;
+    padding-top: 20px;
+    margin-bottom: 20px;
+
     /* 關鍵：預設為 stretch，讓圖片區與文字區高度永遠相等 */
     align-items: stretch;
     min-height: 300px; /* 確保即使文字只有一行，圖片也至少有 300px 高 */
@@ -530,7 +533,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 /* 2. 圖片容器：設定固定寬度，高度隨父層縮放 */
 .blog-image {
     flex: 0 0 40%;
-    max-width: 450px;
+    /* max-width: 450px; */
     position: relative; /* 為了讓內容物絕對定位 */
     border-radius: 4px;
     overflow: hidden;
@@ -546,17 +549,24 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     display: block;
 }
 
+.blog-image.portrait-mode img{
+    height: 100%; /* 強制圖片高度填滿容器 */
+    /* 核心 1：讓圖片填滿容器並保持比例，自動裁切多餘部分 */
+    object-fit: cover;
+    /* 核心 2：指定裁切後的對齊位置為正中央 */
+    object-position: center;
+    display: block;
+}
+
 /* 4. 文字內容區：確保內部撐開 */
 .blog-main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    /* 讓文字內容自動撐開，並與圖片上下邊界對齊 */
-    justify-content: space-between;
-    /* 視需求加入 padding 確保文字不會貼邊 */
     padding: 5px 0; 
+    
 }
-.blog-meta { display: flex;  justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.blog-meta { display: flex;  justify-content: space-between; align-items: center; margin-bottom: 4px; }
 
 /* --- 電腦版佈局邏輯修正 --- */
 .blog-body { 
@@ -569,7 +579,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     column-count: 2;
     column-gap: 30px;
     column-fill: auto;
-    height: 16em; 
+    height: 10em; 
     overflow-y: auto; 
     line-height: 1.8;
     text-align: justify;
@@ -611,11 +621,11 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     .more-btn, .fade-overlay { display: none !important; }
 }
 /* --- 手機版 RWD 修正 (900px 以下) --- */
-@media (max-width: 496px) {
+@media (max-width: 900px) {
     
     .blog-card { 
         flex-direction: column; 
-        gap: 20px; 
+        gap: 10px; 
         margin-bottom: 40px; 
         cursor: pointer;
         align-items: flex-start; /* 手機版不需要等高，回到頂部對齊 */
@@ -639,7 +649,6 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         object-fit: cover;
         /* 核心 2：指定裁切後的對齊位置為正中央 */
         object-position: center;
-        
         display: block;
     }
     
@@ -651,7 +660,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         display: block;
     }
 
-    .blog-main { width: 100%; }
+    .blog-main {
+        width: 100%;
+        columns: 1;
+    }
 
     .content-wrapper {
         column-count: 1;
