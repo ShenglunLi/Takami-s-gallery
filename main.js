@@ -1,9 +1,11 @@
-// main.js
+// // main.js
 
-// 確保 DOM 載入後再執行
 document.addEventListener('DOMContentLoaded', () => {
     const menuBtn = document.getElementById('menuBtn');
     const fullMenu = document.getElementById('fullMenu');
+    // 新增：選取 page-hero 元素
+    const pageHero = document.querySelector('.page-hero');
+    
     let lastScrollY = window.scrollY;
 
     // --- 導覽選單切換 ---
@@ -13,25 +15,36 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (isActive) {
             menuBtn.classList.add('hidden');
+            // 如果選單開啟時也要隱藏 hero，可取消下方註解
+            // if (pageHero) pageHero.classList.add('hidden'); 
             document.body.style.overflow = 'hidden';
         } else {
             menuBtn.classList.remove('hidden');
+            // 如果選單關閉時要顯示 hero，可取消下方註解
+            // if (pageHero) pageHero.classList.remove('hidden');
             document.body.style.overflow = '';
         }
     };
 
-    // --- 捲動隱藏按鈕邏輯 ---
+    // --- 捲動隱藏按鈕與 Hero 邏輯 ---
     window.addEventListener('scroll', () => {
+        // 如果選單正開啟中，則不執行隱藏邏輯
         if (!menuBtn || (fullMenu && fullMenu.classList.contains('active'))) return;
         
         const currentScrollY = window.scrollY;
         const delta = currentScrollY - lastScrollY;
 
+        // 往下捲動超過 50px：隱藏
         if (delta > 0 && currentScrollY > 50) {
             menuBtn.classList.add('hidden');
-        } else if (delta < 0) {
+            if (pageHero) pageHero.classList.add('hidden');
+        } 
+        // 往上捲動：顯示
+        else if (delta < 0) {
             menuBtn.classList.remove('hidden');
+            if (pageHero) pageHero.classList.remove('hidden');
         }
+        
         lastScrollY = currentScrollY;
     });
 

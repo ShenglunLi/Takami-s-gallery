@@ -1,5 +1,6 @@
 /* --- 匯入 Noto Sans TC --- */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
 
 /* --- 設計系統變數 (Design System Tokens) --- */
 :root {
@@ -52,8 +53,8 @@
 
     
 
-    /* 字體排版 (Mobile-first) */
-    --font-main: 'Noto Sans TC', -apple-system, sans-serif;
+/* 字體順序：繁體中文 -> 日文 -> 系統預設 */
+    --font-main: 'Noto Sans TC', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     
     /* 文字大小定義 */
     --fs-h1: 2rem;       
@@ -150,6 +151,19 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     align-items: center;
 }
 
+.page-hero-small {
+    height: 100px;
+    padding: 20px 0;
+}
+.page-hero-small .hero-content h1 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+.page-hero-small .hero-content p {
+    font-size: 0.7rem;
+    margin-top: 4px;
+}
+
 .page-hero-large {
     height: 25vh;
 }
@@ -159,12 +173,34 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     height: 100%;
     position: absolute;
     inset: 0;
-    /* 修改這裡：使用 var() 引用變數，並提供一個預設路徑 */
     background-image: var(--hero-img, url('img/page-hero.jpg')); 
     background-size: cover;
     background-position: center;
     background-color: var(--hero-fallback-bg);
 }
+
+/* hero隱藏過度效果 */
+/* 確保 page-hero 有過渡動畫 */
+.page-hero {
+    transition: transform 0.4s ease, opacity 0.4s ease;
+    position: fixed; /* 或 fixed/sticky，視您的排版而定 */
+    top: 0;
+    z-index: 10;
+}
+
+/* 當加上 hidden 類別時的效果 */
+.page-hero.hidden {
+    transform: translateY(-100%); /* 向上推開隱藏 */
+    opacity: 0;
+    pointer-events: none; /* 隱藏後防止點擊 */
+}
+
+/* 配合hero隱藏，調整 main 上邊距 */
+main, .new-container, .blog-container{
+     margin: 120px auto 0 !important;
+}
+
+
 
 /* 2. 依照各頁面類別定義圖片路徑 */
 .page-index.page-hero-bg {
@@ -358,14 +394,14 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 /* --- 導覽選單樣式 --- */
 .menu-toggle {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 30px;
+    left: 10px;
     z-index: 1000;
     cursor: pointer;
-    padding: 8px 16px;
+    padding: 6px 12px;
     background: var(--bg-color-ts);
-    border-radius: 8px;
-    font-size: 1.5rem;
+    border-radius: 4px;
+    font-size: 1.2rem;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
@@ -687,7 +723,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .page-btn.active, .page-btn:hover { background: var(--primary-color); color: #fff; }
 
 /*Gallery專屬樣式 */
-.gallery-main { padding: 40px 0; min-height: 80vh; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.gallery-main { padding: 40px 0; min-height: 80vh; max-width: 1200px; padding: 0 20px; }
 .category-filter { display: flex; justify-content: flex-start; gap: 12px; margin-top: 20px; margin-bottom: 40px; flex-wrap: wrap; }
 .filter-btn { padding: 6px 24px; border: 1px solid var(--primary-color); background: transparent; color: var(--primary-color); border-radius: var(--radius-full); cursor: pointer; transition: 0.3s; }
 .filter-btn.active, .filter-btn:hover { background: var(--primary-color); color: #fff; }
