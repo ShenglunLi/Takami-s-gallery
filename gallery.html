@@ -34,8 +34,7 @@
         <div class="hero-content"><h1>Gallery</h1><p>ファンアートの置き場<br>版権元とは一切関係ありません</p></div>
     </header>
 
-    <main class="gallery-main">
-        <div class="category-filter" id="filterBar"></div>
+    <main class="gallery-container">
         <div id="galleryContainer"></div>
     </main>
 
@@ -235,89 +234,71 @@
             try {
                 const response = await fetch('data/content.json');
                 allWorks = await response.json();
-                renderFilters();
-                renderCategorizedGallery('All');
+                
+                // 直接執行畫廊渲染，不再需要 renderFilters()
+                renderCategorizedGallery();
+                
                 initTouchEvents();
-            } catch (err) { console.error("Load Failed:", err); }
-        }
-
-        function renderFilters() {
-            const categories = ['All', ...new Set(allWorks.map(w => w.category))];
-            document.getElementById('filterBar').innerHTML = categories.map(cat => `
-                <button class="filter-btn ${cat === 'All' ? 'active' : ''}" onclick="handleFilterClick('${cat}', this)">${cat}</button>
-            `).join('');
-        }
-
-        function handleFilterClick(category, btn) {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderCategorizedGallery(category);
-        }
-
-        function renderCategorizedGallery(filterTag) {
-            const container = document.getElementById('galleryContainer');
-            container.innerHTML = '';
-            currentFilteredWorks = [];
-
-            // 定義您想要的分類排列順序 (排序)
-            const customOrder = ['カラーイラスト', '短編漫画', '落書き'];
-
-            let cats;
-            if (filterTag === 'All') {
-                // 取得所有存在的分類
-                const existingCats = [...new Set(allWorks.map(w => w.category))];
-                
-                // 依照 customOrder 進行排序
-                cats = existingCats.sort((a, b) => {
-                    let indexA = customOrder.indexOf(a);
-                    let indexB = customOrder.indexOf(b);
-                    
-                    // 如果分類不在自定義順序中，則排在最後面
-                    if (indexA === -1) indexA = 999;
-                    if (indexB === -1) indexB = 999;
-                    
-                    return indexA - indexB;
-                });
-            } else {
-                cats = [filterTag];
+            } catch (err) { 
+                console.error("載入失敗:", err); 
             }
-
-            cats.forEach(cat => {
-                const works = allWorks.filter(w => w.category === cat);
-                // 如果該分類下沒有作品則跳過
-                if (works.length === 0) return;
-
-                const group = document.createElement('div');
-                group.className = 'category-group';
-                group.innerHTML = `<h2 class="category-title">${cat}</h2><div class="gallery-grid"></div>`;
-                const grid = group.querySelector('.gallery-grid');
-                
-
-
-                works.forEach(work => {
-                    const globalIdx = currentFilteredWorks.length;
-                    currentFilteredWorks.push(work);
-                    const card = document.createElement('div');
-                    card.className = 'work-card';
-                    card.onclick = () => openOverlay(globalIdx);
-
-                    // 取得圖片路徑
-                    const imgSrc = `img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}`;
-
-                    card.innerHTML = `
-                        ${work.type === 'series' ? `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>` : ''}
-                        <img 
-                            src="${imgSrc}" 
-                            alt="${work.title}"
-                            onload="this.classList.add('loaded')"
-                            onerror="this.closest('.work-card').remove()"
-                        >
-                    `;
-                    grid.appendChild(card);
-                });
-                container.appendChild(group);
-            });
         }
+
+
+
+        function renderCategorizedGallery() {
+    const container = document.getElementById('galleryContainer');
+    container.innerHTML = '';
+    currentFilteredWorks = [];
+
+    // 保留您的自定義排序順序
+    const customOrder = ['カラーイラスト', '短編漫畫', '落書き'];
+
+    // 取得所有存在的分類並排序
+    const existingCats = [...new Set(allWorks.map(w => w.category))];
+    const sortedCats = existingCats.sort((a, b) => {
+        let indexA = customOrder.indexOf(a);
+        let indexB = customOrder.indexOf(b);
+        
+        if (indexA === -1) indexA = 999;
+        if (indexB === -1) indexB = 999;
+        
+        return indexA - indexB;
+    });
+
+    // 依據排序後的分類進行渲染
+    sortedCats.forEach(cat => {
+        const works = allWorks.filter(w => w.category === cat);
+        if (works.length === 0) return;
+
+        const group = document.createElement('div');
+        group.className = 'category-group';
+        group.innerHTML = `<h2 class="category-title">${cat}</h2><div class="gallery-grid"></div>`;
+        const grid = group.querySelector('.gallery-grid');
+
+        works.forEach(work => {
+            const globalIdx = currentFilteredWorks.length;
+            currentFilteredWorks.push(work);
+            const card = document.createElement('div');
+            card.className = 'work-card';
+            card.onclick = () => openOverlay(globalIdx);
+
+            const imgSrc = `img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}`;
+
+            card.innerHTML = `
+                ${work.type === 'series' ? `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>` : ''}
+                <img 
+                    src="${imgSrc}" 
+                    alt="${work.title}"
+                    onload="this.classList.add('loaded')"
+                    onerror="this.closest('.work-card').remove()"
+                >
+            `;
+            grid.appendChild(card);
+        });
+        container.appendChild(group);
+    });
+}
 
         // 建立一個統一修正高度的函式
         function fixOverlayHeight() {
