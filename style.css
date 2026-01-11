@@ -208,13 +208,9 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 
 /* 配合hero隱藏，調整 main 上邊距 */
- .info-container, .new-container, .blog-container {
-     margin: 150px auto 0;
-}
-    .gallery-container{
-        margin: 180px auto 0;
-   }
-
+.info-container, .new-container  { margin: 150px auto 0; }
+.gallery-container{ margin: 180px auto 0; }
+.blog-container{ margin: 100px auto 0; }
 
 
 /* 2. 依照各頁面類別定義圖片路徑 */
@@ -518,7 +514,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 
 /* life專屬樣式 */
-.blog-container { max-width: 1100px; margin: 0 auto; padding: 40px 20px; min-height: 60vh; }
+.blog-container { max-width: 1100px; padding: 40px 20px; min-height: 60vh; }
 
 /* 1. 卡片容器：確保子元素等高 */
 .blog-card {
