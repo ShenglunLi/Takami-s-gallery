@@ -11,10 +11,11 @@
     <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
     <link rel="shortcut icon" href="https://takami-artwork.com/img/favicon-32.png">
     <link rel="apple-touch-icon" href="https://takami-artwork.com/img/apple-touch-icon.png">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
     <link rel="stylesheet" href="style.css">
+    <script data-goatcounter="https://alanzon.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
 
 <body class="page-index">
@@ -47,16 +48,38 @@
             <p>&copy; 2026 TAKAMI</p>
             <p>無断加工・転載・商用利用・AI学習禁止</p>
             <p>No editing, reposting, commercial use, or AI training without written permission.<br>Fanart: Original characters &copy; their owners. | Original works: All rights reserved.</p>
-            <span id="busuanzi_container_site_pv">
+            <!-- <span id="busuanzi_container_site_pv">
                 瀏覽人次: <span id="busuanzi_value_site_pv"></span>
+            </span> -->
+            <span id="stats-pv" style="display:none;">
+                瀏覽人次: <span id="visitor-count">--</span>
             </span>
         </footer>
     </main>
+
+    <script>
+        (function() {
+            var r = new XMLHttpRequest();
+            // 抓取全站總瀏覽人數 (TOTAL)
+            r.open('GET', 'https://alanzon.goatcounter.com/counter/TOTAL.json', true);
+            r.onreadystatechange = function() {
+                if (r.readyState == 4 && r.status == 200) {
+                    var data = JSON.parse(r.responseText);
+                    var countElem = document.getElementById('visitor-count');
+                    if (countElem) {
+                        countElem.innerText = data.count;
+                        document.getElementById('stats-pv').style.display = 'inline';
+                    }
+                }
+            };
+            r.send();
+        })();
+    </script>
+
     <script src="main.js"></script>
 </body>
-<script async src="https://vercount.one/js"></script>
-<script>
+<!-- <script async src="https://vercount.one/js"></script> -->
 
-</script>
+
 
 </html>
