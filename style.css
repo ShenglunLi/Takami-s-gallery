@@ -575,17 +575,25 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .content-wrapper {
     display: block; /* 確保區塊級渲染 */
-    column-count: 2;
+    column-count: 1;
     column-gap: 30px;
-    column-fill: auto;
-    height: 10em; 
-    overflow-y: auto; 
+    height: 15em; 
+    overflow-y: visible; 
     line-height: 1.8;
     text-align: justify;
     padding-right: 15px; /* 增加空間，讓捲動條有位置顯示 */
     /* 針對 Firefox 的極細捲動條設定 */
     scrollbar-width: thin;
     scrollbar-color: var(--icon-muted, #ccc) transparent;
+}
+
+/* 為了保險起見，確保電腦版下文字不受到 line-clamp 限制 */
+@media (min-width: 901px) {
+    .content-wrapper .content-text {
+        display: block !important;
+        -webkit-line-clamp: initial !important;
+        overflow: visible !important;
+    }
 }
 
 .content-wrapper p{

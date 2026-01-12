@@ -182,28 +182,30 @@
                     }
                 }
 
-                // --- 邏輯 2：計算文字行數與展開功能 ---
+            // --- 邏輯 2：計算文字行數與展開功能 ---
+            if (window.innerWidth <= 900) {
+                // 僅在手機版執行收合計算
                 requestAnimationFrame(() => {
                     const style = window.getComputedStyle(contentText);
                     const lineHeight = parseFloat(style.lineHeight) || 24; 
                     const textHeight = contentText.scrollHeight;
                     const rowCount = Math.round(textHeight / lineHeight);
 
-                    // 當實際行數「大於 1 行」時顯示按鈕並啟用展開功能
+                    // 當實際行數大於 2 行時顯示按鈕
                     if (rowCount > 2) {
                         moreBtn.style.display = 'block'; 
                         blogMain.style.cursor = 'pointer';
-                        blogMain.onclick = (e) => {
-                            if (window.innerWidth <= 900) {
-                                card.classList.toggle('expanded');
-                            }
+                        blogMain.onclick = () => {
+                            card.classList.toggle('expanded');
                         };
-                    } else {
-                        moreBtn.style.display = 'none';
-                        blogMain.style.cursor = 'default';
-                        blogMain.onclick = null;
                     }
                 });
+            } else {
+                // 電腦版：強制顯示所有內容，不綁定點擊事件
+                moreBtn.style.display = 'none';
+                blogMain.style.cursor = 'default';
+                blogMain.onclick = null;
+            }
 
                 // 串接 Firebase 拍手數據 (維持原本邏輯)
                 const clapRef = ref(db, 'claps/' + post.id);
