@@ -24,7 +24,7 @@
     --text-muted: #9b9b9b;         /* 輔助與次要文字：中灰 */
     
     /* 遮罩與特殊背景 */
-    --overlay-dark: rgba(0, 0, 0, 0.3);        /* 卡片預設遮罩 (略微調淺) */
+    --overlay-dark: rgba(0, 0, 0, 0.1);        /* 卡片預設遮罩 (略微調淺) */
     --overlay-hover: rgba(0, 0, 0, 0.15);      /* 卡片懸浮遮罩 */
     --card-default-bg: #f5f0e6;                /* 卡片底色：淺米色 */
     --hero-fallback-bg: #fdfaf5;                 /* Hero 底色 */
@@ -41,10 +41,11 @@
     /* 圓點分頁標記顏色 */
     --dot-color: rgba(255, 255, 255, 0.3);
     --dot-active-color: rgb(255, 255, 255);
-    --dot-shadow: 0 0 4px rgba(0, 0, 0, 0.8)
+    --dot-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
 
     /* 陰影 */
-    --text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    --text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    --text-shadow-dark: 0 4px 10px rgba(0, 0, 0, 0.8);
 
     /* New 頁面專用變數 */
     --accent-color: #e65100;       /* 焦橘色 (保留作為重點強調) */
@@ -228,6 +229,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .page-new .page-hero-bg {
     --hero-img: url('img/hero/new.jpg');
+    z-index: 0;
 }
 
 .page-info .page-hero-bg {
@@ -250,6 +252,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .hero-content h1 {
     color: var(--text-light);
+    letter-spacing: 2px;
+    word-spacing: 8px;
     margin: 10px 0;
     text-shadow: var(--text-shadow);
 }
@@ -307,19 +311,26 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     border-radius: var(--radius-md);
     overflow: hidden;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     background-color: var(--card-default-bg);
 }
 
 .card span {
-    font-size: var(--fs-h1);
+    font-size: var(--fs-h2);
     position: relative;
     z-index: 2;
     color: white;
-    font-size: var(--fs-label);
     font-weight: 700;
     text-shadow: var(--text-shadow)
+}
+.card-text{
+    margin-top: 12px;
+    color: var(--text-light);
+    z-index: 2;
+    text-align: center;
+    text-shadow: var(--text-shadow-dark)
 }
 
 /* 卡片背景與遮罩 */
@@ -337,7 +348,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     content: "";
     position: absolute;
     inset: 0;
-    /* background: var(--overlay-dark); */
+    background: var(--overlay-dark);
     transition: var(--transition-base);
 }
 
@@ -345,9 +356,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .card-gallery { --card-img: url('img/hero/gallery.jpg'); }
 .card-life { --card-img: url('img/hero/life.jpg'); }
 
-/* .card:hover { transform: var(--hover-lift); } */
-/* .card:hover::before { transform: scale(1.1); }
-.card:hover::after { background: var(--overlay-hover); } */
+
 
 /* --- 4. Footer 區塊修正 --- */
 .footer {
@@ -378,6 +387,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 /* 手機板微調 */
 @media (max-width: 900px) {
+    .card span{font-size: var(--fs-label);}
+    .card-text{ display: none; }
     .footer { gap: 4px; }
     .footer p { font-size: 0.5rem; }
 }
@@ -1355,6 +1366,9 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* --- Footer SNS 區塊修正 --- */
 /* 共用 SNS 按鈕基礎樣式 */
+.main-logo.info-logo:hover{
+    transform: scale(1);
+}
 .sns-links {
     display: flex;
     flex-direction: column;
@@ -1375,18 +1389,24 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 @media(min-width: 900px) {
 
     .info-container{
+        margin: 0 auto;
         margin-top: 180px;
         flex-direction: row;
+        justify-content: center;
         align-items: start;
         gap: 40px;
+        transform: translateX(-50px);
     }
+    /* .main-logo.info-logo{
+        position: static;
+    } */
     .intro-text{
         margin-bottom: 80px;
     }
     .sns-links {
-        gap: 45px;
         display: flex;
         flex-direction: row;
+        justify-content: space-between;
     }
     .sns-links li {
         gap: 10px;
