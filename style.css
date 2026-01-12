@@ -1059,7 +1059,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 @media (min-width: 900px) {
     .viewer-indicator {margin-bottom: -20px; }
-    .viewer-layer-life {height: 100%; }
+    .viewer-layer-life img { height: 90%;}
+    .life-img img { height: 90%; }
 }
 .dot { width: 8px; height: 8px; background: rgba(255,255,255,0.2); border-radius: 50%; transition: 0.3s; }
 .dot.active { background: #fff; transform: scale(1.2); }
