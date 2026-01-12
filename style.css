@@ -864,69 +864,56 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .info-layer {
     display: flex;
     flex-direction: row;
-
     width: 100%;
     max-width: var(--container-width);
-
-    /* 改為使用整個 viewport 的穩定尺寸 */
-    height: 90%;
-    /* max-height: 100vh; */
-
+    height: 95vh; /* 使用螢幕高度 */
     margin: auto;
     gap: 60px;
-
     align-items: center;
     justify-content: center;
-
     background: transparent;
+    overflow: hidden; /* 防止溢出 */
 }
 
 
-/* --- 圖片外層容器：唯一的圖片尺寸參考 --- */
 .info-cover-box {
     position: relative;
 
-    /* 不讓圖片容器撐爆版面 */
-    flex: 0 1 auto;
-    max-width: 75%;
-
-    /* 關鍵：高度來自 info-layer，而非 vh */
-    height: 100%;
+    /* 修改 1：不主動放大，基礎寬度設為自動 */
+    flex: 0 1 auto; 
+    
+    /* 修改 2：高度固定為 95% 視窗高度，讓圖片有明確的參考基準 */
+    height: 95vh; 
+    max-height: 95vh;
+    
+    /* 修改 3：寬度根據內容(圖片)自動縮放 */
+    width: fit-content; 
+    max-width: 80%; /* 給予上限避免橫圖太寬擠掉文字 */
 
     display: flex;
     align-items: center;
     justify-content: center;
-
     overflow: hidden;
 }
 
 
-/* --- 圖片本體：只做一次等比例縮放 --- */
 #infoCoverImg {
+    height: 100%; 
+    width: auto;  /* 寬度隨比例自動計算 */
+
     max-width: 100%;
     max-height: 100%;
 
-    width: auto;
-    height: auto;
-
     object-fit: contain;
     display: block;
-
     box-shadow: 0 15px 50px rgba(0,0,0,0.15);
-
-    /* 僅保留必要的 GPU 提示，避免重算模糊 */
-    backface-visibility: hidden;
-    transform: translateZ(0);
-    z-index: 0;
 }
 
 
 /* 文字區塊：緊貼圖片容器 */
 .info-details {
-    /* 3. 關鍵修改：不再分配剩餘空間，而是維持內容寬度 */
     flex: 0 0 auto; 
-    width: 300px; /* 給予文字區塊一個穩定的寬度 */
-    min-width: 250px;
+    width: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
