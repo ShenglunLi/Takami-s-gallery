@@ -1059,6 +1059,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 @media (min-width: 900px) {
     .viewer-indicator {margin-bottom: -20px; }
+    .viewer-layer.viewer-layer-life{ height: 100%; }
     .viewer-layer-life img { height: 90%;}
     .life-img img { height: 90%; }
 }
