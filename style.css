@@ -211,7 +211,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 /* 配合hero隱藏，調整 main 上邊距 */
 .info-container, .new-container  { margin: 150px auto 0; }
 .gallery-container{ margin: 180px auto 0; }
-.blog-container{ margin: 100px auto 0; }
+.blog-container{ margin: 140px auto 0; }
 
 
 /* 2. 依照各頁面類別定義圖片路徑 */
@@ -525,7 +525,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 
 /* life專屬樣式 */
-.blog-container { max-width: 1100px; padding: 40px 20px; min-height: 60vh; }
+.blog-container { max-width: 1100px; padding: 0 20px; min-height: 60vh; }
 
 /* 1. 卡片容器：確保子元素等高 */
 .blog-card {
@@ -738,7 +738,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 
 /* 分頁樣式 */
-.pagination { display: flex; justify-content: center; gap: 10px; margin-top: 50px; padding-bottom: 50px; }
+.pagination { display: flex; justify-content: center; gap: 10px; margin-top: 20px; margin-bottom: 20px; }
 .page-btn {
     width: 40px; height: 40px; border: 1px solid var(--primary-color);
     background: transparent; color: var(--primary-color);
@@ -1335,6 +1335,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         }
 /* info 頁面新增樣式 */
 /* --- 佈局結構 --- */
+.page-info {
+    height: auto !important;
+}
+
 .info-container{
     padding: 20px 30px;
     max-width: 1200px;
@@ -1378,8 +1382,9 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 @media(min-width: 900px) {
 
     .info-container{
-        margin: 0 auto;
+        margin: auto;
         margin-top: 180px;
+        margin-bottom: 40px;
         flex-direction: row;
         justify-content: center;
         align-items: start;
