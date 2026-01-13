@@ -58,7 +58,7 @@
                     <a class="page-count-label" id="infoPageCount" onclick="tryEnterViewer()"></a>
                     <img id="infoCoverImg" src="" alt="Cover">
                 </div>
-                <div class="info-details">
+                <div id="infoDetail" class="info-details">
                     <!-- <a class="page-count-label" id="infoPageCount" onclick="tryEnterViewer()"></a> -->
                     <div class="info-header-meta">
                         <div class="date-tag" id="infoDate"></div>
@@ -249,58 +249,58 @@
 
 
         function renderCategorizedGallery() {
-    const container = document.getElementById('galleryContainer');
-    container.innerHTML = '';
-    currentFilteredWorks = [];
+            const container = document.getElementById('galleryContainer');
+            container.innerHTML = '';
+            currentFilteredWorks = [];
 
-    // 保留您的自定義排序順序
-    const customOrder = ['カラーイラスト', '短編漫画', '落書き'];
+            // 保留您的自定義排序順序
+            const customOrder = ['カラーイラスト', '短編漫画', '落書き'];
 
-    // 取得所有存在的分類並排序
-    const existingCats = [...new Set(allWorks.map(w => w.category))];
-    const sortedCats = existingCats.sort((a, b) => {
-        let indexA = customOrder.indexOf(a);
-        let indexB = customOrder.indexOf(b);
-        
-        if (indexA === -1) indexA = 999;
-        if (indexB === -1) indexB = 999;
-        
-        return indexA - indexB;
-    });
+            // 取得所有存在的分類並排序
+            const existingCats = [...new Set(allWorks.map(w => w.category))];
+            const sortedCats = existingCats.sort((a, b) => {
+                let indexA = customOrder.indexOf(a);
+                let indexB = customOrder.indexOf(b);
+                
+                if (indexA === -1) indexA = 999;
+                if (indexB === -1) indexB = 999;
+                
+                return indexA - indexB;
+            });
 
-    // 依據排序後的分類進行渲染
-    sortedCats.forEach(cat => {
-        const works = allWorks.filter(w => w.category === cat);
-        if (works.length === 0) return;
+            // 依據排序後的分類進行渲染
+            sortedCats.forEach(cat => {
+                const works = allWorks.filter(w => w.category === cat);
+                if (works.length === 0) return;
 
-        const group = document.createElement('div');
-        group.className = 'category-group';
-        group.innerHTML = `<h2 class="category-title">${cat}</h2><div class="gallery-grid"></div>`;
-        const grid = group.querySelector('.gallery-grid');
+                const group = document.createElement('div');
+                group.className = 'category-group';
+                group.innerHTML = `<h2 class="category-title">${cat}</h2><div class="gallery-grid"></div>`;
+                const grid = group.querySelector('.gallery-grid');
 
-        works.forEach(work => {
-            const globalIdx = currentFilteredWorks.length;
-            currentFilteredWorks.push(work);
-            const card = document.createElement('div');
-            card.className = 'work-card';
-            card.onclick = () => openOverlay(globalIdx);
+                works.forEach(work => {
+                    const globalIdx = currentFilteredWorks.length;
+                    currentFilteredWorks.push(work);
+                    const card = document.createElement('div');
+                    card.className = 'work-card';
+                    card.onclick = () => openOverlay(globalIdx);
 
-            const imgSrc = `img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}`;
+                    const imgSrc = `img/gallery/${work.cover || (Array.isArray(work.img) ? work.img[0] : work.img)}`;
 
-            card.innerHTML = `
-                ${work.type === 'series' ? `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>` : ''}
-                <img 
-                    src="${imgSrc}" 
-                    alt="${work.title}"
-                    onload="this.classList.add('loaded')"
-                    onerror="this.closest('.work-card').remove()"
-                >
-            `;
-            grid.appendChild(card);
-        });
-        container.appendChild(group);
-    });
-}
+                    card.innerHTML = `
+                        ${work.type === 'series' ? `<div class="series-badge"><i class="fa-solid fa-copy"></i> ${work.img.length}</div>` : ''}
+                        <img 
+                            src="${imgSrc}" 
+                            alt="${work.title}"
+                            onload="this.classList.add('loaded')"
+                            onerror="this.closest('.work-card').remove()"
+                        >
+                    `;
+                    grid.appendChild(card);
+                });
+                container.appendChild(group);
+            });
+        }
 
         // 建立一個統一修正高度的函式
         function fixOverlayHeight() {
@@ -352,6 +352,7 @@
             document.getElementById('infoTitle').innerText = item.title;
             document.getElementById('infoDesc').innerText = item.desc || "";
 
+
             // 日期顯示：確保顯示狀態為 block，並填入日期
             const dateElement = document.getElementById('infoDate');
             dateElement.style.display = 'block'; // 強制顯示日期
@@ -367,6 +368,37 @@
             const isSeries = item.type === 'series';
             const pageBadge = document.getElementById('infoPageCount');
             const coverBox = document.getElementById('infoCoverBox');
+
+            // --- 偵測圖片比例 (橫式 vs 直式) ---
+            // 1. 先取得圖片 DOM 元素
+            const imgElement = document.getElementById('infoCoverImg');
+            const infoDetail = document.getElementById('infoDetail');
+
+
+            // 2. 定義偵測函數
+            function checkImageRatio() {
+                // 移除舊的 Class，確保狀態乾淨
+                infoDetail.classList.remove('portrait-info', 'landscape-info');
+
+                const width = imgElement.naturalWidth;
+                const height = imgElement.naturalHeight;
+
+                if (height >= width) {
+                    infoDetail.classList.add('portrait-info');
+                } else {
+                    infoDetail.classList.add('landscape-info');
+                }
+            }
+
+            // 3. 綁定偵測時機
+            // 如果圖片已經載入過（快取），直接執行
+            if (imgElement.complete && imgElement.naturalWidth !== 0) {
+                checkImageRatio();
+            } else {
+                // 如果圖片還在載入，監聽 load 事件
+                imgElement.onload = checkImageRatio;
+            }
+
 
             if (isSeries) {
                 pageBadge.innerText = `続きを読む [${item.img.length}P]`;
@@ -436,161 +468,161 @@
         function enterViewer() { isViewerActive = true; currentInnerIndex = 0; updateOverlayUI(); }
         function backToInfo() { isViewerActive = false; updateOverlayUI(); }
         function closeOverlay() {
-        document.getElementById('workOverlay').classList.remove('active');
-        document.body.style.overflow = 'auto';
-        document.body.style.backgroundColor = ''; // 關閉時還原底色
-    }
+            document.getElementById('workOverlay').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.body.style.backgroundColor = ''; // 關閉時還原底色
+        }
         function handleOverlayClick(e) { if (e.target.id === 'workOverlay') closeOverlay(); }
         function tryEnterViewer() { if (currentFilteredWorks[currentIndex].type === 'series') enterViewer(); }
 
         function initTouchEvents() {
-    const infoBox = document.getElementById('infoCoverBox');
-    const viewerBox = document.querySelector('.viewer-img-container');
+            const infoBox = document.getElementById('infoCoverBox');
+            const viewerBox = document.querySelector('.viewer-img-container');
 
-    const handleStart = (e) => {
-        if (e.touches.length === 2) {
-            // 雙指開始縮放
-            isZooming = true;
-            startDist = getDistance(e.touches[0], e.touches[1]);
-        } else if (e.touches.length === 1) {
-            // 單指開始
-            touchStartX = e.touches[0].clientX;
-            touchStartY = e.touches[0].clientY;
-            startTouchX = e.touches[0].clientX - posX;
-            startTouchY = e.touches[0].clientY - posY;
-            isSwiping = (scale <= 1.1); // 只有沒縮放時才啟動滑動切換
-        }
-    };
-
-    let lockDirection = null; // 用於鎖定方向：'horizontal', 'vertical', 或 null
-
-    const handleMove = (e) => {
-        const targetImg = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
-        if (!targetImg) return;
-
-    // 1. 雙指縮放邏輯 (優先處理，縮放時不考慮方向鎖定)
-    if (e.touches.length === 2 && isZooming) {
-        e.preventDefault();
-        const currentDist = getDistance(e.touches[0], e.touches[1]);
-        const diff = currentDist / startDist;
-        scale = Math.min(Math.max(1, lastScale * diff), 3);
-        updateTransform(targetImg);
-        return; // 雙指操作結束，跳出
-    }
-
-    // 2. 單指操作邏輯
-    if (e.touches.length === 1) {
-        const currentX = e.touches[0].clientX;
-        const currentY = e.touches[0].clientY;
-        const dx = currentX - touchStartX;
-        const dy = currentY - touchStartY;
-
-        // --- 方向鎖定判定 (Directional Lock) ---
-        if (!lockDirection) {
-            // 移動超過 6px 進行判定，避免過於靈敏
-            if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
-                if (Math.abs(dx) > Math.abs(dy)) {
-                    lockDirection = 'horizontal';
-                } else {
-                    lockDirection = 'vertical';
+            const handleStart = (e) => {
+                if (e.touches.length === 2) {
+                    // 雙指開始縮放
+                    isZooming = true;
+                    startDist = getDistance(e.touches[0], e.touches[1]);
+                } else if (e.touches.length === 1) {
+                    // 單指開始
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    startTouchX = e.touches[0].clientX - posX;
+                    startTouchY = e.touches[0].clientY - posY;
+                    isSwiping = (scale <= 1.1); // 只有沒縮放時才啟動滑動切換
                 }
+            };
+
+            let lockDirection = null; // 用於鎖定方向：'horizontal', 'vertical', 或 null
+
+            const handleMove = (e) => {
+                const targetImg = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
+                if (!targetImg) return;
+
+                // 1. 雙指縮放邏輯 (優先處理，縮放時不考慮方向鎖定)
+                if (e.touches.length === 2 && isZooming) {
+                    e.preventDefault();
+                    const currentDist = getDistance(e.touches[0], e.touches[1]);
+                    const diff = currentDist / startDist;
+                    scale = Math.min(Math.max(1, lastScale * diff), 3);
+                    updateTransform(targetImg);
+                    return; // 雙指操作結束，跳出
+                }
+
+                // 2. 單指操作邏輯
+                if (e.touches.length === 1) {
+                    const currentX = e.touches[0].clientX;
+                    const currentY = e.touches[0].clientY;
+                    const dx = currentX - touchStartX;
+                    const dy = currentY - touchStartY;
+
+                    // --- 方向鎖定判定 (Directional Lock) ---
+                    if (!lockDirection) {
+                        // 移動超過 6px 進行判定，避免過於靈敏
+                        if (Math.abs(dx) > 6 || Math.abs(dy) > 6) {
+                            if (Math.abs(dx) > Math.abs(dy)) {
+                                lockDirection = 'horizontal';
+                            } else {
+                                lockDirection = 'vertical';
+                            }
+                        }
+                        // 還沒判定出方向前，先不做任何事
+                        if (!lockDirection) return;
+                    }
+
+                    // --- 根據鎖定方向執行對應邏輯 ---
+                    
+                    if (lockDirection === 'vertical') {
+                        // [垂直鎖定模式]：不執行 preventDefault，讓瀏覽器原生上下滑動網頁
+                        // 此時不更新圖片 transform，確保 X 軸完全不動
+                        return; 
+                    }
+
+                    if (lockDirection === 'horizontal') {
+                        // [水平鎖定模式]：
+                        // 阻止瀏覽器預設行為（防止在水平滑動時頁面跟著上下晃動）
+                        if (e.cancelable) e.preventDefault();
+
+                        if (scale > 1.1) {
+                            // A. 縮放狀態下的拖動 (Pan)
+                            posX = currentX - startTouchX;
+                            posY = currentY - startTouchY;
+                            updateTransform(targetImg);
+                        } else if (isSwiping) {
+                            // B. 1x 狀態下的水平換頁預覽
+                            // 由於已經鎖定 horizontal，這裡不需要再 Math.abs 判斷
+                            targetImg.style.transition = 'none';
+                            targetImg.style.transform = `translateX(${dx * 0.3}px)`;
+                        }
+                    }
+                }
+            };
+
+            const handleEnd = (e) => {
+                lockDirection = null; // 手指離開時釋放方向鎖定
+                const targetImg = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
+                
+                if (isZooming) {
+                    lastScale = scale;
+                    if (e.touches.length < 2) isZooming = false;
+                }
+
+                if (scale <= 1.1) {
+                    // 處理作品切換
+                    let dx = e.changedTouches[0].clientX - touchStartX;
+                    if (targetImg) {
+                        targetImg.style.transition = 'transform 0.3s ease';
+                        targetImg.style.transform = 'scale(1) translate(0,0)';
+                    }
+                    if (isSwiping && Math.abs(dx) > 70) {
+                        isViewerActive ? changeInnerPage(dx < 0 ? 1 : -1) : changeWork(dx < 0 ? 1 : -1);
+                    }
+                    // 重設位移數值
+                    posX = 0; posY = 0; lastPosX = 0; lastPosY = 0;
+                }
+                isSwiping = false;
+            };
+
+            // 輔助函式
+            function getDistance(t1, t2) {
+                return Math.sqrt(Math.pow(t2.pageX - t1.pageX, 2) + Math.pow(t2.pageY - t1.pageY, 2));
             }
-            // 還沒判定出方向前，先不做任何事
-            if (!lockDirection) return;
+
+            function updateTransform(el) {
+                el.style.transition = 'none';
+                el.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+            }
+
+            [infoBox, viewerBox].forEach(box => {
+                if (box) {
+                    box.addEventListener('touchstart', handleStart, { passive: false });
+                    box.addEventListener('touchmove', handleMove, { passive: false });
+                    box.addEventListener('touchend', handleEnd, { passive: true });
+                }
+            });
         }
 
-        // --- 根據鎖定方向執行對應邏輯 ---
-        
-        if (lockDirection === 'vertical') {
-            // [垂直鎖定模式]：不執行 preventDefault，讓瀏覽器原生上下滑動網頁
-            // 此時不更新圖片 transform，確保 X 軸完全不動
-            return; 
+        function resetAllZoom() {
+            scale = 1;
+            lastScale = 1;
+            posX = 0;
+            posY = 0;
+            const imgs = [document.getElementById('infoCoverImg'), document.getElementById('viewerImg')];
+            imgs.forEach(img => {
+                if (img) {
+                    img.style.transition = 'transform 0.2s ease';
+                    img.style.transform = 'scale(1) translate(0,0)';
+                }
+            });
         }
 
-        if (lockDirection === 'horizontal') {
-            // [水平鎖定模式]：
-            // 阻止瀏覽器預設行為（防止在水平滑動時頁面跟著上下晃動）
-            if (e.cancelable) e.preventDefault();
-
-            if (scale > 1.1) {
-                // A. 縮放狀態下的拖動 (Pan)
-                posX = currentX - startTouchX;
-                posY = currentY - startTouchY;
-                updateTransform(targetImg);
-            } else if (isSwiping) {
-                // B. 1x 狀態下的水平換頁預覽
-                // 由於已經鎖定 horizontal，這裡不需要再 Math.abs 判斷
-                targetImg.style.transition = 'none';
-                targetImg.style.transform = `translateX(${dx * 0.3}px)`;
+        function tryEnterViewer() {
+            // 只有在完全沒縮放，且不是在滑動中才允許進入
+            if (scale <= 1.05 && !isZooming) {
+                if (currentFilteredWorks[currentIndex].type === 'series') enterViewer();
             }
         }
-    }
-};
-
-    const handleEnd = (e) => {
-        lockDirection = null; // 手指離開時釋放方向鎖定
-        const targetImg = isViewerActive ? document.getElementById('viewerImg') : document.getElementById('infoCoverImg');
-        
-        if (isZooming) {
-            lastScale = scale;
-            if (e.touches.length < 2) isZooming = false;
-        }
-
-        if (scale <= 1.1) {
-            // 處理作品切換
-            let dx = e.changedTouches[0].clientX - touchStartX;
-            if (targetImg) {
-                targetImg.style.transition = 'transform 0.3s ease';
-                targetImg.style.transform = 'scale(1) translate(0,0)';
-            }
-            if (isSwiping && Math.abs(dx) > 70) {
-                isViewerActive ? changeInnerPage(dx < 0 ? 1 : -1) : changeWork(dx < 0 ? 1 : -1);
-            }
-            // 重設位移數值
-            posX = 0; posY = 0; lastPosX = 0; lastPosY = 0;
-        }
-        isSwiping = false;
-    };
-
-    // 輔助函式
-    function getDistance(t1, t2) {
-        return Math.sqrt(Math.pow(t2.pageX - t1.pageX, 2) + Math.pow(t2.pageY - t1.pageY, 2));
-    }
-
-    function updateTransform(el) {
-        el.style.transition = 'none';
-        el.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
-    }
-
-    [infoBox, viewerBox].forEach(box => {
-        if (box) {
-            box.addEventListener('touchstart', handleStart, { passive: false });
-            box.addEventListener('touchmove', handleMove, { passive: false });
-            box.addEventListener('touchend', handleEnd, { passive: true });
-        }
-    });
-}
-
-function resetAllZoom() {
-    scale = 1;
-    lastScale = 1;
-    posX = 0;
-    posY = 0;
-    const imgs = [document.getElementById('infoCoverImg'), document.getElementById('viewerImg')];
-    imgs.forEach(img => {
-        if (img) {
-            img.style.transition = 'transform 0.2s ease';
-            img.style.transform = 'scale(1) translate(0,0)';
-        }
-    });
-}
-
-function tryEnterViewer() {
-    // 只有在完全沒縮放，且不是在滑動中才允許進入
-    if (scale <= 1.05 && !isZooming) {
-        if (currentFilteredWorks[currentIndex].type === 'series') enterViewer();
-    }
-}
 
         function resetUIInactivity() {
             const btns = [document.getElementById('overlayBackBtn'), document.getElementById('overlayCloseBtn')];
