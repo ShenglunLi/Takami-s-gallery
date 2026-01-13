@@ -372,12 +372,16 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     margin-top: 20px;
 }
 
-.footer p {
+.footer p, .visitor-count-text {
     font-size: 0.75rem;
     color: var(--text-muted);
     line-height: 1.4;
     text-align: center;
 }
+
+ .visitor-count-text span {
+    font-size: 0.75rem;
+ }
 
 
 
@@ -387,10 +391,11 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 /* 手機板微調 */
 @media (max-width: 900px) {
-    .card span{font-size: var(--fs-label);}
-    .card-text{ display: none; }
+    .card span {font-size: var(--fs-label);}
+    .card-text { display: none; }
     .footer { gap: 4px; }
     .footer p { font-size: 0.5rem; }
+    .visitor-count-text span { font-size: 0.5rem; }
 }
 
 
@@ -912,14 +917,15 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 /* 文字區塊：緊貼圖片容器 */
 .info-details {
-    flex: 0 0 auto; 
-    width: 200px;
+    flex: 0 0 auto;     
     display: flex;
     flex-direction: column;
     justify-content: center;
     /* 移除左側 padding，改由父層 gap 控制距離 */
     padding-left: 0; 
 }
+.info-details.portrait-info{ width: 400px; }
+.info-details.landscape-info{ width: 200px; }
 
 
 .info-cover-box.is-series { cursor: pointer;  transform: scale(1.01);}
