@@ -924,8 +924,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     /* 移除左側 padding，改由父層 gap 控制距離 */
     padding-left: 0; 
 }
-.info-details.portrait-info{ width: 400px; }
-.info-details.landscape-info{ width: 200px; }
+@media (min-width: 900px) {
+    .info-details.portrait-info{ width: 400px; }
+    .info-details.landscape-info{ width: 200px; }
+}
 
 
 .info-cover-box.is-series { cursor: pointer;  transform: scale(1.01);}
