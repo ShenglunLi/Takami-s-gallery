@@ -226,7 +226,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 
 .page-new .page-hero-bg {
-    --hero-img: url('img/hero/new.jpg');
+    --hero-img: url('img/hero/info.jpg');
     z-index: 0;
 }
 
@@ -350,7 +350,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     transition: var(--transition-base);
 }
 
-.card-new { --card-img: url('img/hero/new.jpg'); }
+.card-info { --card-img: url('img/hero/info.jpg'); }
 .card-gallery { --card-img: url('img/hero/gallery.jpg'); }
 .card-life { --card-img: url('img/hero/life.jpg'); }
 
