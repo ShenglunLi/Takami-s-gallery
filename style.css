@@ -157,6 +157,9 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     position: relative;
     height: 25vh;
     width: 100%;
+    min-height: 200px; /* 確保至少有 200px 的高度 */
+    object-fit: cover; /* 關鍵：自動裁切並填滿 */
+    object-position: center; /* 也可以設為 center top 確保人臉或標題不被切掉 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -166,7 +169,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     height: 140px;
     padding: 20px 0;
 }
-.page-hero-small .hero-content h1 {
+.page-hero-small h1 {
     margin: 0;
     font-size: 1.5rem;
 }
@@ -250,15 +253,25 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .hero-content h1 {
     color: var(--text-light);
-    letter-spacing: 2px;
-    word-spacing: 8px;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    word-spacing: 4px;
     margin: 10px 0;
     text-shadow: var(--text-shadow);
 }
 
 .hero-content p{
     color: var(--text-light);
-    letter-spacing: 3px;
+    font-size: 1.6rem;
+    letter-spacing: 5px;
+    text-shadow: var(--text-shadow);
+}
+.hero-content .memo{
+    color: var(--text-light);
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    word-spacing: 8px;
+    white-space: pre-wrap
 }
 
 .hero-content p:first-child {
