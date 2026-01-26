@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Zen+Antique+Soft&display=swap');
 
 /* --- 設計系統變數 (Design System Tokens) --- */
 :root {
@@ -248,13 +248,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     padding: 0 20px;
 }
 
-.hero-content h1 {
-    color: var(--text-light);
-    letter-spacing: 2px;
-    word-spacing: 8px;
-    margin: 10px 0;
-    text-shadow: var(--text-shadow);
-}
+   
+
 
 .hero-content p{
     color: var(--text-light);
@@ -272,28 +267,67 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .hero-content h1 {
     color: var(--text-light);
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    word-spacing: 4px;
-    margin: 10px 0;
-    text-shadow: var(--text-shadow);
-}
-
-.hero-content p{
-    color: var(--text-light);
-    font-size: 1.6rem;
-    letter-spacing: 5px;
-    text-shadow: var(--text-shadow);
-}
-.hero-content .memo{
-    color: var(--text-light);
     font-size: 0.6rem;
     letter-spacing: 2px;
-    word-spacing: 8px;
-    white-space: pre-wrap;
+    word-spacing: 6px;
     margin-bottom: 16px;
+    text-shadow: var(--text-shadow);
 }
 
+@media (max-width: 900px) {
+    .hero-content h1 {
+        font-weight: 500;
+        letter-spacing: 1px;
+        word-spacing: 3px;
+    }
+}
+
+@media (min-width: 900px) {
+    .hero-content h1 {font-size: 0.8em;}
+
+}
+
+/* 標題與注音的容器 */
+.hero-content .hero-title {
+    font-family: "Zen Antique Soft", "Noto Sans JP", serif;
+    color: var(--text-light);
+    font-size: 1.6rem;           /* 維持原本 p 的字體大小 */
+    letter-spacing: 0px;        /* 維持原本 p 的字距 */
+    line-height: 2.2;           /* 增加行高，為下方的假名留空間 */
+    text-shadow: var(--text-shadow);
+    margin-bottom: 56px;        /* 使用原本 .memo 的下邊距，維持佈局高度 */
+}
+
+/* 設定注音位置在下方 */
+.hero-content .hero-title ruby {
+    ruby-position: under;
+    -webkit-ruby-position: after;
+}
+
+/* 針對注音假名 (rt) 的樣式優化 */
+.hero-content .hero-title rt {
+    color: var(--text-light);   /* 維持原本 .memo 的顏色 */
+    font-size: 0.4rem;          /* 使用原本 .memo 的大小 */
+    ruby-align: center;
+    font-weight: normal;
+    text-shadow: var(--text-shadow);
+    /* 修正由於 ruby 預設導致的間距縮減 */
+    margin-top: 0.6em; 
+}
+
+/* 針對電腦版 (min-width: 900px) 的調整 */
+@media (min-width: 900px) {
+    .hero-content .hero-title {
+        font-size: 2rem;         /* 維持原本電腦版 p 的大小 */
+        letter-spacing: 15px;    /* 維持原本電腦版 p 的字距 */
+        text-indent: 15px;
+        margin-bottom: 50px;     /* 維持原本電腦版 .memo 的下邊距 */
+    }
+    
+    .hero-content .hero-title rt {
+        font-size: 0.5rem;       /* 維持原本電腦版 .memo 的大小 */
+    }
+}
 
 
 /* 2. Logo 中心對齊 Hero 下邊界 */
