@@ -345,20 +345,43 @@
             const item = currentFilteredWorks[currentIndex];
             if (!item) return;
 
+            const imgElement = document.getElementById('infoCoverImg');
+            const infoDetail = document.getElementById('infoDetail');
             const coverFile = item.cover || (Array.isArray(item.img) ? item.img[0] : item.img);
-            document.getElementById('infoCoverImg').src = `img/gallery/${coverFile}`;
+
+            // --- [1. 讀取狀態設定] ---
+            // 立即讓舊圖變透明，提示使用者正在切換
+            imgElement.classList.add('img-loading');
+
+            // --- [2. 定義載入完成後的行為] ---
+            imgElement.onload = function() {
+                // A. 移除讀取狀態（恢復不透明度）
+                imgElement.classList.remove('img-loading');
+
+                // B. 偵測圖片比例
+                infoDetail.classList.remove('portrait-info', 'landscape-info');
+                const width = imgElement.naturalWidth;
+                const height = imgElement.naturalHeight;
+                if (height >= width) {
+                    infoDetail.classList.add('portrait-info');
+                } else {
+                    infoDetail.classList.add('landscape-info');
+                }
+
+                // C. 啟動預載機制 (圖片載入完成後再抓下一張，不搶佔當前頻寬)
+                preloadAdjacentImages(item.category);
+            };
+
+            // --- [3. 更新圖片路徑與資訊] ---
+            imgElement.src = `img/gallery/${coverFile}`;
             
-            // 標題顯示：GAS 已淨化，直接顯示純淨標題
             document.getElementById('infoTitle').innerText = item.title;
             document.getElementById('infoDesc').innerText = item.desc || "";
-
-
-            // 日期顯示：確保顯示狀態為 block，並填入日期
             const dateElement = document.getElementById('infoDate');
-            dateElement.style.display = 'block'; // 強制顯示日期
+            dateElement.style.display = 'block';
             dateElement.innerText = item.date;
 
-            // --- 以下邏輯維持不變 ---
+            // --- [4. UI 按鈕與標籤邏輯] ---
             const currentCat = item.category;
             const infoPrev = document.getElementById('infoPrev');
             const infoNext = document.getElementById('infoNext');
@@ -368,48 +391,16 @@
             const isSeries = item.type === 'series';
             const pageBadge = document.getElementById('infoPageCount');
             const coverBox = document.getElementById('infoCoverBox');
-
-            // --- 偵測圖片比例 (橫式 vs 直式) ---
-            // 1. 先取得圖片 DOM 元素
-            const imgElement = document.getElementById('infoCoverImg');
-            const infoDetail = document.getElementById('infoDetail');
-
-
-            // 2. 定義偵測函數
-            function checkImageRatio() {
-                // 移除舊的 Class，確保狀態乾淨
-                infoDetail.classList.remove('portrait-info', 'landscape-info');
-
-                const width = imgElement.naturalWidth;
-                const height = imgElement.naturalHeight;
-
-                if (height >= width) {
-                    infoDetail.classList.add('portrait-info');
-                } else {
-                    infoDetail.classList.add('landscape-info');
-                }
-            }
-
-            // 3. 綁定偵測時機
-            // 如果圖片已經載入過（快取），直接執行
-            if (imgElement.complete && imgElement.naturalWidth !== 0) {
-                checkImageRatio();
-            } else {
-                // 如果圖片還在載入，監聽 load 事件
-                imgElement.onload = checkImageRatio;
-            }
-
-
             if (isSeries) {
                 pageBadge.innerText = `続きを読む [${item.img.length}P]`;
-                pageBadge.classList.add('badge-icon'); // 加入一個標記類別
-                pageBadge.classList.add('active');
+                pageBadge.classList.add('badge-icon', 'active');
                 coverBox.classList.add('is-series');
             } else {
                 pageBadge.classList.remove('active');
                 coverBox.classList.remove('is-series');
             }
 
+            // --- [5. Layer 切換邏輯] ---
             if (isViewerActive && isSeries) {
                 document.getElementById('infoLayer').style.display = 'none';
                 document.getElementById('viewerLayer').classList.add('active');
@@ -424,6 +415,22 @@
             }
 
             if (window.syncClaps) window.syncClaps(item.id);
+        }
+
+        // 獨立的預載函式（建議放在 updateOverlayUI 外部）
+        function preloadAdjacentImages(currentCat) {
+            const neighbors = [currentIndex - 1, currentIndex + 1];
+            neighbors.forEach(idx => {
+                if (idx >= 0 && idx < currentFilteredWorks.length) {
+                    const nextItem = currentFilteredWorks[idx];
+                    // 只預載同分類作品
+                    if (nextItem.category === currentCat) {
+                        const img = new Image();
+                        const file = nextItem.cover || (Array.isArray(nextItem.img) ? nextItem.img[0] : nextItem.img);
+                        img.src = `img/gallery/${file}`;
+                    }
+                }
+            });
         }
 
         function updateViewerImage() {

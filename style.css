@@ -949,7 +949,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     padding-left: 0; 
 }
 @media (min-width: 900px) {
-    .info-details.portrait-info{ width: 400px; }
+    .info-details.portrait-info{ width: 300px; }
+    .info-cover-box{max-height: 90vh;}
     .info-details.landscape-info{ width: 200px; }
 }
 
@@ -1144,10 +1145,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         overflow-y: auto; /* 確保內容超出時可以捲動 */
         overflow-x: hidden; /* 嚴格禁止水平溢出 */
     }
-/*     
-    .info-cover-box{
-        top: 40px;
-    } */
+
     
 
     /* 3. 圖片主體 (整合 #infoCoverImg 與 #viewerImg，移除衝突設定) */
@@ -1460,4 +1458,16 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     background-image: var(--hover); /* 懸停時自動切換為行內定義的 Hover 圖 */
     background-color: transparent;  /* 根據需求決定是否保留背景色 */
     transform: translateY(-3px);
+}
+
+
+/* 讓圖片在 src 改變時平滑切換 */
+#infoCoverImg {
+    transition: opacity 0.25s ease-in-out;
+    opacity: 1;
+}
+
+/* 下載中的透明度（您可以根據喜好調整 0.3 ~ 0.5） */
+.img-loading {
+    opacity: 0.3 !important;
 }
