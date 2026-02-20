@@ -661,6 +661,11 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     scrollbar-color: var(--icon-muted, #ccc) transparent;
 }
 
+
+.content-text
+{
+    white-space: pre-wrap;
+}
 /* 為了保險起見，確保電腦版下文字不受到 line-clamp 限制 */
 @media (min-width: 901px) {
     .content-wrapper .content-text {
