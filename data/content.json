@@ -106,6 +106,17 @@
     "order": 6
   },
   {
+    "id": "TKM-0049",
+    "type": "single",
+    "title": "王與臣",
+    "desc": "",
+    "date": "2026-03-10",
+    "cover": "A-20260310-P.jpg",
+    "img": "A-20260310-P.jpg",
+    "category": "カラーイラスト",
+    "order": 9999
+  },
+  {
     "id": "TKM-0048",
     "type": "series",
     "title": "軍師たちの当てっこ",
