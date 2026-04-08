@@ -106,6 +106,17 @@
     "order": 6
   },
   {
+    "id": "TKM-0051",
+    "type": "single",
+    "title": "春雪.jpg",
+    "desc": "郭嘉の日",
+    "date": "2026-04-09",
+    "cover": "D-20260409-P.jpg",
+    "img": "D-20260409-P.jpg",
+    "category": "モノクロイラスト",
+    "order": 9999
+  },
+  {
     "id": "TKM-0050",
     "type": "single",
     "title": "清明",
