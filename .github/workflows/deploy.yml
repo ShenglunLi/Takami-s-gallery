@@ -5,42 +5,42 @@ name: GitHub Pages 部署自動化
 on:
   push:
     branches:
-      - main  # 當 main 分支有新的 push（來自 GAS 或本地）時觸發
+      - main
 
-# 核心優化：處理併發衝突
+  workflow_dispatch:
+
 concurrency:
-  group: "pages"         # 將所有 Pages 部署歸類在同一組
-  cancel-in-progress: true # 若有新的推送，自動取消正在進行中的舊部署，避免 Error 400
+  group: "pages"
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   deploy:
-    # 設定環境名稱，這會與 GitHub 專案中的 Environments 設定連動
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      
+
     runs-on: ubuntu-latest
-    
-    # 賦予 GitHub Actions 必要的權限
-    permissions:
-      contents: read      # 讀取儲存庫內容
-      pages: write       # 寫入 Pages 服務
-      id-token: write    # 用於身分驗證（OIDC）
 
     steps:
-      - name: 檢出程式碼 (Checkout)
+      - name: 檢出程式碼
         uses: actions/checkout@v4
 
-      - name: 設定 Pages 環境 (Setup Pages)
+      - name: 設定 Pages 環境
         uses: actions/configure-pages@v4
 
-      - name: 上傳網頁成品 (Upload artifact)
+      - name: 上傳網頁成品
         uses: actions/upload-pages-artifact@v3
         with:
-          # 若您的 HTML 檔案在根目錄，請維持 '.'
-          # 若在特定目錄（如 dist），請改為 'dist'
-          path: '.'
+          path: .
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
 
-      - name: 執行部署 (Deploy to GitHub Pages)
+      - name: 執行部署
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
