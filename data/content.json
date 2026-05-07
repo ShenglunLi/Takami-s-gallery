@@ -106,6 +106,39 @@
     "order": 6
   },
   {
+    "id": "TKM-0054",
+    "type": "single",
+    "title": "触れたい",
+    "desc": "（逆光なら、私の表情はよく見えないよね。）",
+    "date": "2026-05-05",
+    "cover": "C-20260505-P.jpg",
+    "img": "C-20260505-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0055",
+    "type": "single",
+    "title": "晚風",
+    "desc": "夕暮れの風に満ちた空気の中で、君と一緒に。",
+    "date": "2026-05-02",
+    "cover": "C-20260502-P.jpg",
+    "img": "C-20260502-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0056",
+    "type": "single",
+    "title": "靜語",
+    "desc": "二人だけに聞こえるような声で。",
+    "date": "2026-04-25",
+    "cover": "C-20260425-P.jpg",
+    "img": "C-20260425-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0053",
     "type": "single",
     "title": "命定",
@@ -146,6 +179,28 @@
     "date": "2026-04-05",
     "cover": "C-20260405-P.jpg",
     "img": "C-20260405-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0057",
+    "type": "single",
+    "title": "",
+    "desc": "「…ふふ、笑っちゃうね。」",
+    "date": "2026-03-28",
+    "cover": "C-20260328-P.jpg",
+    "img": "C-20260328-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0058",
+    "type": "single",
+    "title": "",
+    "desc": "「——奉孝！」",
+    "date": "2026-03-23",
+    "cover": "C-20260323-P.jpg",
+    "img": "C-20260323-P.jpg",
     "category": "落書き",
     "order": 9999
   },
