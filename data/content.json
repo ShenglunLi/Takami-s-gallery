@@ -106,6 +106,17 @@
     "order": 6
   },
   {
+    "id": "TKM-0058",
+    "type": "single",
+    "title": "",
+    "desc": "「——奉孝！」",
+    "date": "2026-05-08",
+    "cover": "C-20260323-P.jpg",
+    "img": "C-20260323-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0054",
     "type": "single",
     "title": "触れたい",
@@ -190,17 +201,6 @@
     "date": "2026-03-28",
     "cover": "C-20260328-P.jpg",
     "img": "C-20260328-P.jpg",
-    "category": "落書き",
-    "order": 9999
-  },
-  {
-    "id": "TKM-0058",
-    "type": "single",
-    "title": "",
-    "desc": "「——奉孝！」",
-    "date": "2026-03-23",
-    "cover": "C-20260323-P.jpg",
-    "img": "C-20260323-P.jpg",
     "category": "落書き",
     "order": 9999
   },
