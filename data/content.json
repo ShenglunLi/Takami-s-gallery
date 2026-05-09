@@ -106,6 +106,17 @@
     "order": 6
   },
   {
+    "id": "TKM-0059",
+    "type": "single",
+    "title": "海の話",
+    "desc": "海が好きです。あなたに似ているから。",
+    "date": "2026-05-09",
+    "cover": "C-20260509-P.jpg",
+    "img": "C-20260509-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0054",
     "type": "single",
     "title": "触れたい",
