@@ -124,6 +124,17 @@
     "order": 7
   },
   {
+    "id": "TKM-0069",
+    "type": "single",
+    "title": "ハグの日",
+    "desc": "",
+    "date": "2026-08-09",
+    "cover": "C-20260809-P.jpg",
+    "img": "C-20260809-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0068",
     "type": "single",
     "title": "乘涼",
