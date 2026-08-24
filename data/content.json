@@ -124,6 +124,28 @@
     "order": 7
   },
   {
+    "id": "TKM-0071",
+    "type": "single",
+    "title": "",
+    "desc": "「……いえ、なんでもありません。」",
+    "date": "2026-08-24",
+    "cover": "C-20260824-P.jpg",
+    "img": "C-20260824-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0070",
+    "type": "single",
+    "title": "滿足",
+    "desc": "",
+    "date": "2026-08-19",
+    "cover": "D-20260819-P.jpg",
+    "img": "D-20260819-P.jpg",
+    "category": "モノクロイラスト",
+    "order": 9999
+  },
+  {
     "id": "TKM-0069",
     "type": "single",
     "title": "ハグの日",
