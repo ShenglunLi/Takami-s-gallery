@@ -8,3 +8,6 @@ Thumbs.db
 
 # 排除 Visual Studio Code 工作區設定檔
 作品集網站.code-workspace
+
+# 排除自行記錄用的檔案
+memo.md
