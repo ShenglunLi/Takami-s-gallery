@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZ2NDQ5P5R"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BZ2NDQ5P5R');
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diary | TAKAMI's Artwork</title>
+
+    <!-- 阻擋機器人及 Pinterest -->
+    <meta name="robots" content="index, follow, noai, max-image-preview:large">
+    <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+
+    <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
+    <link rel="shortcut icon" href="https://takami-artwork.com/img/favicon-32.png">
+    <link rel="apple-touch-icon" href="https://takami-artwork.com/img/apple-touch-icon.png">
+    <link rel="canonical" href="https://takami-artwork.com/diary.html">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap">
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /*
+         * diary.html 新增樣式
+         * 先保留於 HTML 內，確認版面後再整理回 style.css。
+         *
+         * 與既有通用設計衝突時，以既有 style.css 為優先：
+         * 1. 保留既有 Hero 圖片／遮罩／固定與隱藏行為。
+         * 2. 保留全站白色背景，不套用 Figma 畫布的 #e6edef。
+         * 3. 保留既有 menu / footer / typography 基礎設定。
+         */
+
+         /*
+        * Diary 頁面背景
+        *
+        * 現階段：
+        * - diary.html 單獨使用 #f8f7f7 淺灰背景
+        * - diary-card 維持白色，製造輕微層次
+        * - 此設定目前寫在 diary.html，因此不影響其他頁面
+        *
+        * 注意：
+        * 1. html, body 會同時影響 Diary 的 main、footer 與其他透明區域。
+        * 2. 若未來移至共用 style.css，不可直接保留 html, body，
+        *    否則 Gallery / Info 等頁面也會一起變色。
+        * 3. 移入 style.css 時，建議改為：
+        *
+        *    body.page-diary {
+        *        background-color: #f8f7f7;
+        *    }
+        *
+        * 4. 若 html 的 overscroll 區域仍需要相同背景，
+        *    可另外評估使用：
+        *
+        *    html:has(body.page-diary) {
+        *        background-color: #f8f7f7;
+        *    }
+        *
+        *    但須留意瀏覽器相容性。
+        */
+
+        html, body {
+            background-color: #f8f7f7;
+        }
+
+        .page-diary {
+            min-height: 100%;
+        }
+
+        /* 沿用 page-life 的 Hero 圖片來源 */
+        .page-diary .page-hero-bg {
+            --hero-img: url('img/hero/life.jpg');
+        }
+
+        .diary-container {
+            width: min(1200px, calc(100% - 40px));
+            margin: 168px auto 0;
+            padding: 20px 0 48px;
+            min-height: 60vh;
+        }
+
+        .diary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+
+        .diary-month {
+            display: grid;
+            grid-template-columns: 316px minmax(0, 1fr);
+            gap: 32px;
+            align-items: start;
+        }
+
+        .month-tag {
+            width: 316px;
+            color: #333;
+        }
+
+        .month-year {
+            padding: 0 4px;
+            font-family: "Noto Sans Devanagari UI Condensed",
+                         "Noto Sans Devanagari UI Condense",
+                         "Noto Sans Devanagari",
+                         "Arial Narrow",
+                         sans-serif;
+            font-size: 44px;
+            line-height: 1;
+            font-weight: 400;
+            font-stretch: condensed;
+            color: #333;
+        }
+
+        .month-name {
+            margin-top: 2px;
+            font-family: "Noto Serif TC", serif;
+            font-size: 48px;
+            line-height: 1.05;
+            font-weight: 700;
+            color: #333;
+            overflow-wrap: anywhere;
+        }
+
+        .diary-card-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 112px);
+            gap: 24px;
+            align-items: start;
+            justify-content: start;
+        }
+
+        .diary-divider {
+            height: 1px;
+            width: 100%;
+            background: #d6d6d6;
+            border: 0;
+        }
+
+        /* ---------- Card ---------- */
+        .diary-card {
+            position: relative;
+            display: block;
+            width: 112px;
+            height: 176px;
+            overflow: hidden;
+            background: #f3f3f3;
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            isolation: isolate;
+            border: none;
+        }
+
+        .diary-card:focus-visible {
+            outline: 2px solid var(--primary-hover);
+            outline-offset: 3px;
+        }
+
+        .diary-card-face {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            overflow: hidden;
+            transition: opacity 0.22s ease;
+        }
+
+        .diary-card-default {
+            z-index: 2;
+            background: #FFFFFF;
+            opacity: 1;
+        }
+
+        .diary-card-hover {
+            z-index: 1;
+            opacity: 0;
+            color: #fff;
+            background: #333;
+        }
+
+        .diary-card-hover::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: var(--diary-card-img);
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            transform: scale(1.001);
+            transition: transform 0.35s ease;
+        }
+
+        .diary-card-hover::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: rgba(59, 49, 49, 0.5);
+            z-index: -1;
+        }
+
+        /* 僅有滑鼠的裝置啟用 hover，避免手機觸控後 hover 黏住 */
+        @media (hover: hover) {
+            .diary-card:hover .diary-card-default {
+                opacity: 0;
+            }
+
+            .diary-card:hover .diary-card-hover {
+                opacity: 1;
+            }
+
+            .diary-card:hover .diary-card-hover::before {
+                transform: scale(1.03);
+            }
+        }
+
+        /* 鍵盤操作時也能看到 hover 版面 */
+        .diary-card:focus-visible .diary-card-default {
+            opacity: 0;
+        }
+
+        .diary-card:focus-visible .diary-card-hover {
+            opacity: 1;
+        }
+
+        .diary-card-copy {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .diary-day {
+            width: 100%;
+            margin: 0;
+            font-family: "Noto Sans Devanagari UI Condensed",
+                         "Noto Sans Devanagari UI Condense",
+                         "Noto Sans Devanagari",
+                         "Arial Narrow",
+                         sans-serif;
+            font-size: 64px;
+            line-height: 64px;
+            font-weight: 400;
+            font-stretch: condensed;
+            color: #333;
+            letter-spacing: -0.03em;
+        }
+
+        .diary-card-hover .diary-day {
+            color: #fff;
+        }
+
+        .diary-excerpt {
+            width: 100%;
+            margin: 0;
+            font-family: var(--font-main);
+            font-size: 10px;
+            line-height: 1.25;
+            font-weight: 400;
+            color: #333;
+            white-space: pre-line;
+            word-break: break-word;
+
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .diary-card-hover .diary-excerpt {
+            color: #fff;
+        }
+
+        .diary-tag {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 20px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: "Inter", var(--font-main);
+            font-size: 12px;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
+        .diary-card-default .diary-tag {
+            background: #878787;
+            color: #fff;
+        }
+
+        .diary-card-hover .diary-tag {
+            background: #fff;
+            color: #878787;
+        }
+
+        .diary-tag:empty {
+            display: none;
+        }
+
+        .diary-empty,
+        .diary-error {
+            padding: 80px 0;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* ---------- Tablet / Phone ---------- */
+        @media (max-width: 900px) {
+            .diary-container {
+                width: 100%;
+                margin-top: 150px;
+                padding: 20px clamp(16px, 6.36vw, 28px) 40px;
+            }
+
+            .diary-list {
+                gap: 48px;
+            }
+
+            .diary-month {
+                display: flex;
+                flex-direction: column;
+                gap: 32px;
+                width: 100%;
+            }
+
+            .month-tag {
+                width: 100%;
+                max-width: 316px;
+            }
+
+            .diary-card-grid {
+                width: 100%;
+                grid-template-columns: repeat(3, 112px);
+                gap: 24px;
+            }
+
+            .diary-divider {
+                margin: 0 calc(-1 * clamp(16px, 6.36vw, 28px));
+                width: calc(100% + 2 * clamp(16px, 6.36vw, 28px));
+            }
+        }
+
+        /* Figma 手機稿為 440px；較窄手機縮小間距與外距，維持三欄 */
+        @media (max-width: 439px) {
+            .diary-container {
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+            .diary-card-grid {
+                gap: max(4px, calc((100vw - 24px - 336px) / 2));
+            }
+
+            .diary-divider {
+                margin-left: -12px;
+                margin-right: -12px;
+                width: calc(100% + 24px);
+            }
+        }
+
+        @media (max-width: 365px) {
+            .diary-container {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            .diary-card-grid {
+                transform-origin: top left;
+                gap: 4px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .diary-card-face,
+            .diary-card-hover::before {
+                transition: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="page-diary">
+
+    <!-- 沿用既有導覽選單結構 -->
+    <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+        <i class="fa-solid fa-bars menu-icon"></i>
+    </div>
+
+    <nav class="full-menu" id="fullMenu">
+        <div class="close-menu" onclick="toggleMenu()">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <a href="/">Home</a>
+        <a href="info.html">Info</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="diary.html">Diary</a>
+    </nav>
+
+    <!-- 沿用既有 Hero 架構與 life 圖片 -->
+    <header class="page-hero page-hero-small">
+        <div class="page-hero-bg"></div>
+        <div class="hero-content">
+            <h1>Diary</h1>
+            <p>日常記録<br>写真・手描き・制作過程など</p>
+        </div>
+    </header>
+
+    <main class="diary-container">
+        <div id="diaryList" class="diary-list" aria-live="polite"></div>
+    </main>
+
+    <!-- 沿用既有 Footer -->
+    <footer class="footer">
+        <p>&copy; 2026 TAKAMI</p>
+        <p>本サイト掲載の画像・文章の無断転載・加工・商用利用・AI学習への使用は禁止します。</p>
+        <p>
+            Unauthorized reproduction, modification, commercial use,<br class="mobile-br">
+            or AI training of the images and texts on this website is prohibited.<br>
+            Fanart: Original characters and related rights belong to their respective owners.<br class="mobile-br">
+            Original works: All rights reserved.
+        </p>
+    </footer>
+
+    <script>
+        const MONTH_NAMES = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+
+        async function initDiary() {
+            const list = document.getElementById("diaryList");
+
+            try {
+                const response = await fetch("data/content_life.json");
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const posts = await response.json();
+
+                if (!Array.isArray(posts) || posts.length === 0) {
+                    list.innerHTML = '<p class="diary-empty">目前沒有文章 QQ</p>';
+                    return;
+                }
+
+                renderDiary(posts);
+            } catch (error) {
+                console.error("無法載入 diary 資料:", error);
+                list.innerHTML = '<p class="diary-error">無法載入內容，請稍後再試。</p>';
+            }
+        }
+
+        function renderDiary(posts) {
+            const list = document.getElementById("diaryList");
+            list.innerHTML = "";
+
+            const grouped = groupPostsByMonth(posts);
+            const groupKeys = [...grouped.keys()].sort((a, b) => b.localeCompare(a));
+
+            groupKeys.forEach((key, index) => {
+                const [yearString, monthString] = key.split("-");
+                const year = Number(yearString);
+                const month = Number(monthString);
+
+                const monthPosts = grouped.get(key).slice().sort((a, b) => {
+                    return new Date(a.date) - new Date(b.date);
+                });
+
+                const section = document.createElement("section");
+                section.className = "diary-month";
+                section.setAttribute("aria-labelledby", `month-${key}`);
+
+                const tag = document.createElement("header");
+                tag.className = "month-tag";
+
+                const yearEl = document.createElement("div");
+                yearEl.className = "month-year";
+                yearEl.textContent = yearString;
+
+                const monthEl = document.createElement("h2");
+                monthEl.className = "month-name";
+                monthEl.id = `month-${key}`;
+                monthEl.textContent = MONTH_NAMES[month - 1];
+
+                tag.append(yearEl, monthEl);
+
+                const grid = document.createElement("div");
+                grid.className = "diary-card-grid";
+
+                monthPosts.forEach(post => {
+                    grid.appendChild(createDiaryCard(post));
+                });
+
+                section.append(tag, grid);
+                list.appendChild(section);
+
+                if (index < groupKeys.length - 1) {
+                    const divider = document.createElement("hr");
+                    divider.className = "diary-divider";
+                    divider.setAttribute("aria-hidden", "true");
+                    list.appendChild(divider);
+                }
+            });
+        }
+
+        function groupPostsByMonth(posts) {
+            const grouped = new Map();
+
+            posts.forEach(post => {
+                if (!post || !post.date) return;
+
+                const date = new Date(`${post.date}T00:00:00`);
+                if (Number.isNaN(date.getTime())) return;
+
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const key = `${year}-${month}`;
+
+                if (!grouped.has(key)) {
+                    grouped.set(key, []);
+                }
+
+                grouped.get(key).push(post);
+            });
+
+            return grouped;
+        }
+
+        function createDiaryCard(post) {
+            const date = new Date(`${post.date}T00:00:00`);
+            const day = String(date.getDate()).padStart(2, "0");
+            const excerpt = getExcerpt(post.content || "");
+            const imagePath = post.img ? `img/life/${post.img}` : "";
+
+            /*
+             * 預留未來完整圖文頁面。
+             * 建議頁面名稱：diary-entry.html
+             * 日後可由 query string 讀取 id 並顯示完整內容：
+             * diary-entry.html?id=LFE-0016
+             */
+            const card = document.createElement("a");
+            card.className = "diary-card";
+            card.href = `diary-entry.html?id=${encodeURIComponent(post.id || "")}`;
+            card.setAttribute("aria-label", `${post.date} 的 Diary 內容`);
+
+            if (imagePath) {
+                card.style.setProperty("--diary-card-img", `url("${imagePath}")`);
+            }
+
+            const defaultFace = createCardFace({
+                className: "diary-card-face diary-card-default",
+                day,
+                excerpt,
+                tag: post.tag || ""
+            });
+
+            const hoverFace = createCardFace({
+                className: "diary-card-face diary-card-hover",
+                day,
+                excerpt,
+                tag: post.tag || ""
+            });
+
+            card.append(defaultFace, hoverFace);
+            return card;
+        }
+
+        function createCardFace({ className, day, excerpt, tag }) {
+            const face = document.createElement("div");
+            face.className = className;
+            face.setAttribute("aria-hidden", "true");
+
+            const copy = document.createElement("div");
+            copy.className = "diary-card-copy";
+
+            const dayEl = document.createElement("p");
+            dayEl.className = "diary-day";
+            dayEl.textContent = day;
+
+            const excerptEl = document.createElement("p");
+            excerptEl.className = "diary-excerpt";
+            excerptEl.textContent = excerpt;
+
+            copy.append(dayEl, excerptEl);
+
+            const tagEl = document.createElement("span");
+            tagEl.className = "diary-tag";
+            tagEl.textContent = tag;
+
+            face.append(copy, tagEl);
+            return face;
+        }
+
+        function getExcerpt(content) {
+            const normalized = String(content)
+                .replace(/\r\n/g, "\n")
+                .replace(/\n{2,}/g, "\n")
+                .trim();
+
+            if (!normalized) return "";
+
+            // 優先取第一段／第一句作為字卡摘要，CSS 再限制最多三行
+            const firstLine = normalized.split("\n")[0].trim();
+            const sentenceMatch = firstLine.match(/^.*?[。！？!?](?:」|』)?/);
+
+            return sentenceMatch ? sentenceMatch[0] : firstLine;
+        }
+
+        document.addEventListener("DOMContentLoaded", initDiary);
+    </script>
+
+    <script src="main.js"></script>
+</body>
+</html>
