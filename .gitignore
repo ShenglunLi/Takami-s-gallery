@@ -1,6 +1,7 @@
 # 排除暫存資料夾
 not_used/
 google_app_script/
+memo/
 
 # 排除系統產生的雜物
 .DS_Store
