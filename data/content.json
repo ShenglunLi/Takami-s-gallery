@@ -124,6 +124,17 @@
     "order": 7
   },
   {
+    "id": "TKM-0078",
+    "type": "single",
+    "title": "一葉知秋",
+    "desc": "",
+    "date": "2026-09-18",
+    "cover": "C-20260918-P.jpg",
+    "img": "C-20260918-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0077",
     "type": "single",
     "title": "追う眼差し",
