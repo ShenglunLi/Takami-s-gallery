@@ -124,6 +124,17 @@
     "order": 7
   },
   {
+    "id": "TKM-0079",
+    "type": "single",
+    "title": "共飲",
+    "desc": "平凡之刻因你而非凡。",
+    "date": "2026-09-29",
+    "cover": "C-20260929-P.jpg",
+    "img": "C-20260929-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0078",
     "type": "single",
     "title": "一葉知秋",
