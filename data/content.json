@@ -124,6 +124,17 @@
     "order": 7
   },
   {
+    "id": "TKM-0080",
+    "type": "single",
+    "title": "兆し",
+    "desc": "",
+    "date": "2026-10-04",
+    "cover": "D-20261004-P.jpg",
+    "img": "D-20261004-P.jpg",
+    "category": "モノクロイラスト",
+    "order": 9999
+  },
+  {
     "id": "TKM-0079",
     "type": "single",
     "title": "共飲",
