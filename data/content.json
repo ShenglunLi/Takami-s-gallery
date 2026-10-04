@@ -146,6 +146,17 @@
     "order": 9999
   },
   {
+    "id": "TKM-0081",
+    "type": "single",
+    "title": "フォロワー感謝",
+    "desc": "Xのフォロ数への感謝を込めたリクエストイラスト。",
+    "date": "2026-09-21",
+    "cover": "C-20260921-P.jpg",
+    "img": "C-20260921-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0078",
     "type": "single",
     "title": "一葉知秋",
