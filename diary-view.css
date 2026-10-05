@@ -1,0 +1,256 @@
+/*
+ * diary-view.css
+ * Figma: diary-view-desktop / diary-view-phone
+ */
+
+html,
+body.page-diary-view {
+  background-color: #f8f7f7;
+}
+
+.page-diary-view {
+  min-height: 100%;
+}
+
+.page-diary-view .page-hero-bg {
+  --hero-img: url('img/hero/life.jpg');
+}
+
+.diary-view-container {
+  width: min(1200px, calc(100% - 40px));
+  margin: 168px auto 0;
+  padding: 40px 0 80px;
+  min-height: 70vh;
+}
+
+.diary-view-date {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.diary-view-month {
+  width: 300px;
+  flex: 0 0 300px;
+}
+
+.diary-view-year,
+.diary-view-day {
+  font-family: "Libre Caslon Text", Georgia, serif;
+  color: #333;
+}
+
+.diary-view-year {
+  padding: 0 4px;
+  font-size: 32px;
+  line-height: 0.8;
+  font-weight: 400;
+}
+
+.diary-view-month-name {
+  margin: 2px 0 0;
+  font-family: "Noto Serif TC", serif;
+  font-size: 40px;
+  line-height: 0.75;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+}
+
+.diary-view-day {
+  font-size: 80px;
+  line-height: 64px;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.diary-view-main {
+  display: grid;
+  grid-template-columns: 540px minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.diary-view-gallery {
+  width: 540px;
+}
+
+.diary-view-photo {
+  width: 540px;
+  height: 405px;
+  overflow: hidden;
+  background: #eee;
+}
+
+.diary-view-photo img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.diary-view-thumbs {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.diary-thumb {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.diary-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.diary-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  transition: opacity 0.2s ease;
+}
+
+.diary-thumb.active::after,
+.diary-thumb:hover::after,
+.diary-thumb:focus-visible::after {
+  opacity: 0;
+}
+
+.diary-thumb:focus-visible {
+  outline: 2px solid var(--primary-hover);
+  outline-offset: 2px;
+}
+
+.diary-view-text {
+  min-width: 0;
+  color: #333;
+  font-family: var(--font-main);
+  font-size: 16px;
+}
+
+.diary-view-title {
+  min-height: 36px;
+  margin: 0;
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #333;
+}
+
+.diary-view-content p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 30px;
+  color: #333;
+}
+
+.diary-view-gallery.is-empty {
+  min-height: 405px;
+}
+
+.diary-view-status {
+  padding: 120px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.diary-view-status a {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--primary-color);
+}
+
+@media (max-width: 900px) {
+  .diary-view-container {
+    width: 100%;
+    margin-top: 168px;
+    padding: 0 60px 60px;
+  }
+
+  .diary-view-date {
+    width: 100%;
+    gap: 24px;
+    margin-bottom: 40px;
+    justify-content: space-between;
+  }
+
+  .diary-view-month {
+    width: auto;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .diary-view-year {
+    font-size: 28px;
+  }
+
+  .diary-view-month-name {
+    font-size: 40px;
+  }
+
+  .diary-view-day {
+    font-size: 80px;
+    line-height: 64px;
+  }
+
+  .diary-view-main {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    width: 100%;
+  }
+
+  .diary-view-gallery,
+  .diary-view-photo {
+    width: 100%;
+  }
+
+  .diary-view-photo {
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .diary-view-thumbs {
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .diary-thumb {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 439px) {
+  .diary-view-container {
+    padding-left: clamp(20px, 8vw, 60px);
+    padding-right: clamp(20px, 8vw, 60px);
+  }
+
+  .diary-view-month-name {
+    font-size: clamp(32px, 9vw, 40px);
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diary-thumb::after {
+    transition: none;
+  }
+}

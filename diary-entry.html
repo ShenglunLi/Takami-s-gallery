@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diary | TAKAMI's Artwork</title>
+
+  <meta name="robots" content="index, follow, noai, max-image-preview:large">
+  <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;500&family=Noto+Serif+TC:wght@600;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="diary-view.css">
+</head>
+
+<body class="page-diary-view">
+
+  <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars menu-icon"></i>
+  </div>
+
+  <nav class="full-menu" id="fullMenu">
+    <div class="close-menu" onclick="toggleMenu()">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+    <a href="/">Home</a>
+    <a href="info.html">Info</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="diary.html">Diary</a>
+  </nav>
+
+  <header class="page-hero page-hero-small">
+    <div class="page-hero-bg"></div>
+    <div class="hero-content">
+      <h1>Diary</h1>
+      <p>日常記録<br>写真・手描き・制作過程など</p>
+    </div>
+  </header>
+
+  <main class="diary-view-container" id="diaryView">
+    <p class="diary-view-status">Loading...</p>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 TAKAMI</p>
+    <p>本サイト掲載の画像・文章の無断転載・加工・商用利用・AI学習への使用は禁止します。</p>
+    <p>
+      Unauthorized reproduction, modification, commercial use,<br class="mobile-br">
+      or AI training of the images and texts on this website is prohibited.<br>
+      Fanart: Original characters and related rights belong to their respective owners.<br class="mobile-br">
+      Original works: All rights reserved.
+    </p>
+  </footer>
+
+  <script>
+    const MONTH_NAMES = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    document.addEventListener("DOMContentLoaded", initDiaryView);
+
+    async function initDiaryView() {
+      const params = new URLSearchParams(window.location.search);
+      const postId = params.get("id");
+
+      if (!postId) {
+        renderMessage("找不到文章 ID。");
+        return;
+      }
+
+      try {
+        const response = await fetch("data/content_life.json");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const posts = await response.json();
+        const post = posts.find(item => item.id === postId);
+
+        if (!post) {
+          renderMessage("找不到這篇 Diary 內容。");
+          return;
+        }
+
+        renderDiaryEntry(post);
+
+      } catch (error) {
+        console.error("無法載入 Diary 內容:", error);
+        renderMessage("無法載入內容，請稍後再試。");
+      }
+    }
+
+    function renderDiaryEntry(post) {
+      const container = document.getElementById("diaryView");
+      const date = new Date(`${post.date}T00:00:00`);
+
+      if (Number.isNaN(date.getTime())) {
+        renderMessage("日期格式不正確。");
+        return;
+      }
+
+      const year = date.getFullYear();
+      const month = MONTH_NAMES[date.getMonth()];
+      const day = String(date.getDate()).padStart(2, "0");
+
+      /*
+      * 文章內容處理：
+      *
+      * 有 title：
+      * - title 顯示獨立標題
+      * - content 全部顯示為正文
+      *
+      * 無 title：
+      * - content 第一段作為標題
+      * - 正文從第二段開始
+      * - 避免第一段重複顯示
+      */
+      const paragraphs = getContentParagraphs(post.content || "");
+      const hasTitle = Boolean(post.title?.trim());
+
+      const title = hasTitle
+        ? post.title.trim()
+        : (paragraphs[0] || "Diary");
+
+      const bodyParagraphs = hasTitle
+        ? paragraphs
+        : paragraphs.slice(1);
+
+      const images = getPostImages(post);
+
+      container.innerHTML = `
+        <article class="diary-view-entry">
+
+          <header class="diary-view-date">
+            <div class="diary-view-day">${day}</div>
+
+            <div class="diary-view-month">
+              <div class="diary-view-year">${year}</div>
+              <h1 class="diary-view-month-name">
+                ${escapeHtml(month)}
+              </h1>
+            </div>
+          </header>
+
+          <section class="diary-view-main">
+
+            <div class="diary-view-gallery">
+              <div class="diary-view-photo">
+                <img
+                  id="diaryMainImage"
+                  src=""
+                  alt=""
+                  draggable="false"
+                >
+              </div>
+
+              <div
+                class="diary-view-thumbs"
+                id="diaryThumbs"
+                aria-label="圖片選擇"
+              ></div>
+            </div>
+
+            <div class="diary-view-text">
+
+              <h2 class="diary-view-title">
+                ${escapeHtml(title)}
+              </h2>
+
+              <div
+                class="diary-view-content"
+                id="diaryContent"
+              ></div>
+
+            </div>
+
+          </section>
+
+        </article>
+      `;
+
+      renderContent(bodyParagraphs);
+      renderGallery(images, title);
+
+      document.title = `${title} | TAKAMI's Artwork`;
+    }
+
+    function getContentParagraphs(content) {
+      return String(content)
+        .replace(/\r\n/g, "\n")
+        .split(/\n+/)
+        .map(line => line.trim())
+        .filter(Boolean);
+    }
+
+    function getPostImages(post) {
+      /*
+      * 新資料若有 images：
+      * 使用 images 作為詳細頁圖庫
+      *
+      * 舊資料只有 img：
+      * 自動退回單張圖片模式
+      */
+      if (Array.isArray(post.images) && post.images.length) {
+        return post.images.filter(Boolean);
+      }
+
+      return post.img ? [post.img] : [];
+    }
+
+    function renderGallery(images, title) {
+      const mainImage = document.getElementById("diaryMainImage");
+      const thumbs = document.getElementById("diaryThumbs");
+      const gallery = document.querySelector(".diary-view-gallery");
+
+      if (!images.length) {
+        mainImage.remove();
+        thumbs.remove();
+        gallery.classList.add("is-empty");
+        return;
+      }
+
+      const paths = images.map(file => `img/life/${file}`);
+
+      mainImage.src = paths[0];
+      mainImage.alt = title;
+
+      /*
+      * 只有一張圖片時：
+      * 不顯示縮圖列
+      */
+      if (paths.length === 1) {
+        thumbs.hidden = true;
+        return;
+      }
+
+      /*
+      * 多張圖片時：
+      * 產生縮圖按鈕並支援主圖切換
+      */
+      paths.forEach((src, index) => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className =
+          `diary-thumb${index === 0 ? " active" : ""}`;
+
+        button.setAttribute(
+          "aria-label",
+          `顯示第 ${index + 1} 張圖片`
+        );
+
+        const img = document.createElement("img");
+
+        img.src = src;
+        img.alt = "";
+        img.loading = "lazy";
+
+        button.appendChild(img);
+
+        button.addEventListener("click", () => {
+          mainImage.src = src;
+
+          thumbs
+            .querySelectorAll(".diary-thumb")
+            .forEach(item => {
+              item.classList.remove("active");
+            });
+
+          button.classList.add("active");
+        });
+
+        thumbs.appendChild(button);
+      });
+    }
+
+    function renderContent(paragraphs) {
+      const contentBox =
+        document.getElementById("diaryContent");
+
+      paragraphs.forEach(text => {
+        const p = document.createElement("p");
+
+        p.textContent = text;
+
+        contentBox.appendChild(p);
+      });
+    }
+
+    function renderMessage(message) {
+      document.getElementById("diaryView").innerHTML = `
+        <div class="diary-view-status">
+          <p>${escapeHtml(message)}</p>
+          <a href="diary.html">Back to Diary</a>
+        </div>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+
+  <script src="main.js"></script>
+</body>
+</html>
