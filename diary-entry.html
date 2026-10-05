@@ -84,15 +84,15 @@
           return;
         }
 
-        renderDiaryEntry(post);
-
+        const navigation = getDiaryNavigation(posts, postId);
+        renderDiaryEntry(post, navigation);
       } catch (error) {
         console.error("無法載入 Diary 內容:", error);
         renderMessage("無法載入內容，請稍後再試。");
       }
     }
 
-    function renderDiaryEntry(post) {
+    function renderDiaryEntry(post, navigation) {
       const container = document.getElementById("diaryView");
       const date = new Date(`${post.date}T00:00:00`);
 
@@ -105,18 +105,6 @@
       const month = MONTH_NAMES[date.getMonth()];
       const day = String(date.getDate()).padStart(2, "0");
 
-      /*
-      * 文章內容處理：
-      *
-      * 有 title：
-      * - title 顯示獨立標題
-      * - content 全部顯示為正文
-      *
-      * 無 title：
-      * - content 第一段作為標題
-      * - 正文從第二段開始
-      * - 避免第一段重複顯示
-      */
       const paragraphs = getContentParagraphs(post.content || "");
       const hasTitle = Boolean(post.title?.trim());
 
@@ -133,27 +121,24 @@
       container.innerHTML = `
         <article class="diary-view-entry">
 
+          <a class="diary-view-back" href="diary.html" aria-label="返回 Diary">
+            <span aria-hidden="true">←</span>
+            <span>Diary</span>
+          </a>
+
           <header class="diary-view-date">
             <div class="diary-view-day">${day}</div>
 
             <div class="diary-view-month">
               <div class="diary-view-year">${year}</div>
-              <h1 class="diary-view-month-name">
-                ${escapeHtml(month)}
-              </h1>
+              <h1 class="diary-view-month-name">${escapeHtml(month)}</h1>
             </div>
           </header>
 
           <section class="diary-view-main">
-
             <div class="diary-view-gallery">
               <div class="diary-view-photo">
-                <img
-                  id="diaryMainImage"
-                  src=""
-                  alt=""
-                  draggable="false"
-                >
+                <img id="diaryMainImage" src="" alt="" draggable="false">
               </div>
 
               <div
@@ -164,26 +149,17 @@
             </div>
 
             <div class="diary-view-text">
-
-              <h2 class="diary-view-title">
-                ${escapeHtml(title)}
-              </h2>
-
-              <div
-                class="diary-view-content"
-                id="diaryContent"
-              ></div>
-
+              <h2 class="diary-view-title">${escapeHtml(title)}</h2>
+              <div class="diary-view-content" id="diaryContent"></div>
             </div>
-
           </section>
 
+          ${renderDiaryPagination(navigation)}
         </article>
       `;
 
       renderContent(bodyParagraphs);
       renderGallery(images, title);
-
       document.title = `${title} | TAKAMI's Artwork`;
     }
 
@@ -195,18 +171,74 @@
         .filter(Boolean);
     }
 
+    function getDiaryNavigation(posts, currentId) {
+      const orderedPosts = [...posts]
+        .filter(item => item?.id && item?.date)
+        .sort((a, b) => {
+          const dateDiff =
+            new Date(`${a.date}T00:00:00`) -
+            new Date(`${b.date}T00:00:00`);
+
+          return dateDiff ||
+            String(a.id).localeCompare(String(b.id));
+        });
+
+      const currentIndex =
+        orderedPosts.findIndex(item => item.id === currentId);
+
+      if (currentIndex === -1) {
+        return { previous: null, next: null };
+      }
+
+      return {
+        previous: orderedPosts[currentIndex - 1] || null,
+        next: orderedPosts[currentIndex + 1] || null
+      };
+    }
+
+    function renderDiaryPagination(navigation) {
+      const previous = navigation?.previous;
+      const next = navigation?.next;
+
+      const previousLink = previous
+        ? `
+          <a
+            class="diary-view-nav-link diary-view-nav-previous"
+            href="diary-entry.html?id=${encodeURIComponent(previous.id)}"
+          >
+            <span aria-hidden="true">←</span>
+            <span>Previous</span>
+          </a>
+        `
+        : "";
+
+      const nextLink = next
+        ? `
+          <a
+            class="diary-view-nav-link diary-view-nav-next"
+            href="diary-entry.html?id=${encodeURIComponent(next.id)}"
+          >
+            <span>Next</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        `
+        : "";
+
+      return `
+        <nav
+          class="diary-view-pagination"
+          aria-label="Diary 文章導覽"
+        >
+          ${previousLink}
+          ${nextLink}
+        </nav>
+      `;
+    }
+
     function getPostImages(post) {
-      /*
-      * 新資料若有 images：
-      * 使用 images 作為詳細頁圖庫
-      *
-      * 舊資料只有 img：
-      * 自動退回單張圖片模式
-      */
       if (Array.isArray(post.images) && post.images.length) {
         return post.images.filter(Boolean);
       }
-
       return post.img ? [post.img] : [];
     }
 
@@ -223,52 +255,29 @@
       }
 
       const paths = images.map(file => `img/life/${file}`);
-
       mainImage.src = paths[0];
       mainImage.alt = title;
 
-      /*
-      * 只有一張圖片時：
-      * 不顯示縮圖列
-      */
       if (paths.length === 1) {
         thumbs.hidden = true;
         return;
       }
 
-      /*
-      * 多張圖片時：
-      * 產生縮圖按鈕並支援主圖切換
-      */
       paths.forEach((src, index) => {
         const button = document.createElement("button");
-
         button.type = "button";
-        button.className =
-          `diary-thumb${index === 0 ? " active" : ""}`;
-
-        button.setAttribute(
-          "aria-label",
-          `顯示第 ${index + 1} 張圖片`
-        );
+        button.className = `diary-thumb${index === 0 ? " active" : ""}`;
+        button.setAttribute("aria-label", `顯示第 ${index + 1} 張圖片`);
 
         const img = document.createElement("img");
-
         img.src = src;
         img.alt = "";
         img.loading = "lazy";
-
         button.appendChild(img);
 
         button.addEventListener("click", () => {
           mainImage.src = src;
-
-          thumbs
-            .querySelectorAll(".diary-thumb")
-            .forEach(item => {
-              item.classList.remove("active");
-            });
-
+          thumbs.querySelectorAll(".diary-thumb").forEach(item => item.classList.remove("active"));
           button.classList.add("active");
         });
 
@@ -277,14 +286,11 @@
     }
 
     function renderContent(paragraphs) {
-      const contentBox =
-        document.getElementById("diaryContent");
+      const contentBox = document.getElementById("diaryContent");
 
       paragraphs.forEach(text => {
         const p = document.createElement("p");
-
         p.textContent = text;
-
         contentBox.appendChild(p);
       });
     }
