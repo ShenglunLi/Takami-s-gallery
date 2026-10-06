@@ -222,12 +222,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 
 .page-life .page-hero-bg {
-    --hero-img: url('img/hero/life.jpg');
-}
-
-.page-info .page-hero-bg {
-    --hero-img: url('img/hero/info.jpg');
-    z-index: 0;
+    --hero-img: url('img/hero/diary.jpg');
 }
 
 .page-info .page-hero-bg {
@@ -412,7 +407,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .card-info { --card-img: url('img/hero/info.jpg'); }
 .card-gallery { --card-img: url('img/hero/gallery.jpg'); }
-.card-life { --card-img: url('img/hero/life.jpg'); }
+.card-diary { --card-img: url('img/hero/diary.jpg'); }
 
 
 
@@ -1402,103 +1397,116 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         
 
         }
-/* info 頁面新增樣式 */
-/* --- 佈局結構 --- */
+/* --- Info 頁面：左側介紹文字、右側社群連結 --- */
 .page-info {
     height: auto !important;
 }
 
-.info-container{
-    padding: 20px 30px;
+.page-info .info-container {
+    width: 100%;
     max-width: 1200px;
+    margin: 150px auto 40px;
+    padding: 20px 30px;
     display: flex;
     flex-direction: column;
-    gap:20px;
+    align-items: flex-start;
+    gap: 24px;
 }
 
-
-.intro{
-    gap: 40px;
+.page-info .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+    gap: 32px;
 }
-.intro-text{
-    margin-bottom: 40px;
+
+.page-info .intro-text {
+    margin: 0;
     line-height: 1.8;
     color: var(--text-body);
+    overflow-wrap: anywhere;
 }
 
-/* --- Footer SNS 區塊修正 --- */
-/* 共用 SNS 按鈕基礎樣式 */
-.main-logo.info-logo:hover{
+.page-info .info-logo {
+    flex-shrink: 0;
+}
+
+.page-info .info-logo:hover {
     transform: scale(1);
 }
-.sns-links {
+
+.page-info .sns-links {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
     list-style: none;
+    margin: 0;
     padding: 0;
 }
 
-.sns-links li {
-    gap: 20px;
+.page-info .sns-links li {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    gap: 16px;
 }
-.sns-links p{
+
+.page-info .sns-links p {
     font-size: 0.75rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
 }
-@media(min-width: 900px) {
 
-    .info-container{
-        margin: auto;
-        margin-top: 180px;
-        margin-bottom: 40px;
+@media (min-width: 900px) {
+    .page-info .info-container {
+        margin: 180px auto 40px;
         flex-direction: row;
-        justify-content: center;
-        align-items: start;
-        gap: 40px;
-        transform: translateX(-50px);
+        gap: 32px;
     }
-    /* .main-logo.info-logo{
-        position: static;
-    } */
-    .intro-text{
-        margin-bottom: 80px;
-    }
-    .sns-links {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    .sns-links li {
-        gap: 10px;
+
+    .page-info .intro {
+        flex: 1;
+        grid-template-columns: minmax(0, 1fr) 240px;
+        column-gap: clamp(32px, 4vw, 56px);
     }
 }
 
-.sns-btn {
+@media (max-width: 479px) {
+    .page-info .info-container {
+        padding-inline: 20px;
+    }
+}
+
+.page-info .sns-btn {
+    flex: 0 0 32px;
     width: 32px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-full);
-    transition: all 0.3s ease;
+    transition: var(--transition-base);
 }
 /* PNG 圖示統一處理邏輯 */
-.png-icon {
+.page-info .png-icon {
     background-image: var(--icon); /* 使用行內定義的預設圖 */
     background-size: 32px;         /* 統一控制圖示大小 */
     background-repeat: no-repeat;
     background-position: center;
 }
 
-.png-icon:hover {
+.page-info .png-icon:hover,
+.page-info .png-icon:focus-visible {
     background-image: var(--hover); /* 懸停時自動切換為行內定義的 Hover 圖 */
     background-color: transparent;  /* 根據需求決定是否保留背景色 */
     transform: translateY(-3px);
 }
 
+.page-info .sns-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+}
 
 /* 讓圖片在 src 改變時平滑切換 */
 #infoCoverImg {
