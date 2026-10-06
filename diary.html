@@ -75,9 +75,8 @@
             min-height: 100%;
         }
 
-        /* 沿用 page-life 的 Hero 圖片來源 */
         .page-diary .page-hero-bg {
-            --hero-img: url('img/hero/life.jpg');
+            --hero-img: url('img/hero/diary.jpg');
         }
 
         .diary-container {
@@ -90,7 +89,7 @@
         .diary-list {
             display: flex;
             flex-direction: column;
-            gap: 48px;
+            gap: 24px;
         }
 
         .diary-month {
@@ -126,8 +125,8 @@
 
         .diary-card-grid {
             display: grid;
-            grid-template-columns: repeat(6, 112px);
-            gap: 24px;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
             align-items: start;
             justify-content: start;
         }
@@ -143,8 +142,8 @@
         .diary-card {
             position: relative;
             display: block;
-            width: 112px;
-            height: 176px;
+            width: 150px;
+            height: 240px;
             overflow: hidden;
             background: #f3f3f3;
             color: inherit;
@@ -241,8 +240,8 @@
             width: 100%;
             margin: 0;
             font-family: "Libre Caslon Text", Georgia, serif;
-            font-size: 64px;
-            line-height: 64px;
+            font-size: 60px;
+            line-height: 60px;
             font-weight: 500;
             color: #333;
             letter-spacing: -0.03em;
@@ -256,7 +255,7 @@
             width: 100%;
             margin: 0;
             font-family: var(--font-main);
-            font-size: 10px;
+            font-size: 12px;
             line-height: 1.25;
             font-weight: 400;
             color: #333;
@@ -280,8 +279,9 @@
             min-height: 20px;
             padding: 2px 8px;
             border-radius: 4px;
-            font-family: "Inter", var(--font-main);
-            font-size: 12px;
+            font-family: var(--font-main);
+            font-weight: 600;
+            font-size: 10px;
             line-height: 1.2;
             white-space: nowrap;
         }
@@ -316,16 +316,24 @@
             }
 
             .diary-list {
-                gap: 48px;
+                gap: 24px;
             }
-
+            .diary-day {
+                font-size: 56px;
+                line-height: 56px;
+            }
             .diary-month {
                 display: flex;
                 flex-direction: column;
-                gap: 32px;
+                gap: 16px;
                 width: 100%;
             }
-
+            .month-name {
+                font-size: 32px;
+            }
+            .month-year {
+                font-size: 20px;
+            }
             .month-tag {
                 width: 100%;
                 max-width: 316px;
@@ -333,9 +341,19 @@
 
             .diary-card-grid {
                 width: 100%;
-                grid-template-columns: repeat(3, 112px);
-                gap: 24px;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 8px;
             }
+
+            .diary-card {
+                width: 100%;
+                min-width: 0;
+                height: 200px;
+            }
+/* 
+            .diary-excerpt {
+                display: none;
+            } */
 
             .diary-divider {
                 margin: 0 calc(-1 * clamp(16px, 6.36vw, 28px));
@@ -343,22 +361,18 @@
             }
         }
 
-        /* Figma 手機稿為 440px；較窄手機縮小間距與外距，維持三欄 */
+        /* 較窄手機縮小外距，卡片仍維持三欄與 8px 間距 */
         @media (max-width: 439px) {
             .diary-container {
                 padding-left: 12px;
                 padding-right: 12px;
             }
 
-            .diary-card-grid {
-                gap: max(4px, calc((100vw - 24px - 336px) / 2));
-            }
-
-            .diary-divider {
+            /* .diary-divider {
                 margin-left: -12px;
                 margin-right: -12px;
                 width: calc(100% + 24px);
-            }
+            } */
         }
 
         @media (max-width: 365px) {
@@ -367,10 +381,6 @@
                 padding-right: 8px;
             }
 
-            .diary-card-grid {
-                transform-origin: top left;
-                gap: 4px;
-            }
         }
 
         @media (prefers-reduced-motion: reduce) {
