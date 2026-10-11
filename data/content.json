@@ -124,6 +124,17 @@
     "order": 7
   },
   {
+    "id": "TKM-0085",
+    "type": "single",
+    "title": "星",
+    "desc": "",
+    "date": "2026-10-11",
+    "cover": "C-20261011-P.jpg",
+    "img": "C-20261011-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0083",
     "type": "series",
     "title": "見惚れる",
