@@ -55,6 +55,13 @@
 /* 字體順序：繁體中文 -> 日文 -> 系統預設 */
     --font-main: 'Noto Sans TC', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     
+    /* Diary 列表與文章頁共用字型設定 */
+    --diary-font-month: 'Noto Sans TC', sans-serif;
+    --diary-font-month-weight: 500;
+    --diary-font-date: 'Roboto Condensed', sans-serif;
+    --diary-font-date-weight: 200;
+    --diary-day-letter-spacing: -0.04em; /* 字體大小的 -4% */
+
     /* 文字大小定義 */
     --fs-h1: 1.8rem;       
     --fs-h2: 1.3rem;     
@@ -1018,8 +1025,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     transition: 0.3s; display: flex; align-items: center; justify-content: center;
     border-radius: 50%;
 }
-.info-nav-btn.prev { left: 30px; }
-.info-nav-btn.next { right: 30px; }
+.info-nav-btn.prev { left: 30px; z-index: 1000;}
+.info-nav-btn.next { right: 30px; z-index: 1000; }
 
 
 .page-count-label {
