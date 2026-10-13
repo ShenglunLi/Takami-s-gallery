@@ -37,7 +37,7 @@ body.page-diary-view {
 
 .diary-view-year,
 .diary-view-day {
-  font-family: "Libre Caslon Text", Georgia, serif;
+  font-family: var(--diary-font-date);
   color: #333;
 }
 
@@ -45,15 +45,15 @@ body.page-diary-view {
   padding: 0 4px;
   font-size: 32px;
   line-height: 0.8;
-  font-weight: 400;
+  font-weight: var(--diary-font-date-weight);
 }
 
 .diary-view-month-name {
   margin: 2px 0 0;
-  font-family: "Noto Serif TC", serif;
+  font-family: var(--diary-font-month);
   font-size: 40px;
   line-height: 0.75;
-  font-weight: 600;
+  font-weight: var(--diary-font-month-weight);
   color: #333;
   white-space: nowrap;
 }
@@ -61,8 +61,8 @@ body.page-diary-view {
 .diary-view-day {
   font-size: 80px;
   line-height: 64px;
-  font-weight: 500;
-  letter-spacing: -0.03em;
+  font-weight: var(--diary-font-date-weight);
+  letter-spacing: var(--diary-day-letter-spacing);
   white-space: nowrap;
 }
 
