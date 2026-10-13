@@ -248,6 +248,12 @@
                 
                 // 直接執行畫廊渲染，不再需要 renderFilters()
                 renderCategorizedGallery();
+
+                const linkedWorkId = new URLSearchParams(window.location.search).get('id');
+                if (linkedWorkId) {
+                    const linkedIndex = currentFilteredWorks.findIndex(work => work.id === linkedWorkId);
+                    if (linkedIndex !== -1) openOverlay(linkedIndex);
+                }
                 
                 initTouchEvents();
             } catch (err) { 
