@@ -12,7 +12,7 @@
   <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500&display=swap">
-  <link rel="stylesheet" href="style_v2.css">
+  <link rel="stylesheet" href="style.css?v=042204ada207">
 </head>
 
 <body class="page-diary-view">
@@ -44,6 +44,23 @@
     <p class="diary-view-status">Loading...</p>
   </main>
 
+  <dialog id="diaryLightbox" class="overlay diary-lightbox" aria-label="Diary 圖片放大檢視">
+    <button type="button" class="overlay-close" id="diaryLightboxClose" aria-label="關閉圖片">
+      <span class="icon-svg icon-close" aria-hidden="true"></span>
+    </button>
+    <div class="overlay-content">
+      <div class="viewer-layer active">
+        <div class="viewer-img-container" id="diaryLightboxStage">
+          <button type="button" class="nav-btn prev-btn" id="diaryLightboxPrev" aria-label="上一張圖片"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+          <img id="diaryLightboxImage" alt="" draggable="false">
+          <button type="button" class="nav-btn next-btn" id="diaryLightboxNext" aria-label="下一張圖片"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        </div>
+        <div class="viewer-indicator" id="diaryLightboxIndicator" aria-hidden="true"></div>
+        <p class="diary-lightbox-status" id="diaryLightboxStatus" role="status"></p>
+      </div>
+    </div>
+  </dialog>
+
   <footer class="footer">
     <p>&copy; 2026 TAKAMI</p>
     <p>本サイト掲載の画像・文章の無断転載・加工・商用利用・AI学習への使用は禁止します。</p>
@@ -55,6 +72,7 @@
     </p>
   </footer>
 
+  <script src="diary-lightbox.js"></script>
   <script>
     const MONTH_NAMES = [
       "January", "February", "March", "April", "May", "June",
@@ -73,7 +91,7 @@
       }
 
       try {
-        const response = await fetch("data/content_life.json");
+        const response = await fetch("data/diary.json");
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
         const posts = await response.json();
@@ -137,9 +155,9 @@
 
           <section class="diary-view-main">
             <div class="diary-view-gallery">
-              <div class="diary-view-photo">
+              <button type="button" class="diary-view-photo" id="diaryPhotoButton" aria-label="放大圖片" aria-haspopup="dialog" aria-controls="diaryLightbox">
                 <img id="diaryMainImage" src="" alt="" draggable="false">
-              </div>
+              </button>
 
               <div
                 class="diary-view-thumbs"
@@ -258,6 +276,15 @@
       mainImage.src = paths[0];
       mainImage.alt = title;
 
+      const lightbox = createDiaryLightbox(paths, title, index => {
+        mainImage.src = paths[index];
+        thumbs.querySelectorAll(".diary-thumb").forEach((button, buttonIndex) => {
+          button.classList.toggle("active", buttonIndex === index);
+          button.setAttribute("aria-pressed", String(buttonIndex === index));
+        });
+      });
+      document.getElementById("diaryPhotoButton").addEventListener("click", () => lightbox.open());
+
       if (paths.length === 1) {
         thumbs.hidden = true;
         return;
@@ -268,6 +295,7 @@
         button.type = "button";
         button.className = `diary-thumb${index === 0 ? " active" : ""}`;
         button.setAttribute("aria-label", `顯示第 ${index + 1} 張圖片`);
+        button.setAttribute("aria-pressed", String(index === 0));
 
         const img = document.createElement("img");
         img.src = src;
@@ -276,9 +304,7 @@
         button.appendChild(img);
 
         button.addEventListener("click", () => {
-          mainImage.src = src;
-          thumbs.querySelectorAll(".diary-thumb").forEach(item => item.classList.remove("active"));
-          button.classList.add("active");
+          lightbox.select(index);
         });
 
         thumbs.appendChild(button);

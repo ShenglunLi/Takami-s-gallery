@@ -3,6 +3,9 @@ not_used/
 google_app_script/
 memo/
 
+#排除AI運算過程產生的資料夾
+work/
+
 # 排除系統產生的雜物
 .DS_Store
 Thumbs.db

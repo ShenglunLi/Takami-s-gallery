@@ -26,7 +26,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500&display=swap">
-    <link rel="stylesheet" href="style_v2.css">
+    <link rel="stylesheet" href="style.css?v=042204ada207">
 </head>
 
 <body class="page-diary">
@@ -57,6 +57,8 @@
     </header>
 
     <main class="diary-container">
+        <div id="tagFilter" class="tag-filter" role="group" aria-label="依標籤篩選文章"></div>
+        <p id="filterStatus" class="filter-status" role="status"></p>
         <div id="diaryList" class="diary-list" aria-live="polite"></div>
     </main>
 
@@ -82,7 +84,7 @@
             const list = document.getElementById("diaryList");
 
             try {
-                const response = await fetch("data/content_life.json");
+                const response = await fetch("data/diary.json");
                 if (!response.ok) {
                     throw new Error(`HTTP ${response.status}`);
                 }
@@ -94,7 +96,7 @@
                     return;
                 }
 
-                renderDiary(posts);
+                setupFilters(posts);
             } catch (error) {
                 console.error("無法載入 diary 資料:", error);
                 list.innerHTML = '<p class="diary-error">無法載入內容，請稍後再試。</p>';
@@ -108,13 +110,13 @@
             const grouped = groupPostsByMonth(posts);
             const groupKeys = [...grouped.keys()].sort((a, b) => b.localeCompare(a));
 
-            groupKeys.forEach((key, index) => {
+            groupKeys.forEach(key => {
                 const [yearString, monthString] = key.split("-");
                 const year = Number(yearString);
                 const month = Number(monthString);
 
                 const monthPosts = grouped.get(key).slice().sort((a, b) => {
-                    return new Date(a.date) - new Date(b.date);
+                    return new Date(b.date) - new Date(a.date);
                 });
 
                 const section = document.createElement("section");
@@ -136,7 +138,7 @@
                 tag.append(yearEl, monthEl);
 
                 const grid = document.createElement("div");
-                grid.className = "diary-card-grid";
+                grid.className = "diary-rows";
 
                 monthPosts.forEach(post => {
                     grid.appendChild(createDiaryCard(post));
@@ -144,13 +146,6 @@
 
                 section.append(tag, grid);
                 list.appendChild(section);
-
-                if (index < groupKeys.length - 1) {
-                    const divider = document.createElement("hr");
-                    divider.className = "diary-divider";
-                    divider.setAttribute("aria-hidden", "true");
-                    list.appendChild(divider);
-                }
             });
         }
 
@@ -177,69 +172,79 @@
             return grouped;
         }
 
-        function createDiaryCard(post) {
-            const date = new Date(`${post.date}T00:00:00`);
-            const day = String(date.getDate()).padStart(2, "0");
-            const excerpt = getExcerpt(post.content || "");
-            const imagePath = post.img ? `img/life/${post.img}` : "";
-
-            /*
-             * 預留未來完整圖文頁面。
-             * 建議頁面名稱：diary-entry.html
-             * 日後可由 query string 讀取 id 並顯示完整內容：
-             * diary-entry.html?id=LFE-0016
-             */
-            const card = document.createElement("a");
-            card.className = "diary-card";
-            card.href = `diary-entry.html?id=${encodeURIComponent(post.id || "")}`;
-            card.setAttribute("aria-label", `${post.date} 的 Diary 內容`);
-
-            if (imagePath) {
-                card.style.setProperty("--diary-card-img", `url("${imagePath}")`);
-            }
-
-            const defaultFace = createCardFace({
-                className: "diary-card-face diary-card-default",
-                day,
-                excerpt,
-                tag: post.tag || ""
-            });
-
-            const hoverFace = createCardFace({
-                className: "diary-card-face diary-card-hover",
-                day,
-                excerpt,
-                tag: post.tag || ""
-            });
-
-            card.append(defaultFace, hoverFace);
-            return card;
+        // tags 陣列優先，並相容舊版 tag 欄位；未知標籤使用預設色。
+        function getPostTags(post) {
+            const values = Array.isArray(post.tags) && post.tags.length ? post.tags : [post.tag || ""];
+            return [...new Set(values.flatMap(value => String(value).split(/[,，]/))
+                .map(value => value.trim().toUpperCase()).filter(Boolean))];
         }
 
-        function createCardFace({ className, day, excerpt, tag }) {
-            const face = document.createElement("div");
-            face.className = className;
-            face.setAttribute("aria-hidden", "true");
+        function createTag(tag, element = "span") {
+            const chip = document.createElement(element);
+            chip.className = "tag-chip";
+            chip.dataset.tag = tag;
+            chip.textContent = tag;
+            return chip;
+        }
 
-            const copy = document.createElement("div");
-            copy.className = "diary-card-copy";
+        function setupFilters(posts) {
+            const filter = document.getElementById("tagFilter");
+            const standardTags = ["LIFE", "GAME", "MUSIC", "DRAWING", "BOOKS", "FEEDBACK"];
+            const allTags = [...new Set([...standardTags, ...posts.flatMap(getPostTags)])];
+            let activeTag = "";
+            allTags.forEach(tag => {
+                const button = createTag(tag, "button");
+                button.type = "button";
+                button.setAttribute("aria-pressed", "false");
+                button.setAttribute("aria-controls", "diaryList");
+                button.addEventListener("click", () => {
+                    activeTag = activeTag === tag ? "" : tag;
+                    filter.querySelectorAll("button").forEach(item => {
+                        item.setAttribute("aria-pressed", String(item.dataset.tag === activeTag));
+                    });
+                    update();
+                });
+                filter.append(button);
+            });
+            function update() {
+                const visible = activeTag ? posts.filter(post => getPostTags(post).includes(activeTag)) : posts;
+                renderDiary(visible);
+                if (!visible.length) document.getElementById("diaryList").innerHTML = '<p class="diary-empty">此標籤目前沒有文章。</p>';
+                document.getElementById("filterStatus").textContent = (activeTag || "全部") + "：" + visible.length + " 篇文章";
+            }
+            update();
+        }
 
-            const dayEl = document.createElement("p");
-            dayEl.className = "diary-day";
-            dayEl.textContent = day;
-
-            const excerptEl = document.createElement("p");
-            excerptEl.className = "diary-excerpt";
-            excerptEl.textContent = excerpt;
-
-            copy.append(dayEl, excerptEl);
-
-            const tagEl = document.createElement("span");
-            tagEl.className = "diary-tag";
-            tagEl.textContent = tag;
-
-            face.append(copy, tagEl);
-            return face;
+        function createDiaryCard(post) {
+            const card = document.createElement("a");
+            card.className = "diary-row";
+            card.href = "diary-entry.html?id=" + encodeURIComponent(post.id || "");
+            const day = document.createElement("p");
+            day.className = "row-day";
+            day.textContent = post.date.slice(-2);
+            const content = document.createElement("div");
+            content.className = "row-content";
+            const excerpt = document.createElement("p");
+            excerpt.className = "row-excerpt";
+            excerpt.textContent = getExcerpt(post.content || "");
+            const tags = document.createElement("div");
+            tags.className = "row-tags";
+            getPostTags(post).forEach(tag => tags.append(createTag(tag)));
+            content.append(excerpt, tags);
+            const thumbnail = document.createElement("div");
+            thumbnail.className = "row-thumbnail";
+            const imageName = post.img || (Array.isArray(post.images) ? post.images[0] : "");
+            if (imageName) {
+                const img = document.createElement("img");
+                img.src = "img/life/" + imageName;
+                img.alt = "";
+                img.loading = "lazy";
+                img.addEventListener("error", () => { img.remove(); });
+                thumbnail.append(img);
+            }
+            card.setAttribute("aria-label", post.date + " " + excerpt.textContent + " " + getPostTags(post).join("、"));
+            card.append(day, content, thumbnail);
+            return card;
         }
 
         function getExcerpt(content) {
