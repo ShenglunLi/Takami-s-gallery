@@ -19,8 +19,7 @@
   <link rel="apple-touch-icon" href="https://takami-artwork.com/img/apple-touch-icon.png">
   <link rel="canonical" href="https://takami-artwork.com/log.html">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="log.css">
+  <link rel="stylesheet" href="style_v2.css">
   <script src="log.js" defer></script>
   <script src="main.js" defer></script>
 </head>
@@ -55,16 +54,16 @@
     <button type="button" id="log-close" class="log-overlay-close" aria-label="關閉圖片">
       <span class="icon-svg icon-close" aria-hidden="true"></span>
     </button>
-    <button type="button" id="log-prev" class="log-overlay-nav log-overlay-prev" aria-label="上一張圖片">&#10094;</button>
+    <button type="button" id="log-prev" class="info-nav-btn prev" aria-label="上一張圖片"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
     <figure class="log-overlay-content">
       <img id="log-full-image" class="log-full-image" alt="">
       <figcaption class="log-caption">
-        <span id="log-date"></span>
+        <time id="log-date"></time>
         <span id="log-location1"></span>
         <span id="log-location2"></span>
       </figcaption>
     </figure>
-    <button type="button" id="log-next" class="log-overlay-nav log-overlay-next" aria-label="下一張圖片">&#10095;</button>
+    <button type="button" id="log-next" class="info-nav-btn next" aria-label="下一張圖片"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
   </div>
 
   <footer class="footer">
