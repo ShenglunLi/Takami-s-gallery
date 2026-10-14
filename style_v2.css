@@ -2395,7 +2395,7 @@ body.page-log { min-height: 100%; background: var(--bg-color); }
   justify-content: flex-start;
   gap: 2px;
   min-height: 32px;
-  margin-top: 4px;
+  margin-top: 12px;
   font-family: var(--font-main);
   font-size: 10px;
   line-height: 1.25;
@@ -2481,6 +2481,8 @@ body.page-log { min-height: 100%; background: var(--bg-color); }
   .log-overlay { padding: 64px 46px 24px; }
   .log-full-image { max-height: min(72vh, calc(100dvh - 175px)); }
   .log-overlay-close { top: 16px; right: 16px; width: 36px; height: 36px; }
+
+  .log-card-copy {margin-top: 12px; font-size: 8px; }
 }
 
 @media (max-width: 439px) { .log-container { padding-inline: 12px; } }
