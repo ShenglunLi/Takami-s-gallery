@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Log records",
+  "description": "date 可使用 YYYY-MM；已知確切日期時使用 YYYY-MM-DD。月份資料不需補上虛構的日數。",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "date", "location1", "location2", "img"],
+    "properties": {
+      "id": { "type": "string", "pattern": "^LOG-[0-9]{4,}$" },
+      "date": {
+        "type": "string",
+        "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])(-(0[1-9]|[12][0-9]|3[01]))?$",
+        "examples": ["2026-06", "2026-06-19"]
+      },
+      "location1": { "type": "string" },
+      "location2": { "type": "string" },
+      "img": { "type": "string" }
+    }
+  }
+}

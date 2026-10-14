@@ -1,9 +1,170 @@
 [
   {
-    "id": "LOG-0001",
-    "date": "2026-06-19",
+    "id": "LOG-0024",
+    "date": "2026-10",
     "location1": "HSINCHU, TAIWAN",
     "location2": "南寮漁港",
-    "img": "IMG_8699.jpg"
+    "img": "202610-P01.jpg"
+  },
+  {
+    "id": "LOG-0020",
+    "date": "2026-09",
+    "location1": "",
+    "location2": "",
+    "img": "202609-P01.jpg"
+  },
+  {
+    "id": "LOG-0021",
+    "date": "2026-09",
+    "location1": "",
+    "location2": "",
+    "img": "202609-P02.jpg"
+  },
+  {
+    "id": "LOG-0022",
+    "date": "2026-09",
+    "location1": "",
+    "location2": "",
+    "img": "202609-P03.jpg"
+  },
+  {
+    "id": "LOG-0023",
+    "date": "2026-09",
+    "location1": "",
+    "location2": "",
+    "img": "202609-P04.jpg"
+  },
+  {
+    "id": "LOG-0019",
+    "date": "2026-08",
+    "location1": "",
+    "location2": "",
+    "img": "202608-P01.jpg"
+  },
+  {
+    "id": "LOG-0017",
+    "date": "2026-07",
+    "location1": "",
+    "location2": "",
+    "img": "202607-P01.jpg"
+  },
+  {
+    "id": "LOG-0018",
+    "date": "2026-07",
+    "location1": "",
+    "location2": "",
+    "img": "202607-P02.jpg"
+  },
+  {
+    "id": "LOG-0007",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P01.jpg"
+  },
+  {
+    "id": "LOG-0008",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P02.jpg"
+  },
+  {
+    "id": "LOG-0009",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P03.jpg"
+  },
+  {
+    "id": "LOG-0010",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P04.jpg"
+  },
+  {
+    "id": "LOG-0011",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P05.jpg"
+  },
+  {
+    "id": "LOG-0012",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P06.jpg"
+  },
+  {
+    "id": "LOG-0013",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P07.jpg"
+  },
+  {
+    "id": "LOG-0014",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P08.jpg"
+  },
+  {
+    "id": "LOG-0015",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P09.jpg"
+  },
+  {
+    "id": "LOG-0016",
+    "date": "2026-06",
+    "location1": "",
+    "location2": "",
+    "img": "202606-P10.jpg"
+  },
+  {
+    "id": "LOG-0006",
+    "date": "2026-05",
+    "location1": "",
+    "location2": "",
+    "img": "202605-P01.jpg"
+  },
+  {
+    "id": "LOG-0001",
+    "date": "2026-04",
+    "location1": "",
+    "location2": "",
+    "img": "202604-P01.jpg"
+  },
+  {
+    "id": "LOG-0002",
+    "date": "2026-04",
+    "location1": "",
+    "location2": "",
+    "img": "202604-P02.jpg"
+  },
+  {
+    "id": "LOG-0003",
+    "date": "2026-04",
+    "location1": "",
+    "location2": "",
+    "img": "202604-P03.jpg"
+  },
+  {
+    "id": "LOG-0004",
+    "date": "2026-04",
+    "location1": "",
+    "location2": "",
+    "img": "202604-P04.jpg"
+  },
+  {
+    "id": "LOG-0005",
+    "date": "2026-04",
+    "location1": "",
+    "location2": "",
+    "img": "202604-P05.jpg"
   }
 ]

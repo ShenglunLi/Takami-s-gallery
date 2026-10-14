@@ -124,6 +124,98 @@
     "order": 7
   },
   {
+    "id": "TKM-0085",
+    "type": "single",
+    "title": "星",
+    "desc": "",
+    "date": "2026-10-11",
+    "cover": "C-20261011-P.jpg",
+    "img": "C-20261011-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0083",
+    "type": "series",
+    "title": "見惚れる",
+    "desc": "……ほんと、あなたには勝てないな。",
+    "date": "2026-10-08",
+    "cover": "C-20261008-見惚れる/20261008-1.jpg",
+    "img": [
+      "C-20261008-見惚れる/20261008-1.jpg",
+      "C-20261008-見惚れる/20261008-2.jpg",
+      "C-20261008-見惚れる/20261008-3.jpg"
+    ],
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0082",
+    "type": "single",
+    "title": "寒くなってきました。",
+    "desc": "嘉は人から気にかけられるのは好きじゃない。\r\nでも、彧に気にかけてもらうと嬉しくなる。",
+    "date": "2026-10-06",
+    "cover": "C-20261006-P.jpg",
+    "img": "C-20261006-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0080",
+    "type": "single",
+    "title": "兆し",
+    "desc": "",
+    "date": "2026-10-04",
+    "cover": "D-20261004-P.jpg",
+    "img": "D-20261004-P.jpg",
+    "category": "モノクロイラスト",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0079",
+    "type": "single",
+    "title": "共飲",
+    "desc": "平凡之刻因你而非凡。",
+    "date": "2026-09-29",
+    "cover": "C-20260929-P.jpg",
+    "img": "C-20260929-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0084",
+    "type": "single",
+    "title": "",
+    "desc": "「……」",
+    "date": "2026-09-23",
+    "cover": "C-20260923-P.jpg",
+    "img": "C-20260923-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0081",
+    "type": "single",
+    "title": "フォロワー感謝",
+    "desc": "Xのフォロ数への感謝を込めたリクエストイラスト。",
+    "date": "2026-09-21",
+    "cover": "C-20260921-P.jpg",
+    "img": "C-20260921-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
+    "id": "TKM-0078",
+    "type": "single",
+    "title": "一葉知秋",
+    "desc": "",
+    "date": "2026-09-18",
+    "cover": "C-20260918-P.jpg",
+    "img": "C-20260918-P.jpg",
+    "category": "落書き",
+    "order": 9999
+  },
+  {
     "id": "TKM-0077",
     "type": "single",
     "title": "追う眼差し",

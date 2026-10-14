@@ -10,7 +10,7 @@ function logImageUrl(filename) {
 }
 
 function logDate(value) {
-  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)
+  return typeof value === 'string' && /^\d{4}-(?:0[1-9]|1[0-2])(?:-(?:0[1-9]|[12]\d|3[01]))?$/.test(value)
     ? value.replaceAll('-', ' / ')
     : '';
 }
@@ -43,10 +43,10 @@ function renderLog(entries) {
 
     const copy = document.createElement('span');
     copy.className = 'log-card-copy';
-    for (const value of [logDate(entry.date), entry.location1, entry.location2]) {
-      const line = document.createElement('span');
-      line.textContent = typeof value === 'string' ? value : '';
-      copy.append(line);
+    for (const value of [entry.location1, entry.location2]) {
+      const location = document.createElement('span');
+      location.textContent = typeof value === 'string' ? value : '';
+      copy.append(location);
     }
 
     card.append(image, copy);
@@ -68,7 +68,9 @@ function showLog(index) {
   const image = document.getElementById('log-full-image');
   image.src = logImageUrl(entry.img);
   image.alt = [entry.location1, entry.location2].filter(Boolean).join(' ');
-  document.getElementById('log-date').textContent = logDate(entry.date);
+  const date = document.getElementById('log-date');
+  date.dateTime = entry.date;
+  date.textContent = logDate(entry.date);
   document.getElementById('log-location1').textContent = entry.location1 || '';
   document.getElementById('log-location2').textContent = entry.location2 || '';
   document.getElementById('log-prev').disabled = index === 0;
@@ -116,12 +118,28 @@ async function initLog() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('log-overlay');
+  let touchStart = null;
   document.getElementById('log-close').addEventListener('click', closeLog);
   document.getElementById('log-prev').addEventListener('click', () => showLog(activeLogIndex - 1));
   document.getElementById('log-next').addEventListener('click', () => showLog(activeLogIndex + 1));
-  document.getElementById('log-overlay').addEventListener('click', event => {
-    if (event.target.id === 'log-overlay') closeLog();
+  overlay.addEventListener('click', event => {
+    if (event.target === overlay) closeLog();
   });
+  overlay.addEventListener('touchstart', event => {
+    if (event.touches.length !== 1) { touchStart = null; return; }
+    touchStart = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+  }, { passive: true });
+  overlay.addEventListener('touchend', event => {
+    if (!touchStart || event.changedTouches.length !== 1) return;
+    const dx = event.changedTouches[0].clientX - touchStart.x;
+    const dy = event.changedTouches[0].clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy)) {
+      showLog(activeLogIndex + (dx < 0 ? 1 : -1));
+    }
+  });
+  overlay.addEventListener('touchcancel', () => { touchStart = null; });
   document.addEventListener('keydown', event => {
     if (document.getElementById('log-overlay').hidden) return;
     if (event.key === 'Escape') closeLog();
