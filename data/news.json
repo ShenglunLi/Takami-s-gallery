@@ -1,42 +1,42 @@
 [
   {
-    "id": "TKM-0077",
-    "date": "2026-09-13",
+    "id": "TKM-0085",
+    "date": "2026-10-11",
     "section": "Gallery",
-    "title": "追う眼差し",
+    "title": "星",
     "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0077"
+    "url": "gallery.html?id=TKM-0085"
   },
   {
-    "id": "TKM-0076",
-    "date": "2026-09-10",
-    "section": "Gallery",
-    "title": "情不自禁",
-    "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0076"
-  },
-  {
-    "id": "TKM-0075",
-    "date": "2026-09-09",
-    "section": "Gallery",
-    "title": "",
-    "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0075"
-  },
-  {
-    "id": "LFE-0016",
-    "date": "2026-09-04",
+    "id": "LFE-0026",
+    "date": "2026-10-09",
     "section": "Diary",
-    "title": "",
+    "title": "久しぶりのシャーペンで",
     "text": "更新",
-    "url": "diary-entry.html?id=LFE-0016"
+    "url": "diary-entry.html?id=LFE-0026"
   },
   {
-    "id": "TKM-0074",
-    "date": "2026-09-03",
+    "id": "TKM-0083",
+    "date": "2026-10-08",
     "section": "Gallery",
-    "title": "",
+    "title": "見惚れる",
     "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0074"
+    "url": "gallery.html?id=TKM-0083"
+  },
+  {
+    "id": "TKM-0082",
+    "date": "2026-10-06",
+    "section": "Gallery",
+    "title": "寒くなってきました。",
+    "text": "落書き更新",
+    "url": "gallery.html?id=TKM-0082"
+  },
+  {
+    "id": "LFE-0025",
+    "date": "2026-10-05",
+    "section": "Diary",
+    "title": "LEMON MELON COOKIE ♪",
+    "text": "更新",
+    "url": "diary-entry.html?id=LFE-0025"
   }
 ]
