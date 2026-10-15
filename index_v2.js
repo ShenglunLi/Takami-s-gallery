@@ -79,6 +79,8 @@ async function loadNews() {
 
 async function loadLogPreview() {
   const target = document.getElementById('log-latest');
+  if (!target) return;
+
   try {
     const logs = await readJsonArray(LOG_URL);
     const latest = logs.filter(item => item && formatDate(item.date))
