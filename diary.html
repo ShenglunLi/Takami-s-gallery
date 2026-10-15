@@ -47,7 +47,7 @@
         <a href="log.html">Log</a>
     </nav>
 
-    <!-- 沿用既有 Hero 架構與 life 圖片 -->
+    <!-- 沿用既有 Hero 架構與 Diary 圖片 -->
     <header class="page-hero page-hero-small">
         <div class="page-hero-bg"></div>
         <div class="hero-content">
@@ -236,7 +236,7 @@
             const imageName = post.img || (Array.isArray(post.images) ? post.images[0] : "");
             if (imageName) {
                 const img = document.createElement("img");
-                img.src = "img/life/" + imageName;
+                img.src = "img/diary/" + imageName;
                 img.alt = "";
                 img.loading = "lazy";
                 img.addEventListener("error", () => { img.remove(); });
