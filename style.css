@@ -47,7 +47,7 @@
     --text-shadow-dark: 0 4px 10px rgba(0, 0, 0, 0.8);
 
     /* New 頁面專用變數 */
-    --accent-color: #e65100;       /* 焦橘色 (保留作為重點強調) */
+    --accent-color: #EAA04E;       /* 焦橘色 (保留作為重點強調) */
     --card-bg: #ffffff;            /* 作品卡片底色：純白，在米白背景下產生層次感 */
 
 
@@ -352,10 +352,10 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     transition: var(--transition-base);
 }
 
-.main-logo:hover {
+/* .main-logo:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-}
+} */
 
 /* 3. 三欄卡片 */
 .card-container {
@@ -545,6 +545,18 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     text-decoration: none;
     transition: var(--transition-base); /* 確保變化平滑 */
     display: block; /* 增加點擊範圍 */
+}
+
+.full-menu a:not([href="/"]):not([href="index.html"])::before {
+    content: "";
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-right: 8px;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid #000;
+    vertical-align: middle;
 }
 
 /* --- 2. 僅針對「有滑鼠」的裝置套用 Hover 效果 --- */
