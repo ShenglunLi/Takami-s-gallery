@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diary | TAKAMI's Artwork</title>
+
+  <meta name="robots" content="index, follow, noai, max-image-preview:large">
+  <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500&display=swap">
+  <link rel="stylesheet" href="style.css?v=042204ada207">
+</head>
+
+<body class="page-diary-view">
+
+  <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars menu-icon"></i>
+  </div>
+
+  <nav class="full-menu" id="fullMenu">
+    <div class="close-menu" onclick="toggleMenu()">
+      <i class="fa-solid fa-xmark"></i>
+    </div>
+    <a href="/">Home</a>
+    <a href="info.html">Info</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="diary.html">Diary</a>
+    <a href="log.html">Log</a>
+  </nav>
+
+  <header class="page-hero page-hero-small">
+    <div class="page-hero-bg"></div>
+    <div class="hero-content">
+      <h1>Diary</h1>
+      <p>日常記録<br>写真・手描き・制作過程など</p>
+    </div>
+  </header>
+
+  <main class="diary-view-container" id="diaryView">
+    <p class="diary-view-status">Loading...</p>
+  </main>
+
+  <dialog id="diaryLightbox" class="overlay diary-lightbox" aria-label="Diary 圖片放大檢視">
+    <button type="button" class="overlay-close" id="diaryLightboxClose" aria-label="關閉圖片">
+      <span class="icon-svg icon-close" aria-hidden="true"></span>
+    </button>
+    <div class="overlay-content">
+      <div class="viewer-layer active">
+        <div class="viewer-img-container" id="diaryLightboxStage">
+          <button type="button" class="nav-btn prev-btn" id="diaryLightboxPrev" aria-label="上一張圖片"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+          <img id="diaryLightboxImage" alt="" draggable="false">
+          <button type="button" class="nav-btn next-btn" id="diaryLightboxNext" aria-label="下一張圖片"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+        </div>
+        <div class="viewer-indicator" id="diaryLightboxIndicator" aria-hidden="true"></div>
+        <p class="diary-lightbox-status" id="diaryLightboxStatus" role="status"></p>
+      </div>
+    </div>
+  </dialog>
+
+  <footer class="footer">
+    <p>&copy; 2026 TAKAMI</p>
+    <p>本サイト掲載の画像・文章の無断転載・加工・商用利用・AI学習への使用は禁止します。</p>
+    <p>
+      Unauthorized reproduction, modification, commercial use,<br class="mobile-br">
+      or AI training of the images and texts on this website is prohibited.<br>
+      Fanart: Original characters and related rights belong to their respective owners.<br class="mobile-br">
+      Original works: All rights reserved.
+    </p>
+  </footer>
+
+  <script src="diary-lightbox.js"></script>
+  <script>
+    const MONTH_NAMES = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    document.addEventListener("DOMContentLoaded", initDiaryView);
+
+    async function initDiaryView() {
+      const params = new URLSearchParams(window.location.search);
+      const postId = params.get("id");
+
+      if (!postId) {
+        renderMessage("找不到文章 ID。");
+        return;
+      }
+
+      try {
+        const response = await fetch("data/diary.json");
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+        const posts = await response.json();
+        const post = posts.find(item => item.id === postId);
+
+        if (!post) {
+          renderMessage("找不到這篇 Diary 內容。");
+          return;
+        }
+
+        const navigation = getDiaryNavigation(posts, postId);
+        renderDiaryEntry(post, navigation);
+      } catch (error) {
+        console.error("無法載入 Diary 內容:", error);
+        renderMessage("無法載入內容，請稍後再試。");
+      }
+    }
+
+    function renderDiaryEntry(post, navigation) {
+      const container = document.getElementById("diaryView");
+      const date = new Date(`${post.date}T00:00:00`);
+
+      if (Number.isNaN(date.getTime())) {
+        renderMessage("日期格式不正確。");
+        return;
+      }
+
+      const year = date.getFullYear();
+      const month = MONTH_NAMES[date.getMonth()];
+      const day = String(date.getDate()).padStart(2, "0");
+
+      const paragraphs = getContentParagraphs(post.content || "");
+      const hasTitle = Boolean(post.title?.trim());
+
+      const title = hasTitle
+        ? post.title.trim()
+        : (paragraphs[0] || "Diary");
+
+      const bodyParagraphs = hasTitle
+        ? paragraphs
+        : paragraphs.slice(1);
+
+      const images = getPostImages(post);
+
+      container.innerHTML = `
+        <article class="diary-view-entry">
+
+          <a class="diary-view-back" href="diary.html" aria-label="返回 Diary">
+            <span aria-hidden="true">←</span>
+            <span>Diary</span>
+          </a>
+
+          <header class="diary-view-date">
+            <div class="diary-view-day">${day}</div>
+
+            <div class="diary-view-month">
+              <div class="diary-view-year">${year}</div>
+              <h1 class="diary-view-month-name">${escapeHtml(month)}</h1>
+            </div>
+          </header>
+
+          <section class="diary-view-main">
+            <div class="diary-view-gallery">
+              <button type="button" class="diary-view-photo" id="diaryPhotoButton" aria-label="放大圖片" aria-haspopup="dialog" aria-controls="diaryLightbox">
+                <img id="diaryMainImage" src="" alt="" draggable="false">
+              </button>
+
+              <div
+                class="diary-view-thumbs"
+                id="diaryThumbs"
+                aria-label="圖片選擇"
+              ></div>
+            </div>
+
+            <div class="diary-view-text">
+              <h2 class="diary-view-title">${escapeHtml(title)}</h2>
+              <div class="diary-view-content" id="diaryContent"></div>
+            </div>
+          </section>
+
+          ${renderDiaryPagination(navigation)}
+        </article>
+      `;
+
+      renderContent(bodyParagraphs);
+      renderGallery(images, title);
+      document.title = `${title} | TAKAMI's Artwork`;
+    }
+
+    function getContentParagraphs(content) {
+      return String(content)
+        .replace(/\r\n/g, "\n")
+        .split(/\n+/)
+        .map(line => line.trim())
+        .filter(Boolean);
+    }
+
+    function getDiaryNavigation(posts, currentId) {
+      const orderedPosts = [...posts]
+        .filter(item => item?.id && item?.date)
+        .sort((a, b) => {
+          const dateDiff =
+            new Date(`${a.date}T00:00:00`) -
+            new Date(`${b.date}T00:00:00`);
+
+          return dateDiff ||
+            String(a.id).localeCompare(String(b.id));
+        });
+
+      const currentIndex =
+        orderedPosts.findIndex(item => item.id === currentId);
+
+      if (currentIndex === -1) {
+        return { previous: null, next: null };
+      }
+
+      return {
+        previous: orderedPosts[currentIndex - 1] || null,
+        next: orderedPosts[currentIndex + 1] || null
+      };
+    }
+
+    function renderDiaryPagination(navigation) {
+      const previous = navigation?.previous;
+      const next = navigation?.next;
+
+      const previousLink = previous
+        ? `
+          <a
+            class="diary-view-nav-link diary-view-nav-previous"
+            href="diary-entry.html?id=${encodeURIComponent(previous.id)}"
+          >
+            <span aria-hidden="true">←</span>
+            <span>Previous</span>
+          </a>
+        `
+        : "";
+
+      const nextLink = next
+        ? `
+          <a
+            class="diary-view-nav-link diary-view-nav-next"
+            href="diary-entry.html?id=${encodeURIComponent(next.id)}"
+          >
+            <span>Next</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        `
+        : "";
+
+      return `
+        <nav
+          class="diary-view-pagination"
+          aria-label="Diary 文章導覽"
+        >
+          ${previousLink}
+          ${nextLink}
+        </nav>
+      `;
+    }
+
+    function getPostImages(post) {
+      if (Array.isArray(post.images) && post.images.length) {
+        return post.images.filter(Boolean);
+      }
+      return post.img ? [post.img] : [];
+    }
+
+    function renderGallery(images, title) {
+      const mainImage = document.getElementById("diaryMainImage");
+      const thumbs = document.getElementById("diaryThumbs");
+      const gallery = document.querySelector(".diary-view-gallery");
+
+      if (!images.length) {
+        mainImage.remove();
+        thumbs.remove();
+        gallery.classList.add("is-empty");
+        return;
+      }
+
+      const paths = images.map(file => `img/diary/${file}`);
+      mainImage.src = paths[0];
+      mainImage.alt = title;
+
+      const lightbox = createDiaryLightbox(paths, title, index => {
+        mainImage.src = paths[index];
+        thumbs.querySelectorAll(".diary-thumb").forEach((button, buttonIndex) => {
+          button.classList.toggle("active", buttonIndex === index);
+          button.setAttribute("aria-pressed", String(buttonIndex === index));
+        });
+      });
+      document.getElementById("diaryPhotoButton").addEventListener("click", () => lightbox.open());
+
+      if (paths.length === 1) {
+        thumbs.hidden = true;
+        return;
+      }
+
+      paths.forEach((src, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `diary-thumb${index === 0 ? " active" : ""}`;
+        button.setAttribute("aria-label", `顯示第 ${index + 1} 張圖片`);
+        button.setAttribute("aria-pressed", String(index === 0));
+
+        const img = document.createElement("img");
+        img.src = src;
+        img.alt = "";
+        img.loading = "lazy";
+        button.appendChild(img);
+
+        button.addEventListener("click", () => {
+          lightbox.select(index);
+        });
+
+        thumbs.appendChild(button);
+      });
+    }
+
+    function renderContent(paragraphs) {
+      const contentBox = document.getElementById("diaryContent");
+
+      paragraphs.forEach(text => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        contentBox.appendChild(p);
+      });
+    }
+
+    function renderMessage(message) {
+      document.getElementById("diaryView").innerHTML = `
+        <div class="diary-view-status">
+          <p>${escapeHtml(message)}</p>
+          <a href="diary.html">Back to Diary</a>
+        </div>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
+
+  <script src="main.js"></script>
+</body>
+</html>

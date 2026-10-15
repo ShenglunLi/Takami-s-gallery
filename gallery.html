@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-25..0" />
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=042204ada207">
 
 </head>
 <body class="page-gallery">
@@ -37,7 +37,8 @@
         <a href="/">Home</a>
         <a href="info.html">Info</a>
         <a href="gallery.html">Gallery</a>
-        <a href="life.html">Life</a>
+        <a href="diary.html">Diary</a>
+        <a href="log.html">Log</a>
     </nav>
 
     <header class="page-hero page-hero-small">
@@ -248,6 +249,12 @@
                 
                 // 直接執行畫廊渲染，不再需要 renderFilters()
                 renderCategorizedGallery();
+
+                const linkedWorkId = new URLSearchParams(window.location.search).get('id');
+                if (linkedWorkId) {
+                    const linkedIndex = currentFilteredWorks.findIndex(work => work.id === linkedWorkId);
+                    if (linkedIndex !== -1) openOverlay(linkedIndex);
+                }
                 
                 initTouchEvents();
             } catch (err) { 

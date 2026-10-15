@@ -1,3 +1,4 @@
+/* ===== 共用樣式 ===== */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Zen+Antique+Soft&display=swap');
 
 /* --- 設計系統變數 (Design System Tokens) --- */
@@ -55,6 +56,13 @@
 /* 字體順序：繁體中文 -> 日文 -> 系統預設 */
     --font-main: 'Noto Sans TC', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     
+    /* Diary 列表與文章頁共用字型設定 */
+    --diary-font-month: 'Noto Sans TC', sans-serif;
+    --diary-font-month-weight: 500;
+    --diary-font-date: 'Roboto Condensed', sans-serif;
+    --diary-font-date-weight: 200;
+    --diary-day-letter-spacing: -0.04em; /* 字體大小的 -4% */
+
     /* 文字大小定義 */
     --fs-h1: 1.8rem;       
     --fs-h2: 1.3rem;     
@@ -222,12 +230,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 }
 
 .page-life .page-hero-bg {
-    --hero-img: url('img/hero/life.jpg');
-}
-
-.page-info .page-hero-bg {
-    --hero-img: url('img/hero/info.jpg');
-    z-index: 0;
+    --hero-img: url('img/hero/diary.jpg');
 }
 
 .page-info .page-hero-bg {
@@ -412,7 +415,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 
 .card-info { --card-img: url('img/hero/info.jpg'); }
 .card-gallery { --card-img: url('img/hero/gallery.jpg'); }
-.card-life { --card-img: url('img/hero/life.jpg'); }
+.card-diary { --card-img: url('img/hero/diary.jpg'); }
 
 
 
@@ -1023,8 +1026,8 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     transition: 0.3s; display: flex; align-items: center; justify-content: center;
     border-radius: 50%;
 }
-.info-nav-btn.prev { left: 30px; }
-.info-nav-btn.next { right: 30px; }
+.info-nav-btn.prev { left: 30px; z-index: 1000;}
+.info-nav-btn.next { right: 30px; z-index: 1000; }
 
 
 .page-count-label {
@@ -1402,103 +1405,116 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         
 
         }
-/* info 頁面新增樣式 */
-/* --- 佈局結構 --- */
+/* --- Info 頁面：左側介紹文字、右側社群連結 --- */
 .page-info {
     height: auto !important;
 }
 
-.info-container{
-    padding: 20px 30px;
+.page-info .info-container {
+    width: 100%;
     max-width: 1200px;
+    margin: 150px auto 40px;
+    padding: 20px 30px;
     display: flex;
     flex-direction: column;
-    gap:20px;
+    align-items: flex-start;
+    gap: 24px;
 }
 
-
-.intro{
-    gap: 40px;
+.page-info .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+    gap: 32px;
 }
-.intro-text{
-    margin-bottom: 40px;
+
+.page-info .intro-text {
+    margin: 0;
     line-height: 1.8;
     color: var(--text-body);
+    overflow-wrap: anywhere;
 }
 
-/* --- Footer SNS 區塊修正 --- */
-/* 共用 SNS 按鈕基礎樣式 */
-.main-logo.info-logo:hover{
+.page-info .info-logo {
+    flex-shrink: 0;
+}
+
+.page-info .info-logo:hover {
     transform: scale(1);
 }
-.sns-links {
+
+.page-info .sns-links {
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 20px;
     list-style: none;
+    margin: 0;
     padding: 0;
 }
 
-.sns-links li {
-    gap: 20px;
+.page-info .sns-links li {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    gap: 16px;
 }
-.sns-links p{
+
+.page-info .sns-links p {
     font-size: 0.75rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
 }
-@media(min-width: 900px) {
 
-    .info-container{
-        margin: auto;
-        margin-top: 180px;
-        margin-bottom: 40px;
+@media (min-width: 900px) {
+    .page-info .info-container {
+        margin: 180px auto 40px;
         flex-direction: row;
-        justify-content: center;
-        align-items: start;
-        gap: 40px;
-        transform: translateX(-50px);
+        gap: 32px;
     }
-    /* .main-logo.info-logo{
-        position: static;
-    } */
-    .intro-text{
-        margin-bottom: 80px;
-    }
-    .sns-links {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
-    .sns-links li {
-        gap: 10px;
+
+    .page-info .intro {
+        flex: 1;
+        grid-template-columns: minmax(0, 1fr) 240px;
+        column-gap: clamp(32px, 4vw, 56px);
     }
 }
 
-.sns-btn {
+@media (max-width: 479px) {
+    .page-info .info-container {
+        padding-inline: 20px;
+    }
+}
+
+.page-info .sns-btn {
+    flex: 0 0 32px;
     width: 32px;
     height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: var(--radius-full);
-    transition: all 0.3s ease;
+    transition: var(--transition-base);
 }
 /* PNG 圖示統一處理邏輯 */
-.png-icon {
+.page-info .png-icon {
     background-image: var(--icon); /* 使用行內定義的預設圖 */
     background-size: 32px;         /* 統一控制圖示大小 */
     background-repeat: no-repeat;
     background-position: center;
 }
 
-.png-icon:hover {
+.page-info .png-icon:hover,
+.page-info .png-icon:focus-visible {
     background-image: var(--hover); /* 懸停時自動切換為行內定義的 Hover 圖 */
     background-color: transparent;  /* 根據需求決定是否保留背景色 */
     transform: translateY(-3px);
 }
 
+.page-info .sns-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 4px;
+}
 
 /* 讓圖片在 src 改變時平滑切換 */
 #infoCoverImg {
@@ -1510,3 +1526,777 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
 .img-loading {
     opacity: 0.3 !important;
 }
+
+/* ===== 首頁 ===== */
+.site-shell {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #e6edef;
+}
+
+body.page-index { background: #e6edef; }
+.site-shell > .page-hero { flex: none; }
+
+.home-content {
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  display: flex;
+  padding: 60px 20px 0;
+}
+
+.home-grid {
+  width: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.06fr 1fr;
+  grid-template-rows: repeat(2, minmax(150px, 1fr));
+  grid-template-areas:
+    'news gallery diary'
+    'info gallery log';
+  gap: 10px;
+}
+
+.news-panel {
+  grid-area: news;
+  min-width: 0;
+  padding: 8px 16px;
+  border: 1px solid #9b9b9b;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.news-panel h1 {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.news-list { width: fit-content; max-width: 100%; margin: 0 auto; padding: 0; list-style: none; }
+.news-list li + li { margin-top: 5px; }
+
+.news-link {
+  display: grid;
+  grid-template-columns: 72px 64px minmax(0, 1fr);
+  align-items: baseline;
+  gap: 4px;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.news-link:hover .news-text, .news-link:focus-visible .news-text { text-decoration: underline; }
+.news-link span { color: inherit; font-size: inherit; }
+.news-date, .news-section { white-space: nowrap; }
+.news-section { width: 64px; }
+.news-text { min-width: 0; overflow-wrap: anywhere; }
+.news-state { font-size: 12px; text-align: center; }
+
+.nav-card {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 14px;
+  overflow: hidden;
+  isolation: isolate;
+  border-radius: 4px;
+  color: white;
+  text-align: center;
+  background: #34424a;
+}
+
+.nav-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background: var(--card-image) center / cover no-repeat;
+  transition: transform .25s ease;
+}
+
+.nav-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(0, 0, 0, .22);
+}
+
+.nav-card:hover::before { transform: scale(1.04); }
+.nav-card:focus-visible, .news-link:focus-visible { outline: 3px solid #264c70; outline-offset: 3px; }
+.nav-card span { color: white; }
+.card-title { font-size: 20px; font-weight: 700; text-shadow: 0 2px 5px rgba(0, 0, 0, .5); }
+.card-description { font-size: 13px; font-weight: 500; line-height: 1.5; text-shadow: 0 2px 5px rgba(0, 0, 0, .7); }
+.card-latest { max-width: 100%; font-size: 11px; line-height: 1.4; text-shadow: 0 2px 5px #000; overflow-wrap: anywhere; }
+
+.card-info { grid-area: info; --card-image: url('img/hero/info.jpg'); }
+.card-gallery { grid-area: gallery; --card-image: url('img/hero/gallery.jpg'); }
+.card-diary { grid-area: diary; --card-image: url('img/hero/diary.jpg'); }
+.card-log { grid-area: log; --card-image: url('img/hero/log.jpg'); }
+
+.site-shell > .footer { flex: none; margin-top: 20px; }
+
+@media (max-width: 700px) {
+  .home-content { padding: 52px 20px 0; }
+  .home-grid {
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: auto minmax(90px, 1.2fr) minmax(65px, .85fr);
+    grid-template-areas:
+      'news news news'
+      'gallery gallery gallery'
+      'info diary log';
+  }
+  .news-panel { padding: 10px 16px; border: 0; margin-bottom: 8px; }
+  .news-list li:nth-child(n+4) { display: none; }
+  .card-description { display: none; }
+  .card-title { font-size: clamp(15px, 4.5vw, 20px); }
+  .card-latest { width: 100%; overflow: hidden; font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+  .site-shell > .footer { margin-top: 10px; padding: 8px 10px 12px; }
+}
+
+@media (max-width: 370px) {
+  .home-content { padding-inline: 12px; }
+  .news-panel { padding: 6px 8px; }
+  .news-link { grid-template-columns: 66px 64px minmax(0, 1fr); gap: 2px; font-size: 10px; }
+}
+
+@media (max-width: 700px) and (max-height: 650px) {
+  .home-content { padding-top: 48px; }
+  .home-grid { gap: 6px; }
+  .news-panel h1 { margin-bottom: 4px; }
+  .news-list li + li { margin-top: 2px; }
+  .site-shell > .footer { margin-top: 6px; padding-block: 6px; }
+}
+
+/* ===== Diary 列表 ===== */
+
+.page-diary { min-height: 100%; background-color: var(--bg-color); }
+.page-diary .page-hero-bg { --hero-img: url('img/hero/diary.jpg'); }
+.page-diary .diary-container {
+    width: min(1200px, calc(100% - 40px)); margin: 168px auto 0;
+    padding: 0 0 48px; min-height: 60vh;
+}
+.page-diary .month-tag { width: 316px; padding: 4px 0; color: #333; }
+.page-diary .month-year { padding: 0 4px; font-family: var(--diary-font-date); color: #333; }
+.page-diary .month-name { font-family: var(--diary-font-month); color: #333; overflow-wrap: anywhere; }
+.page-diary .diary-empty, .page-diary .diary-error { padding: 80px 0; text-align: center; color: var(--text-muted); }
+@media (max-width: 900px) {
+    .page-diary .diary-container { width: 100%; margin-top: 150px; }
+}
+
+/* Diary 正式版。Figma diary-desktop-v2 / diary-phone-v2；年月字級依確認統一。 */
+        :root {
+            --diary-tag-life-bg: #213757;
+            --diary-tag-game-bg: #4c66a1;
+            --diary-tag-music-bg: #6f7497;
+            --diary-tag-drawing-bg: #aabee2;
+            --diary-tag-books-bg: #ca8793;
+            --diary-tag-feedback-bg: #f9e19a;
+            --diary-tag-default-bg: #878787;
+            --diary-tag-dark-text: #ffffff;
+            --diary-tag-light-text: #3a3a3a;
+            --diary-tag-drawing-text: #333333;
+            --diary-row-border: #343434;
+            --diary-row-hover-bg: #030303;
+            --diary-row-hover-text: #ffffff;
+        }
+        .page-diary .tag-filter {
+            display: flex; justify-content: flex-end; align-items: center;
+            flex-wrap: wrap; gap: 8px 16px; padding: 12px 0;
+        }
+        .page-diary .tag-chip {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 2px 8px; min-height: 18px; border-radius: 4px;
+            background: var(--tag-bg, var(--diary-tag-default-bg));
+            color: var(--tag-text, var(--diary-tag-dark-text));
+            font: 500 10px/14px var(--font-main); white-space: nowrap;
+        }
+        .page-diary .tag-chip[data-tag="LIFE"] { --tag-bg: var(--diary-tag-life-bg); }
+        .page-diary .tag-chip[data-tag="GAME"] { --tag-bg: var(--diary-tag-game-bg); }
+        .page-diary .tag-chip[data-tag="MUSIC"] { --tag-bg: var(--diary-tag-music-bg); }
+        .page-diary .tag-chip[data-tag="DRAWING"] { --tag-bg: var(--diary-tag-drawing-bg); --tag-text: var(--diary-tag-drawing-text); }
+        .page-diary .tag-chip[data-tag="BOOKS"] { --tag-bg: var(--diary-tag-books-bg); --tag-text: var(--diary-tag-light-text); }
+        .page-diary .tag-chip[data-tag="FEEDBACK"] { --tag-bg: var(--diary-tag-feedback-bg); --tag-text: var(--diary-tag-light-text); }
+        .page-diary .tag-filter button { border: 0; cursor: pointer; position: relative; }
+        .page-diary .tag-filter button::before { content: ''; position: absolute; inset: -7px 0; }
+        .page-diary .tag-filter button[aria-pressed="true"] { outline: 2px solid var(--tag-bg); outline-offset: 3px; }
+        .page-diary .tag-filter button:focus-visible { outline: 2px solid var(--text-main); outline-offset: 4px; }
+        .page-diary .diary-list { display: flex; flex-direction: column; gap: 0; }
+        .page-diary .diary-month {
+            display: grid; align-items: start; grid-template-columns: 316px minmax(0, 1fr); gap: 32px;
+            border-top: 1px solid var(--diary-row-border); padding: 0 0 0 8px;
+        }
+        .page-diary .month-year { font-size: 24px; font-weight: 500; line-height: 1.2; }
+        .page-diary .month-name { font-size: 44px; font-weight: 700; line-height: 1.05; margin-top: 0; }
+        .page-diary .diary-rows { display: flex; flex-direction: column; gap: 10px; min-width: 0; width: 100%; }
+        .page-diary .diary-row {
+            display: flex; align-items: center; gap: 8px; min-height: 81px;
+            border-top: 1px solid var(--diary-row-border); color: #333;
+            text-decoration: none; background: #fff;
+            transition: background-color .2s, color .2s;
+        }
+        .page-diary .diary-row:first-child { border-top: 0; min-height: 80px; }
+        .page-diary .row-day {
+            flex: 0 0 auto; padding: 4px; margin: 0;
+            color: inherit;
+            font: 500 64px/64px var(--diary-font-date); letter-spacing: -.05em;
+        }
+        .page-diary .row-content { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+        .page-diary .row-excerpt {
+            flex: 1; min-width: 0; margin: 0; font-size: 10px; line-height: 1.5;
+            color: inherit;
+            display: -webkit-box; -webkit-line-clamp: 3; line-clamp: 3;
+            -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere;
+        }
+        .page-diary .row-tags { display: flex; flex-wrap: wrap; gap: 8px; max-width: 390px; }
+        .page-diary .row-thumbnail { position: relative; flex: 0 0 80px; width: 80px; height: 80px; overflow: hidden; background: #eee; }
+        .page-diary .row-thumbnail img { display: block; width: 80px; height: 80px; object-fit: cover; }
+        .page-diary .diary-row:focus-visible { outline: 2px solid var(--primary-hover); outline-offset: 3px; }
+        .page-diary .filter-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+        @media (min-width: 901px) {
+            .page-diary .diary-row:focus-visible { background: var(--diary-row-hover-bg); color: var(--diary-row-hover-text); }
+        }
+        @media (min-width: 901px) and (hover: hover) and (pointer: fine) {
+            .page-diary .diary-row:hover { background: var(--diary-row-hover-bg); color: var(--diary-row-hover-text); }
+        }
+        @media (max-width: 900px) {
+            .page-diary .diary-container { padding: 20px 20px 40px; }
+            .page-diary .tag-filter { justify-content: flex-start; gap: 16px; }
+            .page-diary .diary-list { gap: 16px; }
+            .page-diary .diary-month { display: flex; flex-direction: column; width: 100%; gap: 32px; border-top: 0; padding: 0 0 16px; }
+            .page-diary .diary-row:first-child { border-top: 1px solid var(--diary-row-border); min-height: 81px; }
+            .page-diary .month-tag { width: 100%; max-width: 100%; padding: 0; }
+            .page-diary .row-content { flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; }
+            .page-diary .row-excerpt { flex: none; width: 100%; }
+            .page-diary .row-tags { max-width: 100%; }
+        }
+        @media (max-width: 365px) { .page-diary .diary-container { padding-left: 12px; padding-right: 12px; } }
+        @media (prefers-reduced-motion: reduce) { .page-diary .diary-row { transition: none; } }
+
+/* ===== Diary 圖片燈箱：沿用 Gallery overlay / viewer / nav / dot ===== */
+.page-diary-view .diary-view-photo {
+  display: block; padding: 0; border: 0; cursor: pointer;
+}
+.page-diary-view .diary-view-photo:focus-visible { outline: 2px solid var(--primary-hover); outline-offset: 4px; }
+.diary-lightbox {
+  max-width: none; max-height: none; margin: 0; padding: 0; border: 0;
+  height: 100dvh; color: #fff;
+}
+.diary-lightbox[open] { display: flex; opacity: 1; }
+.diary-lightbox .overlay-content { width: 95%; height: 100%; }
+.diary-lightbox .viewer-layer { position: relative; height: 90%; justify-content: center; }
+.diary-lightbox .viewer-img-container {
+  position: relative; height: 100%; min-height: 0; max-height: none;
+  overflow: hidden; touch-action: none; user-select: none;
+}
+.diary-lightbox .viewer-img-container img { width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; }
+.diary-lightbox .overlay-close { border: 0; padding: 0; cursor: pointer; }
+.diary-lightbox .nav-btn { display: block !important; }
+.diary-lightbox .overlay-close:focus-visible, .diary-lightbox .nav-btn:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.diary-lightbox .viewer-indicator { bottom: 0; margin-bottom: -20px; }
+.diary-lightbox .viewer-indicator[hidden] { display: none; }
+.diary-lightbox-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 900px) {
+  .diary-lightbox .overlay-content { width: 100%; }
+  .diary-lightbox .nav-btn { display: none !important; }
+  .diary-lightbox .overlay-close { width: 44px; height: 44px; top: max(12px, env(safe-area-inset-top)); left: 12px; }
+  .diary-lightbox .viewer-layer { height: 100%; padding: 64px 0; }
+  .diary-lightbox .viewer-indicator { bottom: max(24px, env(safe-area-inset-bottom)); margin: 0; }
+}
+
+/* ===== Diary 詳細頁 ===== */
+/*
+ * Figma: diary-view-desktop / diary-view-phone
+ */
+
+body.page-diary-view {
+  background-color: var(--bg-color);
+}
+
+.page-diary-view {
+  min-height: 100%;
+}
+
+.page-diary-view .page-hero-bg {
+  --hero-img: url('img/hero/diary.jpg');
+}
+
+.diary-view-container {
+  width: min(1200px, calc(100% - 40px));
+  margin: 168px auto 0;
+  padding: 8px 0 16px;
+  min-height: 70vh;
+}
+
+.diary-view-date {
+  display: flex;
+  align-items: stretch;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.diary-view-month {
+  width: 300px;
+  flex: 0 0 300px;
+}
+
+.diary-view-year,
+.diary-view-day {
+  font-family: var(--diary-font-date);
+  color: #333;
+}
+
+.diary-view-year {
+  padding: 0 4px;
+  font-size: 32px;
+  line-height: 0.8;
+  font-weight: var(--diary-font-date-weight);
+}
+
+.diary-view-month-name {
+  margin: 2px 0 0;
+  font-family: var(--diary-font-month);
+  font-size: 40px;
+  line-height: 0.75;
+  font-weight: var(--diary-font-month-weight);
+  color: #333;
+  white-space: nowrap;
+}
+
+.diary-view-day {
+  font-size: 80px;
+  line-height: 64px;
+  font-weight: var(--diary-font-date-weight);
+  letter-spacing: var(--diary-day-letter-spacing);
+  white-space: nowrap;
+}
+
+.diary-view-main {
+  display: grid;
+  grid-template-columns: 540px minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+
+.diary-view-gallery {
+  width: 540px;
+}
+
+.diary-view-photo {
+  width: 540px;
+  height: auto;
+  overflow: visible;
+  background: transparent;
+}
+
+.diary-view-photo img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.diary-view-thumbs {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.diary-thumb {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.diary-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.diary-thumb::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  transition: opacity 0.2s ease;
+}
+
+.diary-thumb.active::after,
+.diary-thumb:hover::after,
+.diary-thumb:focus-visible::after {
+  opacity: 0;
+}
+
+.diary-thumb:focus-visible {
+  outline: 2px solid var(--primary-hover);
+  outline-offset: 2px;
+}
+
+.diary-view-text {
+  min-width: 0;
+  color: #333;
+  font-family: var(--font-main);
+  font-size: 16px;
+}
+
+.diary-view-title {
+  min-height: 36px;
+  margin: 0;
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #333;
+}
+
+.diary-view-content p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 30px;
+  color: #333;
+}
+
+.diary-view-gallery.is-empty {
+  min-height: 405px;
+}
+
+.diary-view-status {
+  padding: 120px 20px;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.diary-view-status a {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--primary-color);
+}
+
+
+/* Diary view navigation — Scheme B */
+.diary-view-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+  color: #777;
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.5;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.diary-view-back:hover,
+.diary-view-back:focus-visible {
+  color: #111;
+  transform: translateX(-2px);
+}
+
+.diary-view-back:focus-visible,
+.diary-view-nav-link:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 4px;
+}
+
+.diary-view-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(51, 51, 51, 0.15);
+}
+
+.diary-view-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #777;
+  font-family: var(--font-main);
+  font-size: 16px;
+  line-height: 1.5;
+  text-decoration: none;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* 覆蓋全域 span 設定，讓按鈕文字繼承父層樣式 */
+.diary-view-back span,
+.diary-view-nav-link span {
+  font-size: inherit;
+  color: inherit;
+}
+
+.diary-view-nav-previous:hover,
+.diary-view-nav-previous:focus-visible {
+  color: #111;
+  transform: translateX(-2px);
+}
+
+.diary-view-nav-next:hover,
+.diary-view-nav-next:focus-visible {
+  color: #111;
+  transform: translateX(2px);
+}
+
+.diary-view-nav-next {
+  margin-left: auto;
+  text-align: right;
+}
+
+@media (max-width: 900px) {
+  .diary-view-back,
+  .diary-view-nav-link {
+    font-size: 14px;
+  }
+
+  .diary-view-back {
+    margin-bottom: 28px;
+  }
+
+  .diary-view-pagination {
+    margin-top: 48px;
+    padding-top: 20px;
+  }
+
+  .diary-view-container {
+    width: 100%;
+    margin-top: 168px;
+    padding: 0 60px 60px;
+  }
+
+  .diary-view-date {
+    width: 100%;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  .diary-view-month {
+    width: auto;
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .diary-view-year {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+  .diary-view-month-name {
+    font-size: 40px;
+  }
+
+  .diary-view-day {
+    font-size: 80px;
+    line-height: 64px;
+  }
+
+  .diary-view-main {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+    width: 100%;
+  }
+
+  .diary-view-gallery,
+  .diary-view-photo {
+    width: 100%;
+  }
+
+  .diary-view-photo {
+    height: auto;
+  }
+
+  .diary-view-thumbs {
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .diary-thumb {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 439px) {
+  .diary-view-container {
+    padding-left: clamp(20px, 8vw, 60px);
+    padding-right: clamp(20px, 8vw, 60px);
+  }
+
+  .diary-view-month-name {
+    font-size: clamp(32px, 9vw, 40px);
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diary-thumb::after,
+  .diary-view-back,
+  .diary-view-nav-link {
+    transition: none;
+  }
+}
+
+/* ===== Log ===== */
+body.page-log { min-height: 100%; background: var(--bg-color); }
+.page-log .page-hero-bg { --hero-img: url('img/hero/log.jpg'); }
+
+.log-container {
+  width: min(1200px, calc(100% - 40px));
+  min-height: 60vh;
+  margin: 140px auto 0;
+  padding: 20px 0 48px;
+}
+
+.log-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px 10px;
+  align-items: start;
+}
+
+.log-card {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 0;
+  border-radius: 0;
+  background: #ebeae8;
+  box-shadow: 0 2px 8px rgba(75, 61, 42, .08);
+  color: #1e1e1e;
+  text-align: center;
+  cursor: pointer;
+}
+
+.log-card:focus-visible { outline: 2px solid var(--primary-hover); outline-offset: 3px; }
+.log-card-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.log-card-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  min-height: 32px;
+  margin-top: 12px;
+  font-family: var(--font-main);
+  font-size: 10px;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+.log-card-copy span { min-width: 0; min-height: 1.25em; color: #000000; font-size: inherit; }
+
+.log-status { grid-column: 1 / -1; padding: 80px 0; text-align: center; color: var(--text-muted); }
+
+.log-overlay[hidden] { display: none; }
+.log-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 24px 70px;
+  padding-bottom: max(24px, env(safe-area-inset-bottom));
+  background: rgba(0, 0, 0, .90);
+}
+
+.log-overlay-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.log-full-image {
+  display: block;
+  max-width: 100%;
+  max-height: min(78vh, calc(100dvh - 145px));
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.log-caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  max-width: min(100%, 800px);
+  color: #fff;
+  font-family: var(--font-main);
+  font-size: 13px;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.log-caption span,
+.log-caption time { color: #fff; font-size: inherit; }
+
+.log-overlay-close {
+  position: absolute;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .08);
+  color: #fff;
+  cursor: pointer;
+}
+
+.log-overlay-close { top: 24px; right: 24px; width: 48px; height: 48px; }
+#log-overlay .info-nav-btn:disabled { visibility: hidden; }
+.log-overlay-close:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+@media (max-width: 900px) {
+  .log-container { width: 100%; margin-top: 140px; padding: 20px clamp(16px, 6.36vw, 28px) 40px; }
+  .log-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .log-card { padding: 8px; }
+  .log-overlay { padding: 64px 46px 24px; }
+  .log-full-image { max-height: min(72vh, calc(100dvh - 175px)); }
+  .log-overlay-close { top: 16px; right: 16px; width: 36px; height: 36px; }
+
+  .log-card-copy {margin-top: 12px; font-size: 8px; }
+}
+
+@media (max-width: 439px) { .log-container { padding-inline: 12px; } }
+@media (max-width: 365px) { .log-container { padding-inline: 8px; } }

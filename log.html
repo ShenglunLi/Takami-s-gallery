@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BZ2NDQ5P5R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BZ2NDQ5P5R');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log | TAKAMI's Artwork</title>
+  <meta name="robots" content="index, follow, noai, max-image-preview:large">
+  <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
+  <link rel="shortcut icon" href="https://takami-artwork.com/img/favicon-32.png">
+  <link rel="apple-touch-icon" href="https://takami-artwork.com/img/apple-touch-icon.png">
+  <link rel="canonical" href="https://takami-artwork.com/log.html">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css?v=042204ada207">
+  <script src="log.js" defer></script>
+  <script src="main.js" defer></script>
+</head>
+<body class="page-log">
+  <div class="menu-toggle" id="menuBtn" onclick="toggleMenu()">
+    <i class="fa-solid fa-bars menu-icon"></i>
+  </div>
+  <nav class="full-menu" id="fullMenu" aria-label="主要導覽">
+    <div class="close-menu" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></div>
+    <a href="/">Home</a>
+    <a href="info.html">Info</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="diary.html">Diary</a>
+    <a href="log.html">Log</a>
+  </nav>
+
+  <header class="page-hero page-hero-small">
+    <div class="page-hero-bg"></div>
+    <div class="hero-content">
+      <h1>Log</h1>
+      <p>お出かけ<br>連れて行った場所</p>
+    </div>
+  </header>
+
+  <main class="log-container">
+    <div id="log-list" class="log-grid" aria-live="polite">
+      <p class="log-status">載入中…</p>
+    </div>
+  </main>
+
+  <div id="log-overlay" class="log-overlay" role="dialog" aria-modal="true" aria-label="Log 圖片" hidden>
+    <button type="button" id="log-close" class="log-overlay-close" aria-label="關閉圖片">
+      <span class="icon-svg icon-close" aria-hidden="true"></span>
+    </button>
+    <button type="button" id="log-prev" class="info-nav-btn prev" aria-label="上一張圖片"><i class="fas fa-chevron-left" aria-hidden="true"></i></button>
+    <figure class="log-overlay-content">
+      <img id="log-full-image" class="log-full-image" alt="">
+      <figcaption class="log-caption">
+        <time id="log-date"></time>
+        <span id="log-location1"></span>
+        <span id="log-location2"></span>
+      </figcaption>
+    </figure>
+    <button type="button" id="log-next" class="info-nav-btn next" aria-label="下一張圖片"><i class="fas fa-chevron-right" aria-hidden="true"></i></button>
+  </div>
+
+  <footer class="footer">
+    <p>&copy; 2026 TAKAMI</p>
+    <p>本サイト掲載の画像・文章の無断転載・加工・商用利用・AI学習への使用は禁止します。</p>
+    <p>Unauthorized reproduction, modification, commercial use,<br class="mobile-br"> or AI training of the images and texts on this website is prohibited.<br>Fanart: Original characters and related rights belong to their respective owners.<br class="mobile-br"> Original works: All rights reserved.</p>
+  </footer>
+</body>
+</html>
