@@ -26,7 +26,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500&display=swap">
-    <link rel="stylesheet" href="style.css?v=042204ada207">
+    <link rel="stylesheet" href="style.css?v=20261015-diary-month-type">
 </head>
 
 <body class="page-diary">
@@ -189,7 +189,7 @@
 
         function setupFilters(posts) {
             const filter = document.getElementById("tagFilter");
-            const standardTags = ["LIFE", "GAME", "MUSIC", "DRAWING", "BOOKS", "FEEDBACK"];
+            const standardTags = ["FEEDBACK", "BOOKS", "DRAWING", "MUSIC", "GAME", "LIFE"];
             const allTags = [...new Set([...standardTags, ...posts.flatMap(getPostTags)])];
             let activeTag = "";
             allTags.forEach(tag => {
@@ -226,7 +226,7 @@
             content.className = "row-content";
             const excerpt = document.createElement("p");
             excerpt.className = "row-excerpt";
-            excerpt.textContent = getExcerpt(post.content || "");
+            excerpt.textContent = post.title || "";
             const tags = document.createElement("div");
             tags.className = "row-tags";
             getPostTags(post).forEach(tag => tags.append(createTag(tag)));
@@ -245,21 +245,6 @@
             card.setAttribute("aria-label", post.date + " " + excerpt.textContent + " " + getPostTags(post).join("、"));
             card.append(day, content, thumbnail);
             return card;
-        }
-
-        function getExcerpt(content) {
-            const normalized = String(content)
-                .replace(/\r\n/g, "\n")
-                .replace(/\n{2,}/g, "\n")
-                .trim();
-
-            if (!normalized) return "";
-
-            // 優先取第一段／第一句作為字卡摘要，CSS 再限制最多三行
-            const firstLine = normalized.split("\n")[0].trim();
-            const sentenceMatch = firstLine.match(/^.*?[。！？!?](?:」|』)?/);
-
-            return sentenceMatch ? sentenceMatch[0] : firstLine;
         }
 
         document.addEventListener("DOMContentLoaded", initDiary);

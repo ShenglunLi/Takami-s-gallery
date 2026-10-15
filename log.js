@@ -15,11 +15,20 @@ function logDate(value) {
     : '';
 }
 
+function compareLogEntries(a, b) {
+  const dateOrder = b.date.localeCompare(a.date);
+  if (dateOrder) return dateOrder;
+
+  // 同日期或只有月份的資料，依圖片流水號由大到小排列。
+  const sequence = entry => Number(entry.img.match(/-P(\d+)\.[^.]+$/i)?.[1] || 0);
+  return sequence(b) - sequence(a);
+}
+
 function renderLog(entries) {
   const grid = document.getElementById('log-list');
   grid.replaceChildren();
   logEntries = entries.filter(entry => entry && logDate(entry.date) && logImageUrl(entry.img))
-    .sort((a, b) => b.date.localeCompare(a.date));
+    .sort(compareLogEntries);
 
   if (!logEntries.length) {
     const status = document.createElement('p');

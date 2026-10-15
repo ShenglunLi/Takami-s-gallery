@@ -12,7 +12,7 @@
   <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@500&display=swap">
-  <link rel="stylesheet" href="style.css?v=042204ada207">
+  <link rel="stylesheet" href="style.css?v=20261015-diary-navigation">
 </head>
 
 <body class="page-diary-view">
@@ -224,8 +224,8 @@
             class="diary-view-nav-link diary-view-nav-previous"
             href="diary-entry.html?id=${encodeURIComponent(previous.id)}"
           >
-            <span aria-hidden="true">←</span>
             <span>Previous</span>
+            <span aria-hidden="true">→</span>
           </a>
         `
         : "";
@@ -236,8 +236,8 @@
             class="diary-view-nav-link diary-view-nav-next"
             href="diary-entry.html?id=${encodeURIComponent(next.id)}"
           >
+            <span aria-hidden="true">←</span>
             <span>Next</span>
-            <span aria-hidden="true">→</span>
           </a>
         `
         : "";
@@ -247,8 +247,8 @@
           class="diary-view-pagination"
           aria-label="Diary 文章導覽"
         >
-          ${previousLink}
           ${nextLink}
+          ${previousLink}
         </nav>
       `;
     }
