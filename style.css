@@ -1419,7 +1419,15 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
         }
 /* --- Info 頁面：左側介紹文字、右側社群連結 --- */
 .page-info {
-    height: auto !important;
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-info > .footer {
+    flex: none;
 }
 
 .page-info .info-container {
@@ -1428,6 +1436,7 @@ span {font-size: var(--fs-span); color: var(--text-muted)}
     min-height: 60vh;
     margin: 150px auto 0;
     padding: 20px 30px 48px;
+    flex: 1 0 auto;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
