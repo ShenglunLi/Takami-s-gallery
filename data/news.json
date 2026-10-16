@@ -1,5 +1,13 @@
 [
   {
+    "id": "TKM-0086",
+    "date": "2026-10-16",
+    "section": "Gallery",
+    "title": "聽彧說書",
+    "text": "落書き更新",
+    "url": "gallery.html?id=TKM-0086"
+  },
+  {
     "id": "TKM-0085",
     "date": "2026-10-11",
     "section": "Gallery",
@@ -30,13 +38,5 @@
     "title": "寒くなってきました。",
     "text": "落書き更新",
     "url": "gallery.html?id=TKM-0082"
-  },
-  {
-    "id": "LFE-0025",
-    "date": "2026-10-05",
-    "section": "Diary",
-    "title": "LEMON MELON COOKIE ♪",
-    "text": "更新",
-    "url": "diary-entry.html?id=LFE-0025"
   }
 ]
