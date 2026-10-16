@@ -1660,7 +1660,19 @@ body.page-index { background: #e6edef; }
   background: rgba(0, 0, 0, .22);
 }
 
-.nav-card:hover::before { transform: scale(1.04); }
+@media (min-width: 701px) and (hover: hover) and (pointer: fine) {
+  .nav-card:hover::before { transform: scale(1.04); }
+}
+
+/* 手機與觸控裝置改用同一層背景，避免小數像素與圖層合成露出深色底。 */
+@media (max-width: 700px), (hover: none), (pointer: coarse) {
+  .nav-card {
+    background:
+      linear-gradient(rgba(0, 0, 0, .22), rgba(0, 0, 0, .22)),
+      var(--card-image) center / cover no-repeat #34424a;
+  }
+  .nav-card::before, .nav-card::after { content: none; }
+}
 .nav-card:focus-visible, .news-link:focus-visible { outline: 3px solid #264c70; outline-offset: 3px; }
 .nav-card span { color: white; }
 .card-title { font-size: 20px; font-weight: 700; text-shadow: 0 2px 5px rgba(0, 0, 0, .5); }
@@ -1726,7 +1738,10 @@ body.page-index { background: #e6edef; }
     width: min(1200px, calc(100% - 40px)); margin: 168px auto 0;
     padding: 0 0 48px; min-height: 60vh;
 }
-.page-diary .month-tag { width: 316px; padding: 4px 0; color: #333; }
+.page-diary .month-tag {
+  width: 316px; height: 80px; padding: 0; color: #333;
+  display: flex; flex-direction: column; justify-content: center; gap: 4px;
+}
 .page-diary .month-year { padding: 0 4px; font-family: var(--diary-font-date); color: #333; }
 .page-diary .month-name { font-family: var(--diary-font-month); color: #333; overflow-wrap: anywhere; }
 .page-diary .diary-empty, .page-diary .diary-error { padding: 80px 0; text-align: center; color: var(--text-muted); }
@@ -1787,9 +1802,9 @@ body.page-index { background: #e6edef; }
         }
         .page-diary .diary-row:first-child { border-top: 0; }
         .page-diary .row-day {
-            flex: 0 0 auto; padding: 4px; margin: 0;
+            flex: 0 0 auto; padding: 0 4px; margin: 0;
             color: inherit;
-            font: 500 64px/64px var(--diary-font-date); letter-spacing: -.05em;
+            font: 500 var(--date-day-font-size, 64px)/1 var(--diary-font-date); letter-spacing: -.05em;
         }
         .page-diary .row-content { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
         .page-diary .row-excerpt {
@@ -1818,8 +1833,8 @@ body.page-index { background: #e6edef; }
             .page-diary .diary-month { display: flex; flex-direction: column; width: 100%; gap: 8px; border-top: 0; padding: 0; }
             .page-diary .diary-rows { margin-bottom: 16px; }
             .page-diary .diary-row:first-child { border-top: 1px solid var(--diary-row-border); }
-            .page-diary .month-tag { width: 100%; max-width: 100%; padding: 0; }
-            .page-diary .row-day { font-size: 56px; }
+            .page-diary .month-tag { width: 100%; height: auto; max-width: 100%; padding: 0; gap: 2px; }
+            .page-diary .row-day { font-size: var(--date-day-font-size, 56px); }
             .page-diary .row-content { flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; }
             .page-diary .row-excerpt { flex: none; width: 100%; }
             .page-diary .row-tags { max-width: 100%; }
@@ -1885,7 +1900,7 @@ body.page-diary-view {
 
 .diary-view-date {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 24px;
   margin-bottom: 20px;
 }
@@ -1893,6 +1908,9 @@ body.page-diary-view {
 .diary-view-month {
   width: 300px;
   flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .diary-view-year,
@@ -1904,24 +1922,24 @@ body.page-diary-view {
 .diary-view-year {
   padding: 0 4px;
   font-size: 28px;
-  line-height: 0.8;
+  line-height: 1;
   font-weight: var(--diary-font-date-weight);
-  margin-bottom: 4px;
+  margin-bottom: 0;
 }
 
 .diary-view-month-name {
-  margin: 2px 0 0;
+  margin: 0;
   font-family: var(--diary-font-month);
   font-size: 40px;
-  line-height: 0.75;
+  line-height: 1;
   font-weight: var(--diary-font-month-weight);
   color: #333;
   white-space: nowrap;
 }
 
 .diary-view-day {
-  font-size: 80px;
-  line-height: 64px;
+  font-size: var(--date-day-font-size, 80px);
+  line-height: 1;
   font-weight: var(--diary-font-date-weight);
   letter-spacing: var(--diary-day-letter-spacing);
   white-space: nowrap;
@@ -2146,7 +2164,7 @@ body.page-diary-view {
 
   .diary-view-year {
     font-size: 24px;
-    margin-bottom: 8px;
+    margin-bottom: 0;
 }
 
   .diary-view-month-name {
@@ -2154,8 +2172,8 @@ body.page-diary-view {
   }
 
   .diary-view-day {
-    font-size: 80px;
-    line-height: 64px;
+    font-size: var(--date-day-font-size, 80px);
+    line-height: 1;
   }
 
   .diary-view-main {
@@ -2204,6 +2222,22 @@ body.page-diary-view {
   .diary-view-nav-link {
     transition: none;
   }
+}
+
+/* 以實際字形的墨跡範圍對齊日期，避免依賴各字型不同的行框留白。 */
+.date-ink {
+  height: var(--date-ink-height, auto);
+  line-height: 1;
+}
+.date-ink .date-glyph {
+  display: block; white-space: nowrap;
+  font: inherit; color: inherit; letter-spacing: inherit;
+  transform-origin: top left;
+  transform: scaleY(var(--date-ink-scale, 1)) translateY(var(--date-ink-offset, 0px));
+}
+.date-ink .date-baseline {
+  display: inline-block; width: 0; height: 0; padding: 0; margin: 0;
+  vertical-align: baseline;
 }
 
 /* ===== Log ===== */
