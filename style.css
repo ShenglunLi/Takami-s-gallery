@@ -1732,7 +1732,13 @@ body.page-index { background: #e6edef; }
 
 /* ===== Diary 列表 ===== */
 
-.page-diary { min-height: 100%; background-color: var(--bg-color); }
+.page-diary {
+  /* 列表年月、日期字級：直接修改這三個值，沒有 JavaScript 自動換算。 */
+  --diary-year-size: 20px;
+  --diary-month-size: 40px;
+  --diary-day-size: 64px;
+  min-height: 100%; background-color: var(--bg-color);
+}
 .page-diary .page-hero-bg { --hero-img: url('img/hero/diary.jpg'); }
 .page-diary .diary-container {
     width: min(1200px, calc(100% - 40px)); margin: 168px auto 0;
@@ -1791,8 +1797,8 @@ body.page-index { background: #e6edef; }
             display: grid; align-items: start; grid-template-columns: 316px minmax(0, 1fr); gap: 32px;
             border-top: 1px solid var(--diary-row-border); padding: 0 0 0 8px;
         }
-        .page-diary .month-year { font-size: 20px; font-weight: 500; line-height: 1; }
-        .page-diary .month-name { font-size: 40px; font-weight: var(--diary-font-month-weight); line-height: 1; margin-top: 0; }
+        .page-diary .month-year { font-size: var(--diary-year-size); font-weight: 500; line-height: 1; }
+        .page-diary .month-name { font-size: var(--diary-month-size); font-weight: var(--diary-font-month-weight); line-height: 1; margin-top: 0; }
         .page-diary .diary-rows { display: flex; flex-direction: column; gap: 0; min-width: 0; width: 100%; }
         .page-diary .diary-row {
             display: flex; align-items: center; gap: 8px; height: 80px; flex-shrink: 0;
@@ -1804,7 +1810,11 @@ body.page-index { background: #e6edef; }
         .page-diary .row-day {
             flex: 0 0 auto; padding: 0 4px; margin: 0;
             color: inherit;
-            font: 500 var(--date-day-font-size, 64px)/1 var(--diary-font-date); letter-spacing: -.05em;
+            font-family: var(--diary-font-date);
+            font-size: var(--diary-day-size);
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: -.05em;
         }
         .page-diary .row-content { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
         .page-diary .row-excerpt {
@@ -1825,16 +1835,20 @@ body.page-index { background: #e6edef; }
             .page-diary .diary-row:hover { background: var(--diary-row-hover-bg); color: var(--diary-row-hover-text); }
         }
         @media (max-width: 900px) {
+            /* 手機列表字級，獨立於桌面設定。 */
+            .page-diary {
+                --diary-year-size: 12px;
+                --diary-month-size: 24px;
+                --diary-day-size: 56px;
+            }
             .page-diary .diary-container { padding: 20px 20px 40px; }
-            .page-diary .month-year { font-size: 12px; }
-            .page-diary .month-name { font-size: 24px; }
             .page-diary .tag-filter { justify-content: flex-start; gap: 8px; }
             .page-diary .tag-chip { font-size: 9px;}
             .page-diary .diary-month { display: flex; flex-direction: column; width: 100%; gap: 8px; border-top: 0; padding: 0; }
+
             .page-diary .diary-rows { margin-bottom: 16px; }
             .page-diary .diary-row:first-child { border-top: 1px solid var(--diary-row-border); }
             .page-diary .month-tag { width: 100%; height: auto; max-width: 100%; padding: 0; gap: 2px; }
-            .page-diary .row-day { font-size: var(--date-day-font-size, 56px); }
             .page-diary .row-content { flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; }
             .page-diary .row-excerpt { flex: none; width: 100%; }
             .page-diary .row-tags { max-width: 100%; }
@@ -1884,6 +1898,10 @@ body.page-diary-view {
 }
 
 .page-diary-view {
+  /* 詳細頁字級集中於此；手機設定在下方媒體查詢。 */
+  --diary-view-year-size: 28px;
+  --diary-view-month-size: 40px;
+  --diary-view-day-size: 73px;
   min-height: 100%;
 }
 
@@ -1921,7 +1939,7 @@ body.page-diary-view {
 
 .diary-view-year {
   padding: 0 4px;
-  font-size: 28px;
+  font-size: var(--diary-view-year-size);
   line-height: 1;
   font-weight: var(--diary-font-date-weight);
   margin-bottom: 0;
@@ -1930,7 +1948,7 @@ body.page-diary-view {
 .diary-view-month-name {
   margin: 0;
   font-family: var(--diary-font-month);
-  font-size: 40px;
+  font-size: var(--diary-view-month-size);
   line-height: 1;
   font-weight: var(--diary-font-month-weight);
   color: #333;
@@ -1938,11 +1956,18 @@ body.page-diary-view {
 }
 
 .diary-view-day {
-  font-size: var(--date-day-font-size, 80px);
+  font-size: var(--diary-view-day-size);
   line-height: 1;
   font-weight: var(--diary-font-date-weight);
   letter-spacing: var(--diary-day-letter-spacing);
   white-space: nowrap;
+}
+
+/* 原生修整大寫字高至基線的留白，下伸筆畫自然保留；不量測或縮放文字。 */
+@supports (text-box: trim-both cap alphabetic) {
+  .diary-view-year, .diary-view-month-name, .diary-view-day {
+    text-box: trim-both cap alphabetic;
+  }
 }
 
 .diary-view-main {
@@ -2131,6 +2156,10 @@ body.page-diary-view {
 }
 
 @media (max-width: 900px) {
+  .page-diary-view {
+    --diary-view-year-size: 24px;
+    --diary-view-day-size: 68.5px;
+  }
   .diary-view-back,
   .diary-view-nav-link {
     font-size: 14px;
@@ -2160,20 +2189,6 @@ body.page-diary-view {
     width: auto;
     flex: 0 1 auto;
     min-width: 0;
-  }
-
-  .diary-view-year {
-    font-size: 24px;
-    margin-bottom: 0;
-}
-
-  .diary-view-month-name {
-    font-size: 40px;
-  }
-
-  .diary-view-day {
-    font-size: var(--date-day-font-size, 80px);
-    line-height: 1;
   }
 
   .diary-view-main {
@@ -2210,8 +2225,9 @@ body.page-diary-view {
     padding-right: clamp(20px, 8vw, 60px);
   }
 
-  .diary-view-month-name {
-    font-size: clamp(32px, 9vw, 40px);
+  .page-diary-view {
+    --diary-view-month-size: clamp(32px, 9vw, 40px);
+    --diary-view-day-size: clamp(60px, calc(28px + 9vw), 68.5px);
   }
 
 }
@@ -2222,22 +2238,6 @@ body.page-diary-view {
   .diary-view-nav-link {
     transition: none;
   }
-}
-
-/* 以實際字形的墨跡範圍對齊日期，避免依賴各字型不同的行框留白。 */
-.date-ink {
-  height: var(--date-ink-height, auto);
-  line-height: 1;
-}
-.date-ink .date-glyph {
-  display: block; white-space: nowrap;
-  font: inherit; color: inherit; letter-spacing: inherit;
-  transform-origin: top left;
-  transform: scaleY(var(--date-ink-scale, 1)) translateY(var(--date-ink-offset, 0px));
-}
-.date-ink .date-baseline {
-  display: inline-block; width: 0; height: 0; padding: 0; margin: 0;
-  vertical-align: baseline;
 }
 
 /* ===== Log ===== */
