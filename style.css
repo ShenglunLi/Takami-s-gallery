@@ -1842,7 +1842,8 @@ body.page-index { background: #e6edef; }
                 --diary-day-size: 56px;
             }
             .page-diary .diary-container { padding: 20px 20px 40px; }
-            .page-diary .tag-filter { justify-content: flex-start; gap: 8px; }
+            .page-diary .tag-filter {width: 100%; justify-content: space-between; gap: 8px;}
+            .page-diary .tag-filter button {flex: 1 1 auto; }
             .page-diary .tag-chip { font-size: 9px;}
             .page-diary .diary-month { display: flex; flex-direction: column; width: 100%; gap: 8px; border-top: 0; padding: 0; }
 
