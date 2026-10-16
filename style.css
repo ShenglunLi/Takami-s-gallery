@@ -58,7 +58,7 @@
     
     /* Diary 列表與文章頁共用字型設定 */
     --diary-font-month: 'Noto Sans TC', sans-serif;
-    --diary-font-month-weight: 500;
+    --diary-font-month-weight: 700;
     --diary-font-date: 'Roboto Condensed', sans-serif;
     --diary-font-date-weight: 200;
     --diary-day-letter-spacing: -0.04em; /* 字體大小的 -4% */
@@ -1777,7 +1777,7 @@ body.page-index { background: #e6edef; }
             border-top: 1px solid var(--diary-row-border); padding: 0 0 0 8px;
         }
         .page-diary .month-year { font-size: 20px; font-weight: 500; line-height: 1; }
-        .page-diary .month-name { font-size: 40px; font-weight: 700; line-height: 1; margin-top: 0; }
+        .page-diary .month-name { font-size: 40px; font-weight: var(--diary-font-month-weight); line-height: 1; margin-top: 0; }
         .page-diary .diary-rows { display: flex; flex-direction: column; gap: 0; min-width: 0; width: 100%; }
         .page-diary .diary-row {
             display: flex; align-items: center; gap: 8px; height: 80px; flex-shrink: 0;
@@ -1887,7 +1887,7 @@ body.page-diary-view {
   display: flex;
   align-items: stretch;
   gap: 24px;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .diary-view-month {
@@ -1903,9 +1903,10 @@ body.page-diary-view {
 
 .diary-view-year {
   padding: 0 4px;
-  font-size: 32px;
+  font-size: 28px;
   line-height: 0.8;
   font-weight: var(--diary-font-date-weight);
+  margin-bottom: 4px;
 }
 
 .diary-view-month-name {
@@ -2135,7 +2136,6 @@ body.page-diary-view {
   .diary-view-date {
     width: 100%;
     gap: 24px;
-    margin-bottom: 40px;
   }
 
   .diary-view-month {
@@ -2161,7 +2161,7 @@ body.page-diary-view {
   .diary-view-main {
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 16px;
     width: 100%;
   }
 
@@ -2177,6 +2177,7 @@ body.page-diary-view {
   .diary-view-thumbs {
     gap: 12px;
     margin-top: 12px;
+    margin-bottom: 12px;
   }
 
   .diary-thumb {
