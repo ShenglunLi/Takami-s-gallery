@@ -1,5 +1,13 @@
 [
   {
+    "id": "TKM-0089",
+    "date": "2026-10-31",
+    "section": "Gallery",
+    "title": "嘉 意 自 若 ♪",
+    "text": "短編漫画更新",
+    "url": "gallery.html?id=TKM-0089"
+  },
+  {
     "id": "TKM-0088",
     "date": "2026-10-28",
     "section": "Gallery",
@@ -30,13 +38,5 @@
     "title": "星",
     "text": "落書き更新",
     "url": "gallery.html?id=TKM-0085"
-  },
-  {
-    "id": "LFE-0026",
-    "date": "2026-10-09",
-    "section": "Diary",
-    "title": "久しぶりのシャーペンで",
-    "text": "更新",
-    "url": "diary-entry.html?id=LFE-0026"
   }
 ]
