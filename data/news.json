@@ -1,5 +1,13 @@
 [
   {
+    "id": "TKM-0090",
+    "date": "2026-11-09",
+    "section": "Gallery",
+    "title": "",
+    "text": "カラーイラスト更新",
+    "url": "gallery.html?id=TKM-0090"
+  },
+  {
     "id": "LOG-0025",
     "date": "2026-11",
     "section": "Log",
@@ -30,13 +38,5 @@
     "title": "",
     "text": "モノクロイラスト更新",
     "url": "gallery.html?id=TKM-0088"
-  },
-  {
-    "id": "TKM-0087",
-    "date": "2026-10-21",
-    "section": "Gallery",
-    "title": "誘う",
-    "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0087"
   }
 ]
