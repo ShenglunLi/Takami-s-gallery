@@ -1,5 +1,21 @@
 [
   {
+    "id": "LOG-0025",
+    "date": "2026-11",
+    "section": "Log",
+    "title": "HSINCHU, TAIWAN",
+    "text": "更新",
+    "url": "log.html?id=LOG-0025"
+  },
+  {
+    "id": "LOG-0026",
+    "date": "2026-11",
+    "section": "Log",
+    "title": "HSINCHU, TAIWAN",
+    "text": "更新",
+    "url": "log.html?id=LOG-0026"
+  },
+  {
     "id": "TKM-0089",
     "date": "2026-10-31",
     "section": "Gallery",
@@ -22,21 +38,5 @@
     "title": "誘う",
     "text": "落書き更新",
     "url": "gallery.html?id=TKM-0087"
-  },
-  {
-    "id": "TKM-0086",
-    "date": "2026-10-16",
-    "section": "Gallery",
-    "title": "聽彧說書",
-    "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0086"
-  },
-  {
-    "id": "TKM-0085",
-    "date": "2026-10-11",
-    "section": "Gallery",
-    "title": "星",
-    "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0085"
   }
 ]
