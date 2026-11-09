@@ -8,6 +8,14 @@
     "url": "gallery.html?id=TKM-0090"
   },
   {
+    "id": "TKM-0091",
+    "date": "2026-11-09",
+    "section": "Gallery",
+    "title": "",
+    "text": "落書き更新",
+    "url": "gallery.html?id=TKM-0091"
+  },
+  {
     "id": "LOG-0025",
     "date": "2026-11",
     "section": "Log",
@@ -30,13 +38,5 @@
     "title": "嘉 意 自 若 ♪",
     "text": "短編漫画更新",
     "url": "gallery.html?id=TKM-0089"
-  },
-  {
-    "id": "TKM-0088",
-    "date": "2026-10-28",
-    "section": "Gallery",
-    "title": "",
-    "text": "モノクロイラスト更新",
-    "url": "gallery.html?id=TKM-0088"
   }
 ]
