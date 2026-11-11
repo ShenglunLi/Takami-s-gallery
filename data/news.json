@@ -1,5 +1,21 @@
 [
   {
+    "id": "TKM-0093",
+    "date": "2026-11-11",
+    "section": "Gallery",
+    "title": "木漏れ日",
+    "text": "落書き更新",
+    "url": "gallery.html?id=TKM-0093"
+  },
+  {
+    "id": "TKM-0092",
+    "date": "2026-11-10",
+    "section": "Gallery",
+    "title": "",
+    "text": "落書き更新",
+    "url": "gallery.html?id=TKM-0092"
+  },
+  {
     "id": "TKM-0090",
     "date": "2026-11-09",
     "section": "Gallery",
@@ -22,21 +38,5 @@
     "title": "HSINCHU, TAIWAN",
     "text": "更新",
     "url": "log.html?id=LOG-0025"
-  },
-  {
-    "id": "LOG-0026",
-    "date": "2026-11",
-    "section": "Log",
-    "title": "HSINCHU, TAIWAN",
-    "text": "更新",
-    "url": "log.html?id=LOG-0026"
-  },
-  {
-    "id": "TKM-0089",
-    "date": "2026-10-31",
-    "section": "Gallery",
-    "title": "嘉 意 自 若 ♪",
-    "text": "短編漫画更新",
-    "url": "gallery.html?id=TKM-0089"
   }
 ]
