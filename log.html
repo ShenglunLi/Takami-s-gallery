@@ -12,6 +12,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Log | TAKAMI's Artwork</title>
   <meta name="robots" content="index, follow, noai, max-image-preview:large">
+  <script>
+    if (new URLSearchParams(window.location.search).has('id')) {
+      document.querySelector('meta[name="robots"]').content = 'noindex, follow, noai';
+    }
+  </script>
   <meta name="pinterest" content="nopin" description="Sorry, you can't save from this website!">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <link rel="icon" href="https://takami-artwork.com/img/favicon.png" type="image/png">
