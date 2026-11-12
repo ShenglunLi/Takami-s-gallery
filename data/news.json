@@ -1,5 +1,13 @@
 [
   {
+    "id": "TKM-0094",
+    "date": "2026-11-12",
+    "section": "Gallery",
+    "title": "",
+    "text": "落書き更新",
+    "url": "gallery.html?id=TKM-0094"
+  },
+  {
     "id": "TKM-0093",
     "date": "2026-11-11",
     "section": "Gallery",
@@ -30,13 +38,5 @@
     "title": "",
     "text": "落書き更新",
     "url": "gallery.html?id=TKM-0091"
-  },
-  {
-    "id": "LOG-0025",
-    "date": "2026-11",
-    "section": "Log",
-    "title": "HSINCHU, TAIWAN",
-    "text": "更新",
-    "url": "log.html?id=LOG-0025"
   }
 ]
