@@ -135,6 +135,17 @@
     "order": 8
   },
   {
+    "id": "TKM-0095",
+    "type": "single",
+    "title": "",
+    "desc": "海にたゆたい、あなたの呼び声が聞こえた。",
+    "date": "2026-11-19",
+    "cover": "A-20261119-P.jpg",
+    "img": "A-20261119-P.jpg",
+    "category": "カラーイラスト",
+    "order": 9999
+  },
+  {
     "id": "TKM-0094",
     "type": "series",
     "title": "",
