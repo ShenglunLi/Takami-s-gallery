@@ -1,5 +1,13 @@
 [
   {
+    "id": "TKM-0097",
+    "date": "2026-11-26",
+    "section": "Gallery",
+    "title": "冬藏",
+    "text": "カラーイラスト更新",
+    "url": "gallery.html?id=TKM-0097"
+  },
+  {
     "id": "TKM-0096",
     "date": "2026-11-22",
     "section": "Gallery",
@@ -30,13 +38,5 @@
     "title": "木漏れ日",
     "text": "落書き更新",
     "url": "gallery.html?id=TKM-0093"
-  },
-  {
-    "id": "TKM-0092",
-    "date": "2026-11-10",
-    "section": "Gallery",
-    "title": "",
-    "text": "落書き更新",
-    "url": "gallery.html?id=TKM-0092"
   }
 ]
