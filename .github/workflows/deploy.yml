@@ -19,12 +19,11 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
+  upload:
+    name: 準備並上傳網頁成品
     runs-on: ubuntu-latest
+    outputs:
+      artifact_name: ${{ steps.artifact-name.outputs.name }}
 
     steps:
       - name: 檢出程式碼
@@ -33,14 +32,31 @@ jobs:
       - name: 設定 Pages 環境
         uses: actions/configure-pages@v4
 
+      - name: 設定本次成品名稱
+        id: artifact-name
+        shell: bash
+        run: echo "name=github-pages-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
+
       - name: 上傳網頁成品
         uses: actions/upload-pages-artifact@v3
         with:
           path: .
-          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          name: ${{ steps.artifact-name.outputs.name }}
+
+  # 分開 job，避免上傳完成後立即查詢成品時，遇到成品清單尚未更新。
+  # 名稱由 upload 傳入；只重跑 deploy 時仍能使用原先上傳的成品。
+  deploy:
+    name: 部署 GitHub Pages
+    needs: upload
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
 
       - name: 執行部署
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+          artifact_name: ${{ needs.upload.outputs.artifact_name }}
